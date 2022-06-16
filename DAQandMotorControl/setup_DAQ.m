@@ -1,7 +1,7 @@
 % This code will connect the NI DAQ devices, establish data channels,
 % tare the force sensors and accelerometer, and find zero pitch angle
 % relative to flume flow
-
+% This is just a comment to see changes in github. - Eric
 samplerate = 1000; % DAQ sample rate in measurements/second
 pitch_bias = [0 0 0];
 
