@@ -68,7 +68,7 @@ transientcycs2 = transientcycs*freq2/freq3;
 [t2p, Prof2p] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, pitch2, phase12 + phi,0);% pitch Gromit
 [t2h, Prof2h] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, heave2, phase12,0);      % heave Gromit
 [t3p, Prof3p] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, pitch3, phase13 + phi,0);% pitch Wallace
-[t3h, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase13,0);      % heave Wallace
+[~, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase13,0);      % heave Wallace
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];

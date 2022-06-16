@@ -1,5 +1,7 @@
 %% Single Foil Analysis
 
+% DEPRACATED
+
 % Performs a full force and efficiency analysis for a single foil
 % experiment, considering that the single foil's data is recorded using the
 % Wallace rig.

@@ -27,6 +27,8 @@ EP.num_cyc  = 30;  % number of full-amplitude experimental cycles
 EP.transientcycs     = 3; % number of transient cycles
 EP.constantamplitude = 0; % replace oscillating motion with moving the foil to a desired position
 
+EP.flume_depth = flume_height; % from the initial setup_DAQ
+
 %% Run experiment
 
 [flume, out, dat, Prof_out_angle, Prof_out, last_out, freq, pitch2, heave2, pitch3, heave3, phase13, num_cyc, phi, foiltype]...

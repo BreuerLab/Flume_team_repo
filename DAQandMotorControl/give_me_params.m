@@ -1,5 +1,7 @@
 function [U, P1, P2, H1, H2, f_real, f_red, phi, phase13, num_cyc, foil, rho, fs] = give_me_params(out, Prof_out_angle, foiltype)
 
+% DEPRACATED
+
 % Exctracts all relevant parameters from a data file.
 % Eric Handy, Mar 2022
 

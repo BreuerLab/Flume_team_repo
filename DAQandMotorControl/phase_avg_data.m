@@ -5,15 +5,21 @@
 
 % NOTE: For a sampling frequency of fs = 1000 Hz
 
-% Eric Handy, Oct 2021
 % Eric Handy, Dec 2021
-% Eric Handy, May 2022 - last edit
+% Eric Handy, May 2022
+% Eric Handy, Jun 2022 - last edit
 
 
-function [toverT, pitch_cycle, data_cycle] = phase_avg_data(raw_pitch,data,cycle_number) % cycle_number refers to the number of cycles you want averaged
+function [toverT, pitch_cycle, data_cycle] = phase_avg_data(raw_pitch, data, dq, cycle_number) % cycle_number refers to the number of cycles you want averaged
 
-fs = 1000; % sampling freq [Hz]
-% fs = 100000; % yuanhangs data
+if ~exist('dq','var')
+    % parameter does not exist, default it to the following:
+    fs = 1000; % sampling frequency [Hz]
+else
+    fs = dq.Rate; % sampling freq [Hz]
+end
+
+% fs = 100000; % yuanhang's data
 t = 0:1/fs:length(raw_pitch)/fs-1/fs;
 t = t';
 
