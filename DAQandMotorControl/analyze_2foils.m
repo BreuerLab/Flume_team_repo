@@ -5,7 +5,7 @@
 clear;
 
 load(['R:\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\' ...
-    '20220617_TandemFoil_PHPhaseSweep_A2E_p3=75_h3=1c_phase=0.mat'])
+    '20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=0.85c_phase=120.mat'])
 
 % For data taken on 20220617:
 EP.srate = 1000;
