@@ -10,16 +10,12 @@
 % Eric Handy, Jun 2022 - last edit
 
 
-function [toverT, pitch_cycle, data_cycle] = phase_avg_data(raw_pitch, data, dq, cycle_number) % cycle_number refers to the number of cycles you want averaged
+function [toverT, pitch_cycle, data_cycle] = phase_avg_data(raw_pitch, data, cycle_number) % cycle_number refers to the number of cycles you want averaged
 
-if ~exist('dq','var')
-    % parameter does not exist, default it to the following:
-    fs = 1000; % sampling frequency [Hz]
-else
-    fs = dq.Rate; % sampling freq [Hz]
-end
-
+% fs = EP.srate; % sampling freq [Hz]
+fs = 1000;
 % fs = 100000; % yuanhang's data
+
 t = 0:1/fs:length(raw_pitch)/fs-1/fs;
 t = t';
 
@@ -33,7 +29,7 @@ for i=1:1:length(locs)-1
     T(i) = t(locs(i+1)) - t(locs(i));
 end
 
-start = 4; % first cycle to be averaged, skipping the first three
+start = 1; % first cycle to be averaged, skipping the first three
 tot_cycles = length(T); % total number of cycles identified by the code
 
 if ~exist('cycle_number','var')

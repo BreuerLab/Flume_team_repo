@@ -2,9 +2,9 @@
 
 % EP --> Experiment Parameters (saved after the experiment)
 
-function    [kin, res, par] = extract_measurements_2rigs(dq, foiltype, Prof_out_angle, out, EP)
+function    [kin, res, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, EP)
 
-    kin.T = 1/dq.Rate; % cycle period
+    kin.T = 1/EP.srate; % cycle period
     g = 9.80665; % acceleration of gravity
     nu = 1.00e-6; % water kinematic viscosity @22 degC (20220531)
     [foil, ~, ~] = foils_database(foiltype); % foil-specific parameters
@@ -17,9 +17,9 @@ function    [kin, res, par] = extract_measurements_2rigs(dq, foiltype, Prof_out_
     % Define timesteps for each subtrial, excluding ramp up/down
     
     tsteps = length(out); % total timesteps in the experiment
-    tstep_start = round(transientcycs/(freq*T))+1; % first step after ramp up transient
-    tstep_end = round(tsteps-transientcycs/(freq*T)); % first step after ramp down transient
-    times = T*(1:tstep_end-tstep_start+1);
+    tstep_start = round(EP.transientcycs/(EP.freq*kin.T))+1; % first step after ramp up transient
+    tstep_end = round(tsteps-EP.transientcycs/(EP.freq*kin.T)); % first step after ramp down transient
+    times = kin.T*(1:tstep_end-tstep_start+1);
     kin.time_star = times*EP.freq; % time per cycle
     
     % Kinematics ("kin" variable)
@@ -34,22 +34,22 @@ function    [kin, res, par] = extract_measurements_2rigs(dq, foiltype, Prof_out_
     kin.p3_meas = out(tstep_start:tstep_end,5); % trailing measured pitch [rad]
     kin.h3_meas = out(tstep_start:tstep_end,6); % trailing measured heave [m]
     
-    kin.p2_vel = movmean((1/T)*gradient(squeeze(kin.p2_meas)),100); % leading pitch velocity (smoothed with moving mean)
-    kin.h2_vel = movmean((1/T)*gradient(squeeze(kin.h2_meas)),100); % leading heave velocity (smoothed with moving mean)
-    kin.h2_acc = movmean((1/T)*gradient(squeeze(kin.h2_acc)),100); % leading heave acceleration (smoothed with moving mean)
+    kin.p2_vel = movmean((1/kin.T)*gradient(squeeze(kin.p2_meas)),100); % leading pitch velocity (smoothed with moving mean)
+    kin.h2_vel = movmean((1/kin.T)*gradient(squeeze(kin.h2_meas)),100); % leading heave velocity (smoothed with moving mean)
+    kin.h2_acc = movmean((1/kin.T)*gradient(squeeze(kin.h2_vel)),100); % leading heave acceleration (smoothed with moving mean)
     
-    kin.p3_vel = movmean((1/T)*gradient(squeeze(kin.p3_meas)),100); % trailing pitch velocity (smoothed with moving mean)
-    kin.h3_vel = movmean((1/T)*gradient(squeeze(kin.h3_meas)),100); % trailing heave velocity (smoothed with moving mean)
-    kin.h3_acc = movmean((1/T)*gradient(squeeze(kin.h3_acc)),100); % trailing heave acceleration (smoothed with moving mean)
+    kin.p3_vel = movmean((1/kin.T)*gradient(squeeze(kin.p3_meas)),100); % trailing pitch velocity (smoothed with moving mean)
+    kin.h3_vel = movmean((1/kin.T)*gradient(squeeze(kin.h3_meas)),100); % trailing heave velocity (smoothed with moving mean)
+    kin.h3_acc = movmean((1/kin.T)*gradient(squeeze(kin.h3_vel)),100); % trailing heave acceleration (smoothed with moving mean)
     
     % Resulting forces ("res" variable)
     
     res.force2_x0 = out(tstep_start:tstep_end,17); % leading normal force [N]
     res.force2_y0 = out(tstep_start:tstep_end,18); % leading tangential force [N]
-    res.torque2_z0 = out(tstep_start:tstep_end,22); % leading pitch axis torque [N*m]
+    res.torque2_z0 = -out(tstep_start:tstep_end,22); % leading pitch axis torque [N*m] NOTE: negative due to reference transformation
     res.force3_x0 = out(tstep_start:tstep_end,7); % trailing normal force [N]
     res.force3_y0 = out(tstep_start:tstep_end,8); % trailing tangential force [N]
-    res.torque3_z0 = out(tstep_start:tstep_end,12); % trailing pitch axis torque [N*m]
+    res.torque3_z0 = -out(tstep_start:tstep_end,12); % trailing pitch axis torque [N*m] NOTE: negative due to reference transformation
     
     res.inertialload_y = out(tstep_start:tstep_end,23); % trailing inertial load [N?]
     
@@ -60,7 +60,7 @@ function    [kin, res, par] = extract_measurements_2rigs(dq, foiltype, Prof_out_
     
     % Parameters calculated
     
-    par.U = abs(out(tstep_start:tstep_end,13)); % flow speed from the vectrino [m/s]
+    par.U = mean(abs(out(tstep_start:tstep_end,13)))*1.026; % flow speed from the vectrino [m/s] (with correction)
     EP.fred = (EP.freq*foil.chord)/par.U; % reduced frequency
     
     par.Re = par.U*foil.chord/nu; % Reynolds number
@@ -68,6 +68,6 @@ function    [kin, res, par] = extract_measurements_2rigs(dq, foiltype, Prof_out_
     par.St = EP.freq*foil.chord/par.U; % Strouhal number
     % St = EP.fred*H2/(pi*foil.chord); % Another definition of St for pluging flight, considering the reduced frequency
     %                                % and the heaving amplitude as the characteristic length.
-    par.alphaT4 = atan(-2*pi*(EP.H2/foil.chord)*EP.fred) + deg2rad(EP.P2); % relative angle of attack at T/4 (only relevant to the front foil)
+    par.alphaT4 = atan(-2*pi*(EP.H2)*(EP.freq*foil.chord)/par.U) + deg2rad(EP.P2); % relative angle of attack at T/4 (only relevant to the front foil)
     
 end
