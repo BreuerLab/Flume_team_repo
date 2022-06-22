@@ -2,23 +2,23 @@
 
 % NOTE: got to fix the blockage correction
 
-clear;
-
-load(['R:\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\' ...
-    '20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=0.85c_phase=120.mat'])
-
-% For data taken on 20220617:
-EP.srate = 1000;
-EP.P2 = EP.pitch2;
-EP.H2 = EP.heave2;
-EP.P3 = EP.pitch3;
-EP.H3 = EP.heave3;
-% continue
+% clear;
+% 
+% load(['R:\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\' ...
+%     '20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=0.85c_phase=120.mat'])
+% 
+% % For data taken on 20220617:
+% EP.srate = 1000;
+% EP.P2 = EP.pitch2;
+% EP.H2 = EP.heave2;
+% EP.P3 = EP.pitch3;
+% EP.H3 = EP.heave3;
+% % continue
 
 addpath(genpath("Libraries"));
 
-[kin, res, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, EP);
-[eff, par] = calculate_efficiency(kin, res, par, foil, EP);
+[kin, par, foil] = extract_measurements_2rigsV2(foiltype, Prof_out_angle, out, srate, transientcycs);
+res = calculate_forces(par, kin, out);
 
 %% Plotting
 

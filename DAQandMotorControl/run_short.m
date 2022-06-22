@@ -14,10 +14,10 @@ EP.freq     = 0.63;  % real frequency
 % EP.U = 0.4; % flow velocity
 % EP.freq = (fred*U)/chord; % real frequency
 
-EP.P2 = 75; % Gromit, in degrees
-EP.H2 = 1;  % Gromit, in chords (non-dimensional)
+EP.P2 = 70; % Gromit, in degrees
+EP.H2 = 0.8;  % Gromit, in chords (non-dimensional)
 EP.P3 = 65; % Wallace, in degrees
-EP.H3 = 0.5;  % Wallace, in chords (non-dimensional)
+EP.H3 = 1;  % Wallace, in chords (non-dimensional)
 
 EP.phase13 = 180; % phase between both rigs
 EP.phi     = -90; % phase between heaving and pitching
@@ -27,7 +27,7 @@ EP.num_cyc  = 10;  % number of full-amplitude experimental cycles
 EP.transientcycs     = 3; % number of transient cycles
 EP.constantamplitude = 0; % replace oscillating motion with moving the foil to a desired position
 
-EP.flume_depth = flume_height; % from the initial setup_DAQ
+EP.flume_height = flume_height; % from the initial setup_DAQ
 
 %% Run experiment
 
@@ -39,6 +39,6 @@ EP.flume_depth = flume_height; % from the initial setup_DAQ
 
 EP.srate = dq.Rate; % extract the sampling rate from the daq setup
 
-experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun2_', foiltype, '.mat'];
+experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun_', foiltype, '.mat'];
 save(experiment_name, 'foiltype', 'dat', 'out', 'Prof_out_angle', 'EP');
 
