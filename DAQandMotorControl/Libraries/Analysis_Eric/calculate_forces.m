@@ -2,14 +2,18 @@
 
 function res = calculate_forces(par, kin, out)
     
+    % Extracting relevant variables from 'kin' and 'par'
+
     tsteps_exp = kin.tsteps_exp; tstep_start = kin.tstep_start; tstep_end = kin.tstep_end; num_cyc = par.num_cyc;
     h2_comm = kin.h2_comm; h3_comm = kin.h3_comm; % commanded leading (or trailing) heave (for the cycle-avg power)
+    p2_comm = kin.p2_comm; p3_comm = kin.p3_comm; % commanded leading (or trailing) pitch (for the blockage correction)
     p2_meas = kin.p2_meas; p3_meas = kin.p3_meas; % measured pitch and heave
     h2_meas = kin.h2_meas; h3_meas = kin.h3_meas;
     p2_vel = kin.p2_vel; p3_vel = kin.p3_vel; % pitch and heave velocities
     h2_vel = kin.h2_vel; h3_vel = kin.h3_vel;
     h2_acc = kin.h2_acc; h3_acc = kin.h3_acc; % pitch and heave accelerations
     U = par.U; % flow velocity
+    
     [foil, ~, ~] = foils_database(par.foiltype); % foil characteristics
     rho = 1000; % density of water
     
@@ -18,6 +22,7 @@ function res = calculate_forces(par, kin, out)
     f2n = out(tstep_start:tstep_end,17); % leading normal force [N]
     f2t = out(tstep_start:tstep_end,18); % leading tangential force [N]
     tq2 = -out(tstep_start:tstep_end,22); % leading pitch axis torque [N*m] NOTE: negative due to reference transformation
+    
     f3n = out(tstep_start:tstep_end,7); % trailing normal force [N]
     f3t = out(tstep_start:tstep_end,8); % trailing tangential force [N]
     tq3 = -out(tstep_start:tstep_end,12); % trailing pitch axis torque [N*m] NOTE: negative due to reference transformation
@@ -28,6 +33,7 @@ function res = calculate_forces(par, kin, out)
     
     Drag2 = f2t.*cos(p2_meas) - f2n.*sin(p2_meas); % leading Drag force [N]
     Lift2 = f2n.*cos(p2_meas) + f2t.*sin(p2_meas) - (foil.mass1+0.6)*h2_acc; % leading Lift force [N]
+    
     Drag3 = f3t.*cos(p3_meas) - f3n.*sin(p3_meas); % trailing Drag force [N]
     Lift3 = f3n.*cos(p3_meas) + f3t.*sin(p3_meas) - (foil.mass2+0.6)*h3_acc; % trailing Lift force [N]
 
@@ -88,14 +94,35 @@ function res = calculate_forces(par, kin, out)
     
     % Efficiency calculation
     
-    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency
-    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
+    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp_2*foil.span); % single foil uncorrected pitching efficiency
+    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp_2*foil.span); % single foil uncorrected heaving efficiency
     
-    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency    
-    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
+    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp_3*foil.span); % single foil uncorrected pitching efficiency    
+    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp_3*foil.span); % single foil uncorrected heaving efficiency
 
     Eff_2 = EffH_2 + EffP_2; % total leading foil efficiency
     Eff_3 = EffH_3 + EffP_3; % total trailing foil efficiency
+    
+    Eff_sys = 2*(mean(mean(PwrP2_cyc+PwrH2_cyc,2))+mean(mean(PwrP3_cyc+PwrH3_cyc,2)))/(0.5*rho*U^3*Yp*foil.span); % system efficiency
+    
+    % Non-dimensional forces
+    
+    CL2 = Lift2/(0.5*rho*U^2*foil.span*foil.chord); % leading lift coeff
+    CD2 = Drag2/(0.5*rho*U^2*foil.span*foil.chord); % leading drag coeff
+    CM2 = tq2/(0.5*rho*U^2*foil.span^2*foil.chord); % leading moment coeff
+    CPH2 = PwrH2/(0.5*rho*U^3*foil.span*foil.chord); % leading heaving power coeff
+    CPP2 = PwrP2/(0.5*rho*U^3*foil.span*foil.chord); % leading pitching power coeff
+    
+    CL3 = Lift3/(0.5*rho*U^2*foil.span*foil.chord); % leading lift coeff
+    CD3 = Drag3/(0.5*rho*U^2*foil.span*foil.chord); % leading drag coeff
+    CM3 = tq3/(0.5*rho*U^2*foil.span^2*foil.chord); % leading moment coeff
+    CPH3 = PwrH3/(0.5*rho*U^3*foil.span*foil.chord); % leading heaving power coeff
+    CPP3 = PwrP3/(0.5*rho*U^3*foil.span*foil.chord); % leading pitching power coeff
+    
+    % Blockage correction
+    
+    [beta2, U_2prime, Eff_2prime] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+    [beta3, U_3prime, Eff_3prime] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
     
     %% Store variables
     
@@ -131,5 +158,27 @@ function res = calculate_forces(par, kin, out)
     
     res.Eff_2 = Eff_2; % total leading efficiency
     res.Eff_3 = Eff_3; % total trailing efficiency
+    
+    res.Eff_sys = Eff_sys; % system efficiency
+    
+    res.Eff_2prime = Eff_2prime; % corrected leading efficiency
+    res.Eff_3prime = Eff_3prime; % corrected trailing efficiency
+    res.beta2 = beta2; % leading blockage ratio
+    res.beta3 = beta3; % trailing blockage ratio
+    
+    res.CL2 = CL2; % leading lift coeff
+    res.CD2 = CD2; % leading drag coeff
+    res.CM2 = CM2; % leading moment coeff
+    res.CPH2 = CPH2; % leading heave power coeff
+    res.CPP2 = CPP2; % leadinf pitch power coeff
+    
+    res.CL3 = CL3; % trailing lift coeff
+    res.CD3 = CD3; % trailing drag coeff
+    res.CM3 = CM3; % trailing moment coeff
+    res.CPH3 = CPH3; % trailing heave power coeff
+    res.CPP3 = CPP3; % trailing pitch power coeff
+    
+    res.U_2prime = U_2prime; % corrected flowspeed?
+    res.U_3prime = U_3prime; % corrected flowspeed
     
 end

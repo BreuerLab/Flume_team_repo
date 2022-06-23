@@ -4,31 +4,26 @@
 
 % clear;
 % 
-% load(['R:\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\' ...
-%     '20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=0.85c_phase=120.mat'])
-% 
-% % For data taken on 20220617:
-% EP.srate = 1000;
-% EP.P2 = EP.pitch2;
-% EP.H2 = EP.heave2;
-% EP.P3 = EP.pitch3;
-% EP.H3 = EP.heave3;
-% % continue
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220619_TandemSunday_AlphaSweep_APHPhase_A2E_a33_a67\20220619_TandemFoil_APHPhaseSweep_A2E_alpha=0.33_p3=60_h3=0.7c_phase=0.mat')
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=1.15c_phase=-180.mat');
+load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=80_h3=0.55c_phase=180.mat');
+
+out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 addpath(genpath("Libraries"));
 
-[kin, par, foil] = extract_measurements_2rigsV2(foiltype, Prof_out_angle, out, srate, transientcycs);
+[kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 res = calculate_forces(par, kin, out);
 
 %% Plotting
 
-[toverT1, pitch_cyc2, CL2_cyc] = phase_avg_data(kin.p2_meas, eff.CL2); % LiftC2
-[toverT2, pitch_cyc2, CM2_cyc] = phase_avg_data(kin.p2_meas, eff.CM2); % TorqueC2
-[toverT3, pitch_cyc2, CP2_cyc] = phase_avg_data(kin.p2_meas, (eff.PwrH2+eff.PwrP2) ); % PowerC2
+[toverT1, pitch_cyc2, CL2_cyc] = cycle_avg_data(kin.p2_comm, res.CL2); % LiftC2
+[toverT2, pitch_cyc2, CM2_cyc] = cycle_avg_data(kin.p2_comm, res.CM2); % TorqueC2
+[toverT3, pitch_cyc2, CP2_cyc] = cycle_avg_data(kin.p2_comm, (res.CPH2+res.CPP2) ); % PowerC2
 
-[toverT4, pitch_cyc3, CL3_cyc] = phase_avg_data(kin.p3_meas, eff.CL3); % LiftC3
-[toverT5, pitch_cyc3, CM3_cyc] = phase_avg_data(kin.p3_meas, eff.CM3); % TorqueC3
-[toverT6, pitch_cyc3, CP3_cyc] = phase_avg_data(kin.p3_meas, (eff.PwrH3+eff.PwrP3)); % PowerC3
+[toverT4, pitch_cyc3, CL3_cyc] = cycle_avg_data(kin.p3_comm, res.CL3); % LiftC3
+[toverT5, pitch_cyc3, CM3_cyc] = cycle_avg_data(kin.p3_comm, res.CM3); % TorqueC3
+[toverT6, pitch_cyc3, CP3_cyc] = cycle_avg_data(kin.p3_comm, (res.CPH3+res.CPP3)); % PowerC3
 
 %% Force Measurements
 
@@ -76,7 +71,7 @@ yyaxis right
 plot(toverT6, mean(pitch_cyc3));
 title('Trailing C_P');
 
-maintitle = ['Leading eff = ', num2str(eff.Eff_2_prime), ', Trailing eff = ', num2str(eff.Eff_3_prime)];
+maintitle = ['Leading eff = ', num2str(res.Eff_2), ', Trailing eff = ', num2str(res.Eff_3)];
 
 sgtitle(maintitle);
 

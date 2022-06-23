@@ -9,7 +9,7 @@
 % Eff -- total efficiency
 % Fr -- Froude number
 
-function [beta, U_prime, Eff_prime] = blockage_houlsby(pitch, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
+function [beta, U_prime, Eff_prime] = blockage_houlsby(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
 
     width = 0.8; % flume width [m]
     g = 9.80665; % acceleration of gravity [m/s^2]
@@ -18,7 +18,7 @@ function [beta, U_prime, Eff_prime] = blockage_houlsby(pitch, drag_coeff, heave_
     
     % Normalization of average CD
 
-    [~, ~, CD_cyc] = phase_avg_data(pitch,CD); % phase-averaged drag coeff
+    [~, ~, CD_cyc] = cycle_avg_data(pitch_prof,CD); % phase-averaged drag coeff
     CD_avg = mean(mean(CD_cyc)); % mean drag coefficient per cycle
 
     CD_norm = CD_avg*(foil.chord/(2*H)); % normalized drag coeff to be used in calculations

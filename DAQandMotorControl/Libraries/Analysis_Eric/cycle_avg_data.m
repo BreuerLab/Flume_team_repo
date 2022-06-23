@@ -24,17 +24,19 @@ t = t';
 
 % finding peaks and their locations in the pitch data
 min_peak = mean(abs(raw_pitch))*0.9; % determines the minimum value that the peaks should have
-[~,loc] = findpeaks(raw_pitch,'MinPeakProminence',min_peak);
+[~,loc] = findpeaks(raw_pitch,'MinPeakHeight',min_peak);
 locs = loc - loc(1) + 1;
-T = NaN(length(locs),1);
+T = NaN(length(locs)-1,1);
 
 % time period for each cycle
-for i=1:length(locs)
-    if i == length(locs)
-        T(i) = t(end) - t(locs(i));
-    else
+for i=1:length(locs)-1
+%     if i == length(locs)
+% %         T(i) = t(end) - t(locs(i)); % in an ideal world this would be suficient
+%         T(i) = T(i-1); % But since the last cycle may or may not be counted, better to just
+%                        % make it equal to the previous, that way we avoid calculation errors.
+%     else
         T(i) = t(locs(i+1)) - t(locs(i));
-    end
+%     end
 end
 
 if ~exist('cycle_number','var')
@@ -49,6 +51,7 @@ end
 % % For debugging:
 % figure() % shows which cycles will be averaged
 % plot(t,raw_pitch); hold on;
+% plot(t,data);
 % xline(t(locs), '--r'); % identified cycles
 % xline(t(locs(1:cycle_number)), 'g'); % cycles to be averaged
 % ylabel('\theta');
@@ -59,8 +62,8 @@ T_avg = mean(T(1:cycle_number)); % mean time-period considering only the cycles 
 freq = 1/T_avg; % real frequency from the period (for debugging)
 cycle_length = round(T_avg*srate); % averaged number of data points in one cycle
 
-pitch_cycle = NaN(cycle_number,cycle_length); % cycle-averaged pitching angle
-data_cycle = NaN(cycle_number,cycle_length);  % cycle-averaged torque
+pitch_cycle = zeros(cycle_number,cycle_length); % cycle-averaged pitching angle
+data_cycle = zeros(cycle_number,cycle_length);  % cycle-averaged torque
 
 % Data averaging loop
 for i=1:cycle_length-1

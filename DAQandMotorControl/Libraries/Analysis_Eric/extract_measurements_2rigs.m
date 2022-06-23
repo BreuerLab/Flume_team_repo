@@ -2,7 +2,7 @@
 
 % EP --> Experiment Parameters (saved after the experiment)
 
-function    [kin, par, foil] = extract_measurements_2rigsV2(foiltype, Prof_out_angle, out, srate, transientcycs)
+function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs)
 
     [foil, ~, ~] = foils_database(foiltype);
 
