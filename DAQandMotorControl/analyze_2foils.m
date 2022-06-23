@@ -1,18 +1,20 @@
 %% Quick Analysis
 
+addpath(genpath("Libraries"));
+
 % NOTE: got to fix the blockage correction
 
 % clear;
 % 
-% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220619_TandemSunday_AlphaSweep_APHPhase_A2E_a33_a67\20220619_TandemFoil_APHPhaseSweep_A2E_alpha=0.33_p3=60_h3=0.7c_phase=0.mat')
-% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=1.15c_phase=-180.mat');
-load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Data_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=80_h3=0.55c_phase=180.mat');
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220619_TandemSunday_AlphaSweep_APHPhase_A2E_a33_a67\20220619_TandemFoil_APHPhaseSweep_A2E_alpha=0.33_p3=60_h3=0.7c_phase=0.mat')
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=1.15c_phase=-180.mat');
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=80_h3=0.55c_phase=180.mat');
 
-out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
-
-addpath(genpath("Libraries"));
+% out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
+% [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
+out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting
@@ -25,7 +27,7 @@ res = calculate_forces(par, kin, out);
 [toverT5, pitch_cyc3, CM3_cyc] = cycle_avg_data(kin.p3_comm, res.CM3); % TorqueC3
 [toverT6, pitch_cyc3, CP3_cyc] = cycle_avg_data(kin.p3_comm, (res.CPH3+res.CPP3)); % PowerC3
 
-%% Force Measurements
+%% Cycle-averaged Force Measurements
 
 figure();
 

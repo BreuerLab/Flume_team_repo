@@ -24,11 +24,13 @@ A2E = [   3*0.0254;            6;           0.928;           0.924;         "Rec
 C1  = [     0.054;            8.28;         0.386;           0;             "Cylindrical";   "Carbon fiber" ;     "No"    ]; % Joel's cylinder
 V1  = [      0.06;            6.68;         0.306;           0;          "VibrissaeBeem50x"; "PLA3DprintWepoxy";  "No"    ]; % Joel's vibrissae model
 T1  = [   3*0.0254;            6;           0.000;           0.744;         "Triangular";    "Aluminum"     ;     "No"    ];
+M1  = [   0.075;               4;           0.000;           0.968;         "Membrane";     "Silicone/Steel" ;    "Yes"    ]; % Ilan's membrane
+I1  = [   0.075;               4;           0.000;           0.968;         "0 c inext.";   "Mylar/Steel"    ;    "Yes"    ]; % Ilan's membrane
 
 
 
 
-foils = table(FoilProperties, E1, E1E, A1, A1E, A2, A2E, C1 ,V1, T1); % constructing a table out of the foil data
+foils = table(FoilProperties, E1, E1E, A1, A1E, A2, A2E, C1 ,V1, T1, M1, I1); % constructing a table out of the foil data
 
 selected_data = foils.(foiltype); % identifies the column of the selected foils
 
