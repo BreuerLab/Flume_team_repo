@@ -103,7 +103,7 @@ function res = calculate_forces(par, kin, out)
     Eff_2 = EffH_2 + EffP_2; % total leading foil efficiency
     Eff_3 = EffH_3 + EffP_3; % total trailing foil efficiency
     
-    Eff_sys = 2*(mean(mean(PwrP2_cyc+PwrH2_cyc,2))+mean(mean(PwrP3_cyc+PwrH3_cyc,2)))/(0.5*rho*U^3*Yp*foil.span); % system efficiency
+    Eff_sys = (mean(mean(PwrP2_cyc+PwrH2_cyc,2))+mean(mean(PwrP3_cyc+PwrH3_cyc,2)))/(0.5*rho*U^3*Yp*foil.span); % system efficiency
     
     % Non-dimensional forces
     

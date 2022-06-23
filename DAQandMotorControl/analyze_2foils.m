@@ -14,7 +14,7 @@ out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
-out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+% out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting
