@@ -1,0 +1,39 @@
+FROM THE OUTPUT OF THE RUN_MOTORS CODE
+(2022 06 23)
+
+ ------------------------------------------------------------------------------------------
+
+ >> From the "out" variable:
+ - Cols 1 to 6 = pitching and heaving positions for the three rigs (starting with the foremost upstream)
+               1 --> Shawn   pitching (defunct)
+               2 --> Shawn   heaving  (defunct)
+               3 --> Gromit  pitching (leading) [rad]
+               4 --> Gromit  heaving  (leading) [m]
+               5 --> Wallace pitching (trailing) [rad]
+               6 --> Wallace heaving  (trailing) [m]
+ - Cols 13 to 16 = vectrino data.
+               13 --> x flow velocity [m/s]
+               14 --> y flow velocity [m/s]
+               15 --> z1 flow velocity [m/s]
+               16 --> z2 flow velocity [m/s]
+ - Cols 17 to 22 = Leading foil data:
+               17 --> normal force (Fy) [N]
+               18 --> tangential force (Fx) [N]
+               22 --> spanwise torque (Tz) [N]
+ - Cols 7 to 12 = Trailing foil data:
+                7 --> normal force (Fy) [N]
+                8 --> tangential force (Fx) [N]
+               12 --> spanwise torque (Tz) [N]
+
+ ------------------------------------------------------------------------------------------
+
+ >> From the "Prof_out_angle" variable:
+ - Cols 1 to 6 = pitching and heaving positions for the three rigs (starting with the foremost upstream)
+               1 --> Shawn   pitching (defunct)
+               2 --> Shawn   heaving  (defunct)
+               3 --> Gromit  pitching (leading) [deg]
+               4 --> Gromit  heaving  (leading) [m]
+               5 --> Wallace pitching (trailing) [deg]
+               6 --> Wallace heaving  (trailing) [m]
+
+ ------------------------------------------------------------------------------------------

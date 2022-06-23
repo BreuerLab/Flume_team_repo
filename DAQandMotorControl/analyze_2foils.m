@@ -10,7 +10,7 @@ addpath(genpath("Libraries"));
 % load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=60_h3=1.15c_phase=-180.mat');
 % load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\20220617_TandemFoil_PHPhaseSweep_A2E_p3=80_h3=0.55c_phase=180.mat');
 
-% out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
+out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
