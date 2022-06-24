@@ -14,7 +14,7 @@ out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
-% out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting
@@ -31,49 +31,56 @@ res = calculate_forces(par, kin, out);
 
 figure();
 
+maintitle = ['Leading eff = ', num2str(res.Eff_2), ', Trailing eff = ', num2str(res.Eff_3)];
+
+sgtitle(maintitle, 'Interpreter', 'latex');
+
 subplot(2,3,1)
 yyaxis left
 shadedErrorBar(toverT1, CL2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT1, mean(pitch_cyc2));
-title('Leading C_L');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{L,le}$', 'Interpreter', 'latex');
 
 subplot(2,3,2)
 yyaxis left
 shadedErrorBar(toverT2, CM2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT2, mean(pitch_cyc2));
-title('Leading C_M');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{M,le}$', 'Interpreter', 'latex');
 
 subplot(2,3,3)
 yyaxis left
 shadedErrorBar(toverT3, CP2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT3, mean(pitch_cyc2));
-title('Leading C_P');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{P,le}$', 'Interpreter', 'latex');
 
 subplot(2,3,4)
 yyaxis left
 shadedErrorBar(toverT4, CL3_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT4, mean(pitch_cyc3));
-title('Trailing C_L');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{L,tr}$', 'Interpreter', 'latex');
 
 subplot(2,3,5)
 yyaxis left
 shadedErrorBar(toverT5, CM3_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT5, mean(pitch_cyc3));
-title('Trailing C_M');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{M,tr}$', 'Interpreter', 'latex');
 
 subplot(2,3,6)
 yyaxis left
 shadedErrorBar(toverT6, CP3_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
 yyaxis right
 plot(toverT6, mean(pitch_cyc3));
-title('Trailing C_P');
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{P,tr}$', 'Interpreter', 'latex');
 
-maintitle = ['Leading eff = ', num2str(res.Eff_2), ', Trailing eff = ', num2str(res.Eff_3)];
-
-sgtitle(maintitle);
 

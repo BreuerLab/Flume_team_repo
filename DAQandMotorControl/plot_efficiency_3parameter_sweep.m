@@ -37,7 +37,8 @@ end
 %%
 figure(2)
 
-sgtitle('Uncorrected, trailing', 'FontSize', 20, 'Interpreter', 'latex');
+mt = ['Unorrected trailing foil efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
 colormap('magma')
 
 for i = 1:size(Eff_phys_2,2)
@@ -87,7 +88,8 @@ end
 %%
 figure(4)
 
-sgtitle('Corrected, trailing', 'FontSize', 20, 'Interpreter', 'latex');
+mt = ['Corrected trailing foil efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
 colormap('magma')
 
 for i = 1:size(Eff_corr_2,2)
@@ -116,7 +118,8 @@ end
 %%
 figure(5)
 
-sgtitle('System Efficiency', 'FontSize', 20, 'Interpreter', 'latex');
+mt = ['System efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
 colormap('magma')
 
 for i = 1:size(Eff_sys,2)
