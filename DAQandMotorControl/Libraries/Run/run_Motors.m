@@ -1,6 +1,6 @@
 function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi, foiltype]...
     = run_Motors(dq,last_out,pitch_bias,Wbias,Gbias,accbias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
-    num_cyc, transientcycs, constantamplitude)
+    num_cyc, transientcycs, constantamplitude, betah, betap)
 %%
 % Given frequency [Hz], Pitch amplitude [deg] and heave amplitude [chords], this function will run 3 rigs for a set number of cycles
 % NOTE: Considering the frontmost rig was removed (Shawn), it's values are defaulted to 0
@@ -62,13 +62,13 @@ last_pos = conv_last_out(last_out,pitch_bias); % dunno what this is for
 % different
 num_cyc2 = num_cyc*freq2/freq3;
 transientcycs2 = transientcycs*freq2/freq3;
-
-[t1p, Prof1p] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, pitch1, phi,0);          % pitch Shawn
-[t1h, Prof1h] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, heave1, 0,0);            % heave Shawn
-[t2p, Prof2p] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, pitch2, phase12 + phi,0);% pitch Gromit
-[t2h, Prof2h] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, heave2, phase12,0);      % heave Gromit
-[t3p, Prof3p] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, pitch3, phase13 + phi,0);% pitch Wallace
-[~, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase13,0);      % heave Wallace
+% NOTE: CHANGED GENERATE_PROFILE TO ADD TRAPEZOIDAL PROFILE GENERATION (+beta PARAMETER IN THE FUNCTION CALL)
+[t1p, Prof1p] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, pitch1, phi,0,0);          % pitch Shawn
+[t1h, Prof1h] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, heave1, 0,0,0);            % heave Shawn
+[t2p, Prof2p] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, pitch2, phase12 + phi,0,0);% pitch Gromit
+[t2h, Prof2h] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, heave2, phase12,0,0);      % heave Gromit
+[t3p, Prof3p] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, pitch3, phase13 + phi,0,betap);% pitch Wallace
+[~, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase13,0,betah);      % heave Wallace
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];
