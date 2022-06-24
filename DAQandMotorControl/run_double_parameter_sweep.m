@@ -95,6 +95,12 @@ for j = 1:length(phase13)
                 '_p3=', num2str(Pitch3(k)), '_h3=', num2str(Heave3(i),3), 'c_phase=', num2str(phase13(j)), '.mat'];
             filename = fullfile(folderpath, file);
             
+
+            %% TEMP SECTION BREAK
+            diagnostics = run_diagnostics(Prof_out_angle,dat,out,foiltype,fs); % get diagnostic data
+            disp(diagnostics);
+
+            %% TEMP SECTION BREAK
             save(filename, 'EP', 'dat', 'Prof_out_angle', 'out', 'foiltype', 'fred', 'freq', 'pitch3k', 'heave3i', 'phase13j', 'Re', 'alphaT4', 'num_cyc');
             
             pause(20)
