@@ -97,8 +97,8 @@ for j = 1:length(phase13)
             
 
             %% TEMP SECTION BREAK
-
-            diagnostics = run_diagnostics(Prof_out_angle,dat,out,foiltype); % get diagnostic data
+            diagnostics = run_diagnostics(Prof_out_angle,dat,out,foiltype,fs); % get diagnostic data
+            disp(diagnostics);
 
             %% TEMP SECTION BREAK
             save(filename, 'EP', 'dat', 'Prof_out_angle', 'out', 'foiltype', 'fred', 'freq', 'pitch3k', 'heave3i', 'phase13j', 'Re', 'alphaT4', 'num_cyc');

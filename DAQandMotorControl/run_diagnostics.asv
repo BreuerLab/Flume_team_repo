@@ -1,4 +1,4 @@
-function [diagnostics] = run_diagnostics(kin,res)
+function [diagnostics] = run_diagnostics(Prof_out_angle,dat,out,foiltype,dq)
     %% Check Encoder Data
     
     function [wave_mean] = verify_sinusoidal(motion_data,name)
@@ -9,14 +9,36 @@ function [diagnostics] = run_diagnostics(kin,res)
         end
     end
 
-    diagnostics.p2_mean = verify_sinusoidal(kin.p2_meas,"Gromit pitch");
-    diagnostics.h2_mean = verify_sinusoidal(kin.h2_meas,"Gromit heave");
-    diagnostics.p3_mean = verify_sinusoidal(kin.p3_meas,"Wallace pitch");
-    diagnostics.h3_mean = verify_sinusoidal(kin.h3_meas,"Wallace heave");
+    diagnostics.p2_mean = verify_sinusoidal(out(:,3),"Gromit pitch");
+    diagnostics.h2_mean = verify_sinusoidal(out(:,4),"Gromit heave");
+    diagnostics.p3_mean = verify_sinusoidal(out(:,5),"Wallace pitch");
+    diagnostics.h3_mean = verify_sinusoidal(out(:,6),"Wallace heave");
+
+    %% Commanded Motion v. Measured
+
+    % cross correlation
+    function [lag] = calculate_lag(comm,measured)
+        [c,lags] = xcorr(comm,measured);
+        [max_c,index] = max(c);
+        disp(max_c);
+        lag = lags(index);
+    end
+    
+    diagnostics.p2_lag = calculate_lag(Prof_out_angle(:,3),out(:,3));
+    diagnostics.h2_lag = calculate_lag(Prof_out_angle(:,4),out(:,4));
+    diagnostics.p3_lag = calculate_lag(Prof_out_angle(:,5),out(:,5));
+    diagnostics.h3_lag = calculate_lag(Prof_out_angle(:,6),out(:,6));
+    
+    % check amplitudes
+    % standard deviation of paths
+
+    %% Flow Rate
+
+    %% Force Drift/Misalignment
     
     %% Force PSD
     
-    [pxx,w] = pwelch(kin.h2_meas);
+    [pxx,w] = pwelch(out(:,4));
     plot(w,10*log10(pxx))
 
     % cross correlation to check for time delay
