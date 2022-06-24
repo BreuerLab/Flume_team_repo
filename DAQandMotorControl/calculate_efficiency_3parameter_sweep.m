@@ -8,8 +8,8 @@ cd(main_dir);
 
 % Folderpath where files are stored
 
-% folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220619_TandemSunday_AlphaSweep_APHPhase_A2E_a33_a67\');
-folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\');
+folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220619_TandemSunday_AlphaSweep_APHPhase_A2E_a33_a67\');
+% folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220617_TandemFriday_AlphaSweep_PHPhase_A2E_a15\');
 
 % Sweeping parameters
 
@@ -37,11 +37,11 @@ for ii = 1:lp3
     for jj = 1:lph
         for kk = 1:lh3
             
-%             filename = ['20220619_TandemFoil_APHPhaseSweep_A2E_alpha=0.679_p3=',...
-%                 num2str(p3(ii)), '_h3=', num2str(h3(kk),3), 'c_phase=', num2str(ph(jj)), '.mat'];
-            
-            filename = ['20220617_TandemFoil_PHPhaseSweep_A2E_p3='...
+            filename = ['20220619_TandemFoil_APHPhaseSweep_A2E_alpha=0.679_p3=',...
                 num2str(p3(ii)), '_h3=', num2str(h3(kk),3), 'c_phase=', num2str(ph(jj)), '.mat'];
+            
+%             filename = ['20220617_TandemFoil_PHPhaseSweep_A2E_p3='...
+%                 num2str(p3(ii)), '_h3=', num2str(h3(kk),3), 'c_phase=', num2str(ph(jj)), '.mat'];
             
             filepath = fullfile(folderpath,filename);
             load(filepath);
@@ -69,6 +69,6 @@ for ii = 1:lp3
 end
 tstop = toc;
 
-save('20220619_TandemFoil_efficiency_A2E_a15_PHPh.mat',...
+save('20220619_TandemFoil_efficiency_A2E_a68_PHPh.mat',...
     'foiltype', 'p3', 'h3', 'ph', 'Eff_sys', 'Eff_phys_2', 'Eff_phys_3', 'Eff_corr_2', 'Eff_corr_3', 'U', 'Fr', 'CD2_norm', 'CD2_norm_p', 'CD3_norm', 'CD3_norm_p');
 
