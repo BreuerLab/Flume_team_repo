@@ -121,8 +121,8 @@ function res = calculate_forces(par, kin, out)
     
     % Blockage correction
     
-    [beta2, U_2prime, Eff_2prime] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
-    [beta3, U_3prime, Eff_3prime] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
+    [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+    [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
     
     %% Store variables
     
@@ -180,5 +180,10 @@ function res = calculate_forces(par, kin, out)
     
     res.U_2prime = U_2prime; % corrected flowspeed?
     res.U_3prime = U_3prime; % corrected flowspeed
+    
+    res.CD2_norm = CD2_norm; % leading drag coeff normalized by the heaving amplitude
+    res.CD3_norm = CD3_norm; % trailing drag coeff normalized by the heaving amplitude
+    res.CD2_norm_p = CD2_norm_p; % leading blockage-corrected drag coeff normalized by the heaving amplitude
+    res.CD3_norm_p = CD3_norm_p; % leading blockage-corrected drag coeff normalized by the heaving amplitude
     
 end

@@ -28,7 +28,7 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     
     %% Flow speed
     
-    U = round(mean(abs(out(:,13))),4)*1.026; % flow speed (with LDV correction)
+    U = round(mean(abs(out(:,13))),4);%*1.026; % flow speed (with LDV correction)
     
     %% Frequency
     

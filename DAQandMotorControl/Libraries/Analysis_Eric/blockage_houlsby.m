@@ -9,7 +9,7 @@
 % Eff -- total efficiency
 % Fr -- Froude number
 
-function [beta, U_prime, Eff_prime] = blockage_houlsby(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
+function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_houlsby(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
 
     width = 0.8; % flume width [m]
     g = 9.80665; % acceleration of gravity [m/s^2]
