@@ -1,6 +1,7 @@
-function [Time, Waveform] = generate_profile(N_cycles, Frequency, Sampling_Frequency, N_cycles_up, N_cycles_down, Amplitude, Phase_shift,constantamplitude)
+function [Time, Waveform] = generate_profile_trapezoidal(N_cycles, Frequency, Sampling_Frequency, N_cycles_up, N_cycles_down, Amplitude, Phase_shift,constantamplitude,beta)
 % Function to generate a waveform of a given amplitude, with a given frequency [Hz], sampling
 % frequency [Hz], number of cycles to ramp up and down, Phase shift [deg]
+% beta : the thing that modulates the shape of the trapezoidal profile (trapz profile parameter) 2022624
 
 % Kenny Breuer, Dec 2021
 % Eric Handy, Dec 2021 - edit
@@ -14,8 +15,22 @@ Npts_per_cycle = round(Npts_total/(N_cycles+N_cycles_up+N_cycles_down)); % total
 
 Time = (0:Npts_total)*dt; % time vector
 
-% Base waveform - the begining and end will be modulated
-Waveform = sin(2*pi*Frequency*Time + deg2rad(Phase_shift));
+% % Base waveform - the begining and end will be modulated
+% Waveform = sin(2*pi*Frequency*Time + deg2rad(Phase_shift));
+
+% For Trapezoidal profiles
+
+if beta >= -1 && beta < 0
+    Waveform = asin(-beta*sin(2*pi*Frequency*Time + deg2rad(Phase_shift)))/asin(-beta);
+elseif beta == 0
+    Waveform = sin(2*pi*Frequency*Time + deg2rad(Phase_shift));
+elseif beta > 0 && beta <= 2.5
+    Waveform = tanh(beta*sin(2*pi*Frequency*Time + deg2rad(Phase_shift)))/tanh(beta);
+else
+    error("Beta must be -1 <= beta <= 1");
+end
+
+
 if constantamplitude ~= 0
     Waveform = ones(1,length(Time));
 end
