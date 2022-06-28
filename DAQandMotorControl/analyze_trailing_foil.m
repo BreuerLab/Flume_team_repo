@@ -1,4 +1,4 @@
-%% Quick 2 Foil Analysis
+%% Quick Trailing Foil Analysis
 
 addpath(genpath("Libraries"));
 
@@ -14,15 +14,10 @@ out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
-out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+% out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting
-
-[toverT1, pitch_cyc2, CL2_cyc] = cycle_avg_data(kin.p2_comm, res.CL2); % LiftC2
-[toverT2, pitch_cyc2, CM2_cyc] = cycle_avg_data(kin.p2_comm, res.CM2); % TorqueC2
-[toverT3, pitch_cyc2, CD2_cyc] = cycle_avg_data(kin.p2_comm, (res.CD2) ); % DragC2
-[toverT4, pitch_cyc2, CP2_cyc] = cycle_avg_data(kin.p2_comm, (res.CPH2+res.CPP2) ); % PowerC2
 
 [toverT5, pitch_cyc3, CL3_cyc] = cycle_avg_data(kin.p3_comm, res.CL3); % LiftC3
 [toverT6, pitch_cyc3, CM3_cyc] = cycle_avg_data(kin.p3_comm, res.CM3); % TorqueC3
@@ -42,55 +37,7 @@ maintitle = ['$\eta_{le}$ = ', num2str(res.Eff_2,3), ', $\eta_{tr}$ = ', num2str
 sgtitle(maintitle, 'Interpreter', 'latex', 'FontSize', 24);
 
 
-subplot(2,4,1)
-yyaxis left
-ylabel('$C_{L,le}$', 'Interpreter', 'latex')
-shadedErrorBar(toverT1, CL2_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
-
-yyaxis right
-plot(toverT1, mean(pitch_cyc2));
-ylabel('$\theta(t/T)_{le}$', 'Interpreter', 'latex')
-
-set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-
-
-subplot(2,4,2)
-yyaxis left
-ylabel('$C_{M,le}$', 'FontSize', 18, 'Interpreter', 'latex')
-shadedErrorBar(toverT2, CM2_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
-
-yyaxis right
-plot(toverT2, mean(pitch_cyc2));
-ylabel('$\theta(t/T)_{le}$', 'Interpreter', 'latex')
-
-set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-
-
-subplot(2,4,3)
-yyaxis left
-ylabel('$C_{D,le}$', 'FontSize', 18, 'Interpreter', 'latex')
-shadedErrorBar(toverT3, CD2_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
-
-yyaxis right
-plot(toverT3, mean(pitch_cyc2));
-ylabel('$\theta(t/T)_{le}$', 'Interpreter', 'latex')
-
-set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-
-
-subplot(2,4,4)
-yyaxis left
-ylabel('$C_{P,le}$', 'FontSize', 18, 'Interpreter', 'latex')
-shadedErrorBar(toverT4, CP2_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
-
-yyaxis right
-plot(toverT4, mean(pitch_cyc2));
-ylabel('$\theta(t/T)_{le}$', 'Interpreter', 'latex')
-
-set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-
-
-subplot(2,4,5)
+subplot(2,2,1)
 yyaxis left
 ylabel('$C_{L,tr}$', 'FontSize', 18, 'Interpreter', 'latex')
 shadedErrorBar(toverT5, CL3_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
@@ -102,7 +49,7 @@ ylabel('$\theta(t/T)_{tr}$', 'Interpreter', 'latex')
 set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
 
 
-subplot(2,4,6)
+subplot(2,2,2)
 yyaxis left
 ylabel('$C_{M,tr}$', 'FontSize', 18, 'Interpreter', 'latex')
 shadedErrorBar(toverT6, CM3_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
@@ -114,7 +61,7 @@ ylabel('$\theta(t/T)_{tr}$', 'Interpreter', 'latex')
 set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
 
 
-subplot(2,4,7)
+subplot(2,2,3)
 yyaxis left
 ylabel('$C_{D,tr}$', 'FontSize', 18, 'Interpreter', 'latex')
 shadedErrorBar(toverT7, CD3_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
@@ -126,7 +73,7 @@ ylabel('$\theta(t/T)_{tr}$', 'Interpreter', 'latex')
 set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
 
 
-subplot(2,4,8)
+subplot(2,2,4)
 yyaxis left
 ylabel('$C_{P,tr}$', 'FontSize', 18, 'Interpreter', 'latex')
 shadedErrorBar(toverT8, CP3_cyc,{@mean, @std},'lineprops',{'-b','LineWidth',1.5},'transparent',true,'patchSaturation',0.2);
