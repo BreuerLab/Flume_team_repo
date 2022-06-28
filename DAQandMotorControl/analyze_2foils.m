@@ -14,14 +14,14 @@ out(:,5) = deg2rad(Prof_out_angle(:,5)); % for data taken on 20220617 - 20220622
 
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
-% out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting
 
-% [toverT1, pitch_cyc2, CL2_cyc] = cycle_avg_data(kin.p2_comm, res.CL2); % LiftC2
-% [toverT2, pitch_cyc2, CM2_cyc] = cycle_avg_data(kin.p2_comm, res.CM2); % TorqueC2
-% [toverT3, pitch_cyc2, CP2_cyc] = cycle_avg_data(kin.p2_comm, (res.CPH2+res.CPP2) ); % PowerC2
+[toverT1, pitch_cyc2, CL2_cyc] = cycle_avg_data(kin.p2_comm, res.CL2); % LiftC2
+[toverT2, pitch_cyc2, CM2_cyc] = cycle_avg_data(kin.p2_comm, res.CM2); % TorqueC2
+[toverT3, pitch_cyc2, CP2_cyc] = cycle_avg_data(kin.p2_comm, (res.CPH2+res.CPP2) ); % PowerC2
 
 [toverT4, pitch_cyc3, CL3_cyc] = cycle_avg_data(kin.p3_comm, res.CL3); % LiftC3
 [toverT5, pitch_cyc3, CM3_cyc] = cycle_avg_data(kin.p3_comm, res.CM3); % TorqueC3
@@ -31,33 +31,34 @@ res = calculate_forces(par, kin, out);
 
 figure();
 
-maintitle = ['Leading eff = ', num2str(res.Eff_2), ', Trailing eff = ', num2str(res.Eff_3)];
+maintitle = ['$\eta_{le}$ = ', num2str(res.Eff_2), ', $\eta_{tr}$ = ', num2str(res.Eff_3), ', $\psi_{1-2} =$ ', num2str(par.phase13),...
+    ', $\theta_{le}|\theta_{tr} =$ ', num2str(par.P2), '$^o|$', num2str(par.P3), '$^o$'];
 
-sgtitle(maintitle, 'Interpreter', 'latex');
+sgtitle(maintitle, 'Interpreter', 'latex', 'FontSize', 24);
 
-% subplot(2,3,1)
-% yyaxis left
-% shadedErrorBar(toverT1, CL2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
-% yyaxis right
-% plot(toverT1, mean(pitch_cyc2));
-% set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-% title('$C_{L,le}$', 'Interpreter', 'latex');
+subplot(2,3,1)
+yyaxis left
+shadedErrorBar(toverT1, CL2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
+yyaxis right
+plot(toverT1, mean(pitch_cyc2));
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{L,le}$', 'Interpreter', 'latex');
 
-% subplot(2,3,2)
-% yyaxis left
-% shadedErrorBar(toverT2, CM2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
-% yyaxis right
-% plot(toverT2, mean(pitch_cyc2));
-% set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-% title('$C_{M,le}$', 'Interpreter', 'latex');
+subplot(2,3,2)
+yyaxis left
+shadedErrorBar(toverT2, CM2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
+yyaxis right
+plot(toverT2, mean(pitch_cyc2));
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{M,le}$', 'Interpreter', 'latex');
 
-% subplot(2,3,3)
-% yyaxis left
-% shadedErrorBar(toverT3, CP2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
-% yyaxis right
-% plot(toverT3, mean(pitch_cyc2));
-% set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
-% title('$C_{P,le}$', 'Interpreter', 'latex');
+subplot(2,3,3)
+yyaxis left
+shadedErrorBar(toverT3, CP2_cyc,{@mean, @std},'lineprops','-b','transparent',true,'patchSaturation',0.2);
+yyaxis right
+plot(toverT3, mean(pitch_cyc2));
+set(gca,'FontSize',18, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+title('$C_{P,le}$', 'Interpreter', 'latex');
 
 subplot(2,3,4)
 yyaxis left

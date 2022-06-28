@@ -2,7 +2,7 @@
 
 % EP --> Experiment Parameters (saved after the experiment)
 
-function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs)
+function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs, foil_separation)
 
     [foil, ~, ~] = foils_database(foiltype);
 
@@ -14,6 +14,13 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     if ~exist('flume_height','var')
         % parameter does not exist, default it to the following:
         flume_height = 0.55; % assumed flume water depth [m]
+    end
+    
+    if ~exist('foil_separation','var')
+        % parameter does not exist, request value:
+        foil_separation = input('Foil separation [chords] = ');
+    else
+        foil_separation = foil_separation/foil.chord; % input from the initial DAQ prompt window has units of [m]
     end
     
     if ~exist('transientcycs','var')
@@ -72,6 +79,20 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     freq = round(1/period,3); % real frequency from the period
     fred = round(freq*foil.chord/U,2); % reduced frequency
     
+    % Phase between leading/trailing motion
+    
+    [xfc, lags] = xcorr(Prof_out_angle(:,4), Prof_out_angle(:,6)); % get the cross-correlation from both signals (heaving from both rigs)
+    [~, I] = max(xfc); % obtain the index of the maximum corrleation value, as we expect the signals to be most correlated at a lag
+    sig_lag = lags(I); % obtain the phase difference in sampled points
+    phase13 = round(sig_lag*360/((1/freq)*1000)); % calculate the phase angle from the phase difference
+    
+    % Phase between heaving and pitching (assuming both foils have same parameter)
+    
+    [xfc, lags] = xcorr(Prof_out_angle(:,6), Prof_out_angle(:,5)); % get the cross-correlation from both signals (pitching and heaving)
+    [~, I] = max(xfc); % obtain the index of the maximum correlation value, as we expect the signals to be most correlated at a lag
+    sig_lag = lags(I); % obtain the phase difference in sampled points
+    phi = round(sig_lag*360/((1/freq)*1000)); % calculate the phase angle from the phase difference
+    
     %% Kinematics
     
     % Heave and Pitch amplitudes
@@ -116,10 +137,11 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     
     Re = U*foil.chord/nu; % Reynolds number
     Fr = U/sqrt(g*flume_height); % Froude number
-    St = freq*foil.chord/U; % Strouhal number
-    % St = EP.fred*H2/(pi*foil.chord); % Another definition of St for pluging flight, considering the reduced frequency
-    %                                % and the heaving amplitude as the characteristic length.
+    St_c = freq*foil.chord/U; % Strouhal number
+    St_h = fred*H2/(pi*foil.chord); % Another definition of St for plunging flight, considering the reduced frequency
+                                       % and the heaving amplitude as the characteristic length.
     alphaT4 = atan(-2*pi*(H2/foil.chord)*fred) + deg2rad(P2); % relative angle of attack at T/4 (only relevant to the front foil)
+    global_phase = rad2deg(2*pi*((foil_separation*foil.chord)/(U*period)) + deg2rad(phase13)); % global phase parameter (Kinsey and Dumas - 2012)
     
     %% Storing variables
     
@@ -133,10 +155,14 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     par.fred = fred; % reduced frequency
     par.Re = Re; % Reynolds
     par.Fr = Fr; % Froude
-    par.St = St; % Strouhal
+    par.St_c = St_c; % Strouhal (normalized with chord length)
+    par.St_h = St_h; % Strouhal (normalized with heave amplitude)
     par.alphaT4 = alphaT4; % angle of attack at 1/4 stroke
     par.P2 = P2; par.H2 = H2; % leading pitch [deg] and heave [m]
     par.P3 = P3; par.H3 = H3; % trailing pitch [deg] and heave [m]
+    par.phase13 = phase13; % phase between leading and trailing motions [deg]
+    par.phi = phi; % phase between heave and pitch [deg]
+    par.global_phase = global_phase; % global phase parameter [deg]
     
     kin.p2_comm = p2_comm; % commanded leading pitch [deg]
     kin.h2_comm = h2_comm; % commanded trailing heave [m]
