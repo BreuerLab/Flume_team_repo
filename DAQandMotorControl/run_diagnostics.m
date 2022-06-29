@@ -169,7 +169,7 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
     diagnostics.ttz_pois = evaluate_force(ttz,ttz_n);
 
     % standard deviation margin for cycle averaging
-    function [mean_line,dev] = cycle_std(cycle,data)
+    function [norm_dev] = norm_cycle_std(cycle,data,name)
         [toverT,pitch_cycle,data_cycle] = cycle_avg_data(cycle,data);
 
         mean_line = mean(data_cycle(4:30,:));
@@ -182,6 +182,12 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
         [norm_mean,c,s] = normalize(f_mean_line,'range',[-1 1]);
         norm_dev = normalize(f_dev,'center',c,'scale',s);
 
+        if (max(norm_dev) > 0.5)
+            amt_over = length(find(norm_dev > 0.5));
+            warning(name + "'s standard deviation is " + amt_over/length(norm_dev)*100 ... ...
+                + "% over 1/2 the amplitude of the average cycle.")
+        end
+
         nexttile
         hold on
 
@@ -189,8 +195,6 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
 
         above = norm_mean + norm_dev;
         below = norm_mean - norm_dev;
-        length(below)
-        length(above)
         t2 = [toverT,fliplr(toverT)];
         between = [below,fliplr(above)];
         fill(t2,between,[0 0.2235 0.3705]);
@@ -201,17 +205,10 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
 
     figure
     tiledlayout(2,3);
-    cycle_std(p2c,lfy);
-    cycle_std(p2c,lfx);
-    cycle_std(p2c,ltz);
-    cycle_std(p3c,tfy);
-    cycle_std(p3c,tfx);
-    cycle_std(p3c,ttz);
-
-    % cross correlation to check for time delay
-    % flow rate — check that its constant
-    % check for any force drift/misalignment
-    % verify that amplitudes are expected (not too high or low)
-    % compare commanded motion with measured in general ^^
-    % 
+    diagnostics.lfy_normdev = norm_cycle_std(p2c,lfy,lfy_n);
+    diagnostics.lfx_normdev = norm_cycle_std(p2c,lfx,lfx_n);
+    diagnostics.ltz_normdev = norm_cycle_std(p2c,ltz,ltz_n);
+    diagnostics.tfy_normdev = norm_cycle_std(p3c,tfy,tfy_n);
+    diagnostics.tfx_normdev = norm_cycle_std(p3c,tfx,tfx_n);
+    diagnostics.ttz_normdev = norm_cycle_std(p3c,ttz,ttz_n);
 end
