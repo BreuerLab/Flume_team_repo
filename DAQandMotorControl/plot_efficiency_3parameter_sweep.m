@@ -2,128 +2,71 @@
 
 clear;
 
+cd('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Flume_team_repo\DAQandMotorControl\');
+addpath(genpath("Libraries"));
+
 % load('20220619_TandemFoil_efficiency_A2E_a15_PHPh.mat');
 load('20220619_TandemFoil_efficiency_A2E_a33_PHPh.mat');
 % load('20220619_TandemFoil_efficiency_A2E_a68_PHPh.mat');
 
-lvlstp = 0.01;
+global_phase = rad2deg((2*pi*6*0.0762)/(0.39*(1/0.63)) + deg2rad(ph));
+
+lvlstp = 0.005;
 
 [X, Y] = meshgrid(p3,h3);
+% [X, Y] = meshgrid(global_phase,h3);
+
+ylbl = ('$h_{tr}$');
+xlbl = ('$\theta_{tr}$');
+% xlbl = ('$\Phi_{1-2}$');
+% xlbl = ('$\psi_{1-2}$');
 
 %%
 figure(1)
 
-colormap('viridis')
+mt = ['Corrected $\eta_{tr}$, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
+colormap('magma')
 
-Eff_phys_2_std = std(Eff_phys_2,0,2);
-Eff_phys_2_mean = mean(Eff_phys_2,'all');
-Eff2 = squeeze(Eff_phys_2_std(:,1,:))';
+for i = 1:size(Eff_corr_2,2)-1
+    
+    Eff3 = squeeze(Eff_corr_3(:,i,:))';
 
-contourf(X, Y, Eff2, 'LineStyle', 'none');
+    subplot(2,3,i);
+    contourf(X, Y, Eff3, 'LevelStep', lvlstp, 'LineStyle', 'none'); hold on;
+    
+    % Find maximum
+    
+    [M, I] = max(Eff3,[],'all','linear');
+%     xline(X(I),'--y');
+%     yline(Y(I),'--y');
+    plot(X(I),Y(I),'p','MarkerSize',18,'MarkerEdgeColor','k','MarkerFaceColor','y');
+    
+    caxis([min(Eff_phys_3,[],'all'), max(Eff_phys_3,[],'all')]);
+    set(gca, 'FontSize', 16, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+    
+    xlabel(xlbl,'Interpreter','latex');
+    ylabel(ylbl,'Interpreter','latex');
+    
+    t = ['$\psi_{1-2}$ = ',num2str(ph(i)), '$^o$, $\eta_{tr}$ = ', num2str(M,3)];
+    title(t, 'Interpreter', 'latex', 'FontSize', 18);
+    
+end
 
-xlabel('$\theta_{tr}$', 'Interpreter', 'latex');
-ylabel('$h_{tr}$', 'Interpreter', 'latex');
-
-c = colorbar();
-caxis([0, max(Eff_phys_2_std,[],'all')]);
-set(gca,'FontSize',22,'TickLabelInterpreter', 'latex');
-
-t = ['STD($\eta_{le}$), $\bar \eta_{le} =$ ', num2str((Eff_phys_2_mean),3)];
-title(t, 'Interpreter', 'latex', 'FontSize', 24);
+colorbar();
 
 %%
 figure(2)
 
-mt = ['Unorrected trailing foil efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+mt = ['$\eta_{sys}$, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
 sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
 colormap('magma')
 
-for i = 1:size(Eff_phys_2,2)
-    
-    Eff3 = squeeze(Eff_phys_3(:,i,:))';
-
-    subplot(3,3,i);
-    contourf(X, Y, Eff3, 'LevelStep', lvlstp, 'LineStyle', 'none'); hold on;
-    
-    % Find maximum
-    
-    [M, I] = max(Eff3,[],'all','linear');
-%     xline(X(I),'--y');
-%     yline(Y(I),'--y');
-    plot(X(I),Y(I),'p','MarkerSize',15,'MarkerEdgeColor','k','MarkerFaceColor','y');
-    
-    
-    colorbar();
-    caxis([min(Eff_phys_3,[],'all'), max(Eff_phys_3,[],'all')]);
-    
-    t = ['phase = ',num2str(ph(i)), '$^o$, $\eta_{tr}$ = ', num2str(M,3)];
-    title(t, 'Interpreter', 'latex', 'FontSize', 18);
-    
-end
-
-%% Corrected efficiency
-% 
-% figure(3)
-% 
-% sgtitle('Corrected')
-% colormap('turbo')
-% 
-% for i = 1:size(Eff_corr_2,2)
-%     
-%     Eff2 = squeeze(Eff_corr_2(:,i,:))';
-% 
-%     subplot(2,4,i);
-%     contourf(X, Y, Eff2, 'LevelStep', lvlstp, 'LineStyle', 'none');
-%     colorbar();
-% %     caxis([0.23, 0.246]);
-%     
-%     t = ['phase = ',num2str(ph(i))];
-%     title(t);
-%     
-% end
-% 
-%%
-figure(4)
-
-mt = ['Corrected trailing foil efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
-sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
-colormap('magma')
-
-for i = 1:size(Eff_corr_2,2)
-    
-    Eff3 = squeeze(Eff_corr_3(:,i,:))';
-
-    subplot(3,3,i);
-    contourf(X, Y, Eff3, 'LevelStep', lvlstp, 'LineStyle', 'none'); hold on;
-    
-    % Find maximum
-    
-    [M, I] = max(Eff3,[],'all','linear');
-%     xline(X(I),'--y');
-%     yline(Y(I),'--y');
-    plot(X(I),Y(I),'p','MarkerSize',15,'MarkerEdgeColor','k','MarkerFaceColor','y');
-    
-    
-    colorbar();
-    caxis([0, max(Eff_corr_3,[],'all')]);
-    
-    t = ['phase = ',num2str(ph(i)), '$^o$, $\eta_{tr}$ = ', num2str(M,3)];
-    title(t, 'Interpreter', 'latex', 'FontSize', 18);
-    
-end
-
-%%
-figure(5)
-
-mt = ['System efficiency, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
-sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
-colormap('magma')
-
-for i = 1:size(Eff_sys,2)
+for i = 1:size(Eff_sys,2)-1
     
     Eff3 = squeeze(Eff_sys(:,i,:))';
 
-    subplot(3,3,i);
+    subplot(2,3,i);
     contourf(X, Y, Eff3, 'LevelStep', lvlstp, 'LineStyle', 'none'); hold on;
     
     % Find maximum
@@ -131,13 +74,52 @@ for i = 1:size(Eff_sys,2)
     [M, I] = max(Eff3,[],'all','linear');
 %     xline(X(I),'--y');
 %     yline(Y(I),'--y');
-    plot(X(I),Y(I),'p','MarkerSize',15,'MarkerEdgeColor','k','MarkerFaceColor','y');
+    plot(X(I),Y(I),'p','MarkerSize',18,'MarkerEdgeColor','k','MarkerFaceColor','y');
     
-    
-    colorbar();
     caxis([min(Eff_sys,[],'all'), max(Eff_sys,[],'all')]);
+    set(gca, 'FontSize', 16, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
     
-    t = ['phase = ',num2str(ph(i)), '$^o$, $\eta_{sys}$ = ', num2str(M,3)];
+    xlabel(xlbl,'Interpreter','latex');
+    ylabel(ylbl,'Interpreter','latex');
+    
+    t = ['$\psi_{1-2}$ = ',num2str(ph(i)), '$^o$, $\eta_{sys}$ = ', num2str(M,3)];
     title(t, 'Interpreter', 'latex', 'FontSize', 18);
     
 end
+
+colorbar();
+
+%%
+figure(3)
+
+mt = ['$\eta_{sys}$, $\alpha_{T/4}$ = ', num2str(alphaT4,2)];
+sgtitle(mt, 'FontSize', 20, 'Interpreter', 'latex');
+colormap('magma')
+
+for i = 1:size(Eff_sys,2)-1
+    
+    Eff3 = squeeze(Eff_sys_corr(:,i,:))';
+
+    subplot(2,3,i);
+    contourf(X, Y, Eff3, 'LevelStep', lvlstp, 'LineStyle', 'none'); hold on;
+    
+    % Find maximum
+    
+    [M, I] = max(Eff3,[],'all','linear');
+%     xline(X(I),'--y');
+%     yline(Y(I),'--y');
+    plot(X(I),Y(I),'p','MarkerSize',18,'MarkerEdgeColor','k','MarkerFaceColor','y');
+    
+    caxis([min(Eff_sys_corr,[],'all'), max(Eff_sys_corr,[],'all')]);
+    set(gca, 'FontSize', 16, 'LineWidth', 1.5, 'TickLabelInterpreter', 'latex');
+    
+    xlabel(xlbl,'Interpreter','latex');
+    ylabel(ylbl,'Interpreter','latex');
+    
+    t = ['$\psi_{1-2}$ = ',num2str(ph(i)), '$^o$, $\eta_{sys}$ = ', num2str(M,3)];
+    title(t, 'Interpreter', 'latex', 'FontSize', 18);
+    
+end
+
+colorbar();
+

@@ -10,7 +10,11 @@
 
 % Eric Handy, Jun 2022 - last edit
 
-function [toverT, pitch_cycle, data_cycle] = cycle_avg_data(raw_pitch, data, srate, cycle_number)
+function [toverT, pitch_cycle, data_cycle] = cycle_avg_data(raw_pitch, data, srate, zero_start, cycle_number)
+
+if ~exist('zero_start','var')
+    zero_start = 0;
+end
 
 if ~exist('srate','var')
     % parameter does not exist, default it to the following:
@@ -71,7 +75,24 @@ for i=1:cycle_length-1
     data_cycle(:,i)  =      data( i : cycle_length : i+cycle_length*cycle_number-1 );
 end
 
+pitch_cycle(:,end) = (pitch_cycle(:,end-1)+pitch_cycle(:,1))*0.5; % this is more of a quick-fix, might want to redo some of this code
+data_cycle(:,end) = (data_cycle(:,end-1)+data_cycle(:,1))*0.5;
+
 t_avg = 0:1/srate:length(mean(pitch_cycle))/srate-1/srate; % actual averaged time per cycle [s]
 toverT = t_avg/T_avg; % normalized time over the period
+
+% If data should start minimum value (to make plotting symmetric)
+if zero_start == 1
+    [~, I] = min(pitch_cycle,[],2); % find location of minimum values in every cycle
+    beginning = pitch_cycle(:,1:I-1); % everything to the left of the minimum value is the beginnning
+    beginning_dat = data_cycle(:,1:I-1);
+    ending = pitch_cycle(:,I:end); % everything to the right of the minimum value is the ending
+    ending_dat = data_cycle(:,I:end);
+    pitch_cycle = [ending,beginning]; % reassign the pitch_cycle variable while reorganizing the cycle data
+    data_cycle = [ending_dat,beginning_dat];
+end
+
+% t_avg = 0:1/srate:length(mean(pitch_cycle))/srate-1/srate; % actual averaged time per cycle [s]
+% toverT = t_avg/T_avg; % normalized time over the period
 
 end
