@@ -1,4 +1,4 @@
-function [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,position,t,Wbias,Gbias,accbias,pitch_bias)
+function [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,position,t,Wbias,Gbias,accbias,pitch_bias,foil)
 % n_pos is in volts, transitions position  from current to desired
 
 % out = input_conv2(n_pos);
@@ -31,7 +31,7 @@ dat = readwrite(dq,output_prof,"OutputFormat","Matrix");
 
 last_out=[pprof1(end) hprof1(end) pprof2(end),hprof2(end) pprof3(end),hprof3(end)];
 
-[out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias);
+[out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias,foil);
 
 
 end
