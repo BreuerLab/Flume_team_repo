@@ -1,5 +1,6 @@
 function [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,position,t,Wbias,Gbias,accbias,pitch_bias)
 % n_pos is in volts, transitions position  from current to desired
+% position is the absolute position respect to the zero-pitch angle
 
 % out = input_conv2(n_pos);
 

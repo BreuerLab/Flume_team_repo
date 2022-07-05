@@ -95,4 +95,6 @@ disp('All set. Turn on motor power. Press any key to run find_bias_3rigs');
 
 % Find zero bias pitch angle by finding pitch with zero lift
 disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch</a> when at full speed.')
+disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch_Gromit(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch_Gromit</a> when at full speed.')
+disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch_Wallace(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch_Wallace</a> when at full speed.')
 

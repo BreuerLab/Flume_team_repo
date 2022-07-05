@@ -7,7 +7,7 @@
 
 %% Experiment Parameter Definition
 
-EP.foiltype = 'E1E'; % from foils_database
+EP.foiltype = 'A2'; % from foils_database
 
 EP.freq     = 0.5;  % real frequency
 % EP.fred = 0.12; % reduced frequency
@@ -16,8 +16,8 @@ EP.freq     = 0.5;  % real frequency
 
 EP.P2 = 0; % Gromit, in degrees
 EP.H2 = 0;  % Gromit, in chords (non-dimensional)
-EP.P3 = 70; % Wallace, in degrees
-EP.H3 = 0.8;  % Wallace, in chords (non-dimensional)
+EP.P3 = 30; % Wallace, in degrees
+EP.H3 = 0;  % Wallace, in chords (non-dimensional)
 
 EP.phase13 = 180; % phase between both rigs
 EP.phi     = -90; % phase between heaving and pitching
@@ -29,8 +29,8 @@ EP.constantamplitude = 0; % replace oscillating motion with moving the foil to a
 
 EP.flume_height = flume_height; % from the initial setup_DAQ
 
-EP.betah = -0.95; % trapezoidal profile parameter <--- for traingular shape
-EP.betap =  2.5; % <-- for trapezoid shape
+EP.betah = 0; % trapezoidal profile parameter <--- for traingular shape
+EP.betap = 0; % <-- for trapezoid shape
 
 %% Run experiment
 
@@ -42,6 +42,6 @@ EP.betap =  2.5; % <-- for trapezoid shape
 
 EP.srate = dq.Rate; % extract the sampling rate from the daq setup
 
-experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun_TrapezoidalTrial2', foiltype, '.mat'];
+experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun_Wallace_Pitch_teknic_test2', foiltype, '.mat'];
 save(experiment_name, 'foiltype', 'dat', 'out', 'Prof_out_angle', 'EP');
 
