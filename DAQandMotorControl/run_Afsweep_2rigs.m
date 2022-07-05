@@ -9,9 +9,9 @@ U = 0.3; % m/s
 num_cyc = 10; % must be even?
 transientcycs = 5;
 constantpitch = 0; % 1 for constant pitch during trial, only last foil
-A2pitch = 20; % Pitch amplitude in degrees
-A1pitch = 20; % pitch amplitude of upstream foil in degrees
-A1star = 0.064/chord; % heave amplitude of upstream foil in meters
+A2pitch = 0; % Pitch amplitude in degrees
+A1pitch = 0; % pitch amplitude of upstream foil in degrees
+A1star = 0; % heave amplitude of upstream foil in meters
 phase2 = 0;
 phi = 0;
 

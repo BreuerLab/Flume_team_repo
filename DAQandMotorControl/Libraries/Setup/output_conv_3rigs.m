@@ -1,4 +1,4 @@
-function [out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias)
+function [out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias,foil)
 
 % Define conversions
 pitch_conv= 2*pi/10000; % rad/cnt
@@ -55,7 +55,7 @@ out(:,4)=(dat(:,4)).*heave_conv;
 out(:,13:16)=(dat(:,13:16)-2.5)*2/5;
 
 accscale = 9.81; % Convert from Volts to m/s^2
-loadmass = 0.6+0.306; % Mass below force sensor in kg
+loadmass = 0.6+foil.mass1; % Mass below force sensor in kg
 %  600g is aluminum mounting plate, 386g is cylinder mass as of 20220503,
 %  306g is vibrissae Beem 50x scale as of 20220518
 out(:,23) = loadmass*accscale*(dat(:,23) - accbias);%- mean(dat(:,23),1); % Accelerometer

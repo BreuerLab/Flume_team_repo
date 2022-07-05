@@ -1,4 +1,4 @@
-function [out,Wbias,Gbias,accbias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname)
+function [out,Wbias,Gbias,accbias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
 bias_trialduration = 10;
 
 write(dq,last_out)
@@ -33,7 +33,6 @@ output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3];  % needs additional trigge
 % dq.queueOutputData(output); 
 % [dat,t] = dq.startForeground;
 dat = readwrite(dq,output,"OutputFormat","Matrix");
-size(dat)
 
 % for ii = [5:10 15:20]
 % dat(:,ii) = medfilt1(dat(:,ii),10);
@@ -47,7 +46,7 @@ accstd = std(dat(:,23),1);
 
 % Heave_voltage = mean(dat(:,9),1);
 % -.05158-.05602*sin(2*pi*.2704)
-out = output_conv_3rigs(dat,Wbias,Gbias,accbias);
+out = output_conv_3rigs(dat,Wbias,Gbias,accbias,foil);
 figure(1)
 subplot(2,1,2)
 % plot(dat(20:end-20,5:10) - repmat(Wbias,numel(out(20:end-20,3)),1),'.')
