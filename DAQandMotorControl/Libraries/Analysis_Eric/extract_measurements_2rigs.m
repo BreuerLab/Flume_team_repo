@@ -140,7 +140,9 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
 %     St_c = freq*foil.chord/U; % Strouhal number
 %     St_h = fred*H2/(pi*foil.chord); % Another definition of St for plunging flight, considering the reduced frequency
                                        % and the heaving amplitude as the characteristic length.
-    alphaT4 = atan(-2*pi*(H2/foil.chord)*fred) + deg2rad(P2); % relative angle of attack at T/4 (only relevant to the front foil)
+    alphaT4_2 = atan(-2*pi*(H2/foil.chord)*fred) + deg2rad(P2); % relative angle of attack at T/4 (leading)
+    alphaT4_3 = atan(-2*pi*(H3/foil.chord)*fred) + deg2rad(P3); % relative angle of attack at T/4 (trailing)
+    
     global_phase = rad2deg(2*pi*((foil_separation*foil.chord)/(U*period)) + deg2rad(phase13)); % global phase parameter (Kinsey and Dumas - 2012)
     
     %% Storing variables
@@ -157,7 +159,10 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     par.Fr = Fr; % Froude
 %     par.St_c = St_c; % Strouhal (normalized with chord length)
 %     par.St_h = St_h; % Strouhal (normalized with heave amplitude)
-    par.alphaT4 = alphaT4; % angle of attack at 1/4 stroke
+
+    par.alphaT4_2 = alphaT4_2; % angle of attack at 1/4 stroke (leading)
+    par.alphaT4_3 = alphaT4_3; % angle of attack at 1/4 stroke (trailing)
+    
     par.P2 = P2; par.H2 = H2; % leading pitch [deg] and heave [m]
     par.P3 = P3; par.H3 = H3; % trailing pitch [deg] and heave [m]
     par.phase13 = phase13; % phase between leading and trailing motions [deg]

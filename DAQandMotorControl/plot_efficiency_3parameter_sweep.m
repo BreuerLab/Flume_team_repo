@@ -5,9 +5,10 @@ clear;
 cd('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\Flume_team_repo\DAQandMotorControl\');
 addpath(genpath("Libraries"));
 
-% load('20220619_TandemFoil_efficiency_A2E_a15_PHPh.mat');
-load('20220619_TandemFoil_efficiency_A2E_a33_PHPh.mat');
-% load('20220619_TandemFoil_efficiency_A2E_a68_PHPh.mat');
+load('20220706_BarnsleyWellicome_TandemFoil_efficiency_A2E_a33_PHPh.mat');
+% load('20220706_TandemFoil_efficiency_A2E_a15_PHPh.mat');
+% load('20220706_TandemFoil_efficiency_A2E_a33_PHPh.mat');
+% load('20220706_TandemFoil_efficiency_A2E_a68_PHPh.mat');
 
 global_phase = rad2deg((2*pi*6*0.0762)/(0.39*(1/0.63)) + deg2rad(ph));
 

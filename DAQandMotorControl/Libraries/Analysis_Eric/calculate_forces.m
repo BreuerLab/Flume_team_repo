@@ -94,11 +94,11 @@ function res = calculate_forces(par, kin, out)
     
     % Efficiency calculation
     
-    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp_2*foil.span); % single foil uncorrected pitching efficiency
-    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp_2*foil.span); % single foil uncorrected heaving efficiency
+    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency
+    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
     
-    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp_3*foil.span); % single foil uncorrected pitching efficiency    
-    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp_3*foil.span); % single foil uncorrected heaving efficiency
+    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency    
+    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
 
     Eff_2 = EffH_2 + EffP_2; % total leading foil efficiency
     Eff_3 = EffH_3 + EffP_3; % total trailing foil efficiency
@@ -123,11 +123,15 @@ function res = calculate_forces(par, kin, out)
     
     % Blockage correction
     
-    [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
-    [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
+%     [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+%     [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
+    [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_barn_well(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+    [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_barn_well(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
     
-    [~, ~, Eff_sys_2prime, ~, ~] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_sys_2, U, par.Fr, foil, par.flume_height);
-    [~, ~, Eff_sys_3prime, ~, ~] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_sys_3, U, par.Fr, foil, par.flume_height);
+%     [~, ~, Eff_sys_2prime, ~, ~] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_sys_2, U, par.Fr, foil, par.flume_height);
+%     [~, ~, Eff_sys_3prime, ~, ~] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_sys_3, U, par.Fr, foil, par.flume_height);
+    [~, ~, Eff_sys_2prime, ~, ~] = blockage_barn_well(p2_comm, CD2, par.H2, Eff_sys_2, U, par.Fr, foil, par.flume_height);
+    [~, ~, Eff_sys_3prime, ~, ~] = blockage_barn_well(p3_comm, CD3, par.H3, Eff_sys_3, U, par.Fr, foil, par.flume_height);
     
     Eff_sys_corr = Eff_sys_2prime+Eff_sys_3prime; % corrected system efficiency
     
