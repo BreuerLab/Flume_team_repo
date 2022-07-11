@@ -99,6 +99,9 @@ for j = 1:length(phase13)
             %% Diagnostics
             [diagnostics,cont_exp] = run_diagnostics(Prof_out_angle,out,fs,EP); % get diagnostic data
             disp(diagnostics);
+            if (~cont_exp)
+                error("Terminal error in last trial, e")
+            end
 
             %% Save data
             save(filename, 'EP', 'dat', 'Prof_out_angle', 'out', 'diagnostics', 'foiltype', 'fred', 'freq', 'pitch3k', 'heave3i', 'phase13j', 'Re', 'alphaT4', 'num_cyc');
@@ -106,11 +109,6 @@ for j = 1:length(phase13)
             pause(20)
             exp = exp + 1;
             fprintf(sprintf('\nFinished experiment %i \n\n Running next experiment... \n\n',exp));
-
-            % check if diagnostic discovered terminal error
-            if (~cont_exp)
-                error("Terminal error in last trial, stopping experiment.");
-            end
         end
     end    
 end

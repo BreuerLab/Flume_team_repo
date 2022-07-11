@@ -1,5 +1,19 @@
-function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
+function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,EP)
     addpath(genpath("Libraries"))
+    continue_exp = true;
+    
+    %% Email setup
+    from_address = 'breuerflume@gmail.com';
+    pass = 'lfvxzaqmulqfaumi'; % email password is flumepass
+    setpref('Internet', 'E_mail', from_address);
+    setpref('Internet', 'SMTP_Username', from_address);
+    setpref('Internet', 'SMTP_Password', pass);
+    setpref('Internet', 'SMTP_Server',   'smtp.gmail.com');
+    props = java.lang.System.getProperties;
+    props.setProperty('mail.smtp.auth',                'true');  % Note: 'true' as a string, not a logical value!
+    props.setProperty('mail.smtp.starttls.enable',     'true');  % Note: 'true' as a string, not a logical value!
+    props.setProperty('mail.smtp.socketFactory.port',  '465');   % Note: '465'  as a string, not a numeric value!
+    props.setProperty('mail.smtp.socketFactory.class', 'javax.net.ssl.SSLSocketFactory');
 
     %% Locally Label Variables
     % NOTE: converting comm to radians
@@ -95,6 +109,12 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
         diff = normalize(comm,"range") - normalize(measured,"range");
         if (max(abs(diff)) > 0.05)
             warning(name + " encoder value is over 5% off from commanded.")
+        elseif (max(abs(diff)) > 0.1)
+            warning(name + " encoder value is over 10% off from commanded.")
+            sendmail("eric_handy-cardenas@brown.edu","ERROR",...
+                "Encoder data is over 10% astray from commanded profile." +...
+                " The experiment has been stopped.");
+            continue_exp = false;
         end
     end
 
@@ -211,12 +231,10 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
     diagnostics.tfy_normdev = norm_cycle_std(p3c,tfy,tfy_n);
     diagnostics.tfx_normdev = norm_cycle_std(p3c,tfx,tfx_n);
     diagnostics.ttz_normdev = norm_cycle_std(p3c,ttz,ttz_n);
-
     % if catastrophic errors happen kill experiment send eric distraught
     % email
     % check if vectrino speed of current experiment is same as previous
     % experiment
-    % check temperatures
     % generalize program for input data sets?
     % 
 end
