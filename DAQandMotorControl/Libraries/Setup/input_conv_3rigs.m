@@ -71,8 +71,8 @@ end
 
 Prof_out(:,1) = -profs(:,1).*5./(360)*2*45/56*5 + pitch_bias(1); % Pitch 1 (Shawn)
 % Prof_out(:,3) = -profs(:,3).*5./(360)*2*60/74 + pitch_offset2;%/1.0126
-Prof_out(:,5) = -profs(:,5)*5.*10/30000*12800/360*1.00+pitch_bias(3); % 5:1 gear *( 10 volts /30000 steps) * (12800 steps/ revolution) * calibration gain 4/4/2016
-% ^^^^^ Supposedly this is sent out to Wallace?
+% Prof_out(:,5) = -profs(:,5)*5.*10/30000*12800/360*1.00+pitch_bias(3); % 5:1 gear *( 10 volts /30000 steps) * (12800 steps/ revolution) * calibration gain 4/4/2016
+Prof_out(:,5) = -profs(:,5).*(3.14159/180)*5.*(1/3.2221) + pitch_bias(3); % Wallace Teknic pitch motor - 20220630
 
 %% Pitch 3 (Servo motor)
 
