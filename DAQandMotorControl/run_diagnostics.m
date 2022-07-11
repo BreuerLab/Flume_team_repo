@@ -211,4 +211,12 @@ function [diagnostics] = run_diagnostics(Prof_out_angle,out,fs,EP)
     diagnostics.tfy_normdev = norm_cycle_std(p3c,tfy,tfy_n);
     diagnostics.tfx_normdev = norm_cycle_std(p3c,tfx,tfx_n);
     diagnostics.ttz_normdev = norm_cycle_std(p3c,ttz,ttz_n);
+
+    % if catastrophic errors happen kill experiment send eric distraught
+    % email
+    % check if vectrino speed of current experiment is same as previous
+    % experiment
+    % check temperatures
+    % generalize program for input data sets?
+    % 
 end

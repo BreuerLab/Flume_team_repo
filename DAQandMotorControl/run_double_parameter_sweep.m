@@ -96,12 +96,12 @@ for j = 1:length(phase13)
             filename = fullfile(folderpath, file);
             
 
-            %% TEMP SECTION BREAK
+            %% Diagnostics
             diagnostics = run_diagnostics(Prof_out_angle,out,fs,EP); % get diagnostic data
             disp(diagnostics);
 
-            %% TEMP SECTION BREAK
-            save(filename, 'EP', 'dat', 'Prof_out_angle', 'out', 'foiltype', 'fred', 'freq', 'pitch3k', 'heave3i', 'phase13j', 'Re', 'alphaT4', 'num_cyc');
+            %% Save data
+            save(filename, 'EP', 'dat', 'Prof_out_angle', 'out', 'diagnostics', 'foiltype', 'fred', 'freq', 'pitch3k', 'heave3i', 'phase13j', 'Re', 'alphaT4', 'num_cyc');
             
             pause(20)
             exp = exp + 1;
