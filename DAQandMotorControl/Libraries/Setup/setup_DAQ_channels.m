@@ -9,10 +9,10 @@ disp('Inititializing NI DAQs')
 %    Number of channels: 28
 %       index Type Device Channel   MeasurementType        Range         Name   
 %       ----- ---- ------ ------- ------------------- ---------------- ---------
-%       1     ci   Dev2   ctr3    Position            n/a              Pitch 1
-%       2     ci   Dev2   ctr2    Position            n/a              Heave 1
-%       3     ci   Dev2   ctr1    Position            n/a              Pitch 2
-%       4     ci   Dev2   ctr0    Position            n/a              Heave 2
+%       1     ci   Dev3   ctr0    Position            n/a              Pitch 1
+%       2     ci   Dev3   ctr1    Position            n/a              Heave 1
+%       3     ci   Dev2   ctr3    Position            n/a              Pitch 2
+%       4     ci   Dev2   ctr2    Position            n/a              Heave 2
 %       5     ci   Dev2   ctr0    Position            n/a              Pitch 3
 %       6     ci   Dev2   ctr1    Position            n/a              Heave 3
 %       7     ai   Dev2   ai0     Voltage (Diff)      -10 to +10 Volts Wallace 1
