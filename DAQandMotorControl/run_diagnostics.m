@@ -1,4 +1,4 @@
-function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,EP)
+function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,freq)
     addpath(genpath("Libraries"))
     continue_exp = true;
     
@@ -140,11 +140,11 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,EP)
         nexttile
         plot(data);
         nexttile
-        plot(w/EP.freq,psd);
+        plot(w/freq,psd);
         xlim([0,25])
         nexttile
-        plot(w/EP.freq,psd);
-        xlim([25,120/EP.freq])
+        plot(w/freq,psd);
+        xlim([25,120/freq])
     end
 
     function [w,psd] = calculate_psd(data)
@@ -167,8 +167,8 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,EP)
 
     function [pois] = evaluate_force(force,name)
         [w,psd] = calculate_psd(force);
-        w_norm = w/EP.freq;
-        psd_seg = psd(find_nearest(w_norm,25):find_nearest(w_norm,120/EP.freq));
+        w_norm = w/freq;
+        psd_seg = psd(find_nearest(w_norm,25):find_nearest(w_norm,120/freq.freq));
         [pks,indcs] = scan_frequencies(psd(find_nearest(w_norm,1)),psd_seg);
 
         if (~isempty(pks))
@@ -195,7 +195,7 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,EP)
         mean_line = mean(data_cycle(4:30,:));
         dev = std(data_cycle(4:30,:));
         
-        [b,a] = butter(5,20*EP.freq/(fs/2));
+        [b,a] = butter(5,20*freq/(fs/2));
         f_mean_line = filtfilt(b,a,mean_line);
         f_dev = filtfilt(b,a,dev);
 

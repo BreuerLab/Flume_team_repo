@@ -48,8 +48,8 @@ Re = U*foil.chord/nu; % Reynolds number
 fred = 0.12; % reduced frequency
 EP.freq = (fred*U)/foil.chord; % real frequency
 
-Pitch2   = 40;   % Gromit, in degrees
-Heave2   = 0.8;    % Gromit, in chords
+Pitch2   = 0;   % Gromit, in degrees
+Heave2   = 0;    % Gromit, in chords
 % pitch3   = 75;   % Wallace, in degrees
 % heave3   = 0.8;  % Wallace, in chords
 
@@ -66,13 +66,19 @@ EP.alphaT4 = alphaT4;
 
 EP.flume_depth = flume_height; % from the initial setup_DAQ
 
+EP.betah = 0;
+EP.betap = 0;
+
 %% Sweeping Parameter
 
 % fred = 0.08:0.01:0.18;
 % freq = (fred*U)/foil.chord;
-Pitch3   = 60:5:80;   % Wallace, in degrees
-Heave3   = 0.55:0.15:1.3;  % Wallace, in chords
-phase13 = -180:60:180; % phase between Wallace and Gromit
+% Pitch3   = 60:5:80;   % Wallace, in degrees
+% Heave3   = 0.55:0.15:1.3;  % Wallace, in chords
+% phase13 = -180:60:180; % phase between Wallace and Gromit
+Pitch3   = 65;   % Wallace, in degrees
+Heave3   = 1;  % Wallace, in chords
+phase13 = 180; % phase between Wallace and Gromit
 
 %% Run experiment
 
@@ -89,15 +95,15 @@ for j = 1:length(phase13)
             EP.phase13 = phase13(j);
 
             [flume, out, dat, Prof_out_angle, Prof_out, last_out, freq, pitch2, heave2, pitch3k, heave3i, phase13j, num_cyc, phi, foiltype]...
-                = run_Motors(dq,last_out,pitch_bias,Wbias,Gbias,accbias,...
-                EP.foiltype, EP.freq, Pitch2, Heave2, Pitch3(k), Heave3(i), phase13(j), EP.phi, EP.num_cyc, EP.transientcycs, EP.constantamplitude);
+                = run_Motors(dq,last_out,pitch_bias,Wbi   as,Gbias,accbias,...
+                EP.foiltype, EP.freq, Pitch2, Heave2, Pitch3(k), Heave3(i), phase13(j), EP.phi, EP.num_cyc, EP.transientcycs, EP.constantamplitude, EP.betah, EP.betap);
             file = ['\', datestr(now,'yyyymmdd'), '_TandemFoil_PHPhaseSweep_', EP.foiltype,...
                 '_p3=', num2str(Pitch3(k)), '_h3=', num2str(Heave3(i),3), 'c_phase=', num2str(phase13(j)), '.mat'];
             filename = fullfile(folderpath, file);
             
 
             %% Diagnostics
-            [diagnostics,cont_exp] = run_diagnostics(Prof_out_angle,out,fs,EP); % get diagnostic data
+            [diagnostics,cont_exp] = run_diagnostics(Prof_out_angle,out,fs,freq); % get diagnostic data
             disp(diagnostics);
 
             %% Save data
