@@ -14,7 +14,7 @@ freq = 0.5;  % real frequency
 
 P2 = 0; % Gromit, in degrees
 H2 = 0;  % Gromit, in chords (non-dimensional)
-P3 = 30; % Wallace, in degrees
+P3 = 0; % Wallace, in degrees
 H3 = 0;  % Wallace, in chords (non-dimensional)
 
 phase13 = 180; % phase between both rigs
@@ -35,15 +35,16 @@ betap = 0; % <-- for trapezoid shape
     foiltype, freq, P2, H2, P3, H3, phase13, phi, num_cyc, transientcycs, constantamplitude, betah, betap);
 
 %% Run diagnostics
-
-fs = dq.Rate; % sampling frequency
-
-[diagnostics, continue_exp] = run_diagnostics(Prof_out_angle, out, fs, freq);
+% 
+% fs = dq.Rate; % sampling frequency
+% 
+% [diagnostics, continue_exp] = run_diagnostics(Prof_out_angle, out, fs, freq);
 
 %% Save
 
-EP.srate = dq.Rate; % extract the sampling rate from the daq setup
+% EP.srate = dq.Rate; % extract the sampling rate from the daq setup
 
-experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun_Wallace_Pitch_teknic_test2', foiltype, '.mat'];
-save(experiment_name, 'foiltype', 'dat', 'out', 'Prof_out_angle', 'diagnostics', 'flume_height');
+experiment_name = [datestr(now,'yyyymmdd'), '_ShortRun_Wallace_calibration_test_1', foiltype, '.mat'];
+% save(experiment_name, 'foiltype', 'dat', 'out', 'Prof_out_angle', 'diagnostics', 'flume_height');
+save(experiment_name, 'foiltype', 'dat', 'out', 'Prof_out_angle', 'flume_height');
 

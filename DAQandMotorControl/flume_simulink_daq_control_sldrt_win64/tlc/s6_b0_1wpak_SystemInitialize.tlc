@@ -1,0 +1,36 @@
+%implements s6_b0_1wpak_SystemInitialize "C"
+
+%function SystemInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcInitializeConditionsFcnOfS4B1 = OpaqueTLCBlockFcn("InitializeConditions", 4, 1, 2, 1, 0)
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+%if !WHITE_SPACE(tlcInitializeConditionsFcnOfS4B1)
+/* InitializeConditions for S-Function (sldrtci): '<Root>/Counter Input' */
+%<tlcInitializeConditionsFcnOfS4B1>\
+%endif
+/* InitializeConditions for Delay: '<Root>/Delay' */
+flume_simulink_daq_control_DW.Delay_DSTATE = flume_simulink_daq_control_P.Delay_InitialCondition;
+/* SystemInitialize for Enabled SubSystem: '<Root>/data_recording' */
+/* InitializeConditions for UnitDelay: '<S11>/Output' */
+flume_simulink_daq_control_DW.Output_DSTATE = flume_simulink_daq_control_P.Output_InitialCondition;
+/* SystemInitialize for RelationalOperator: '<S6>/Relational Operator' incorporates:
+ *  Outport: '<S6>/durationlimit'
+ */
+flume_simulink_daq_control_B.RelationalOperator = flume_simulink_daq_control_P.durationlimit_Y0;
+/* End of SystemInitialize for SubSystem: '<Root>/data_recording' */
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedSystemInitializeLocalVars", localVarDecl)>
+%endfunction
+%function SystemInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void SystemInitialize(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(2, 1, fcnProtoType)>
+%endfunction
