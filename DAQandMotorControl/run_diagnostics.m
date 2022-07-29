@@ -168,7 +168,7 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,freq
     function [pois] = evaluate_force(force,name)
         [w,psd] = calculate_psd(force);
         w_norm = w/freq;
-        psd_seg = psd(find_nearest(w_norm,25):find_nearest(w_norm,120/freq.freq));
+        psd_seg = psd(find_nearest(w_norm,25):find_nearest(w_norm,120/freq));
         [pks,indcs] = scan_frequencies(psd(find_nearest(w_norm,1)),psd_seg);
 
         if (~isempty(pks))

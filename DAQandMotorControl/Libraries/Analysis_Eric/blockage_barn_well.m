@@ -9,7 +9,7 @@
 % Eff -- total efficiency
 % Fr -- Froude number
 
-function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_barn_well(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
+function [beta, U_prime, U_wake, U_wake_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_barn_well(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
     
     width = 0.8; % flume width [m]
     g = 9.80665; % acceleration of gravity [m/s^2]
@@ -28,7 +28,7 @@ function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_barn_well(pit
     
     err = 1;
 %     tic;
-    while err > 1e-6
+    while err > 1e-7 % decreased this
         
         alpha2_alpha4 = (-1+sqrt(1+beta*(beta4_alpha4^2 - 1)))/(beta*(beta4_alpha4 - 1));
         alpha4_1 = beta4_alpha4 - beta*(alpha2_alpha4)*(beta4_alpha4 - 1);
@@ -44,6 +44,10 @@ function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_barn_well(pit
     
     U_prime = U*(alpha2^2 + CD_norm/4)/alpha2;
 
+    U_wake = (alpha2/alpha2_alpha4)*U; % velocity behind the leading foil
+    
+    U_wake_prime = (2*alpha2*(U/U_prime) - 1)*U_prime; % technically a correct calculation, but probably not useful for real-world applications
+    
     CD_norm_p = CD_norm*((U/U_prime)^2); % corrected normalized drag coefficient
 
     Eff_prime = Eff*((U/U_prime)^3); % corrected efficiency

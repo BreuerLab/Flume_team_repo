@@ -92,21 +92,6 @@ function res = calculate_forces(par, kin, out)
 
     Yp = max(Yp_2, Yp_3); % assuming both foils have the same chord
     
-    % Efficiency calculation
-    
-    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency
-    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
-    
-    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected pitching efficiency    
-    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % single foil uncorrected heaving efficiency
-
-    Eff_2 = EffH_2 + EffP_2; % total leading foil efficiency
-    Eff_3 = EffH_3 + EffP_3; % total trailing foil efficiency
-    
-    Eff_sys = (mean(mean(PwrP2_cyc+PwrH2_cyc,2))+mean(mean(PwrP3_cyc+PwrH3_cyc,2)))/(0.5*rho*U^3*Yp*foil.span); % system efficiency
-    Eff_sys_2 = mean(mean(PwrP2_cyc+PwrH2_cyc,2))/(0.5*rho*U^3*Yp*foil.span);
-    Eff_sys_3 = mean(mean(PwrP3_cyc+PwrH3_cyc,2))/(0.5*rho*U^3*Yp*foil.span);
-    
     % Non-dimensional forces
     
     CL2 = Lift2/(0.5*rho*U^2*foil.span*foil.chord); % leading lift coeff
@@ -121,19 +106,42 @@ function res = calculate_forces(par, kin, out)
     CPH3 = PwrH3/(0.5*rho*U^3*foil.span*foil.chord); % leading heaving power coeff
     CPP3 = PwrP3/(0.5*rho*U^3*foil.span*foil.chord); % leading pitching power coeff
     
-    % Blockage correction
+    % Efficiency calculation
     
+    % % Leading foil
+    
+    EffP_2 = mean(mean(PwrP2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % leading foil uncorrected pitching efficiency
+    EffH_2 = mean(mean(PwrH2_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % leading foil uncorrected heaving efficiency
+    Eff_2 = EffH_2 + EffP_2; % total leading foil efficiency
+    
+    [beta2, U_2prime, U_2wake, ~, ~, CD2_norm, CD2_norm_p] = blockage_barn_well(p3_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+    
+    Eff_2prime = Eff_2*(U/U_2prime)^3; % corrected leading foil efficiency
+    
+    % % Trailing foil
+    
+    EffP_3 = mean(mean(PwrP3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % trailing foil uncorrected pitching efficiency    
+    EffH_3 = mean(mean(PwrH3_cyc,2))/(0.5*rho*U^3*Yp*foil.span); % trailing foil uncorrected heaving efficiency
+    Eff_3 = EffH_3 + EffP_3; % total trailing foil efficiency
+    
+    [beta3, U_3prime, U_3wake, ~, ~, CD3_norm, CD3_norm_p] = blockage_barn_well(p3_comm, CD2, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
+    
+    Eff_3prime = Eff_3*(U/U_3prime)^3; % corrected trailing foil efficiency (using the calculated wake velocity from the leading foil's blockage calculation)
+    
+%   NOTE: this might be wrong, the blockage-corrected calculation of the
+%   trailing foil is done considering the corrected free-stream flow from
+%   the leading foil. Perhaps it would make more sense to take the vectrino
+%   measurement and calculate the corrected flow with the drag data of the
+%   trailing foil.
+    
+%     Eff_sys = (mean(mean(PwrP2_cyc+PwrH2_cyc,2))+mean(mean(PwrP3_cyc+PwrH3_cyc,2)))/(0.5*rho*U^3*Yp*foil.span); % system efficiency
+    Eff_sys = Eff_2 + Eff_3; % system efficiency
+    Eff_sys_corr = Eff_2prime + Eff_3prime; % corrected system efficiency
+    
+%     % Blockage correction (not used anymore)
+%     
 %     [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
 %     [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
-    [beta2, U_2prime, Eff_2prime, CD2_norm, CD2_norm_p] = blockage_barn_well(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
-    [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_barn_well(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
-    
-%     [~, ~, Eff_sys_2prime, ~, ~] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_sys_2, U, par.Fr, foil, par.flume_height);
-%     [~, ~, Eff_sys_3prime, ~, ~] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_sys_3, U, par.Fr, foil, par.flume_height);
-    [~, ~, Eff_sys_2prime, ~, ~] = blockage_barn_well(p2_comm, CD2, par.H2, Eff_sys_2, U, par.Fr, foil, par.flume_height);
-    [~, ~, Eff_sys_3prime, ~, ~] = blockage_barn_well(p3_comm, CD3, par.H3, Eff_sys_3, U, par.Fr, foil, par.flume_height);
-    
-    Eff_sys_corr = Eff_sys_2prime+Eff_sys_3prime; % corrected system efficiency
     
     %% Store variables
     
@@ -182,7 +190,7 @@ function res = calculate_forces(par, kin, out)
     res.CD2 = CD2; % leading drag coeff
     res.CM2 = CM2; % leading moment coeff
     res.CPH2 = CPH2; % leading heave power coeff
-    res.CPP2 = CPP2; % leadinf pitch power coeff
+    res.CPP2 = CPP2; % leading pitch power coeff
     
     res.CL3 = CL3; % trailing lift coeff
     res.CD3 = CD3; % trailing drag coeff
@@ -190,8 +198,10 @@ function res = calculate_forces(par, kin, out)
     res.CPH3 = CPH3; % trailing heave power coeff
     res.CPP3 = CPP3; % trailing pitch power coeff
     
-    res.U_2prime = U_2prime; % corrected flowspeed?
-    res.U_3prime = U_3prime; % corrected flowspeed
+    res.U_2prime = U_2prime; % corrected flowspeed
+%     res.U_2wake = U_2wake; % wake vleocity behind the leading foil
+    
+    res.U_3prime = U_3prime; % corrected flowspeed in fornt of the trailing foil
     
     res.CD2_norm = CD2_norm; % leading drag coeff normalized by the heaving amplitude
     res.CD3_norm = CD3_norm; % trailing drag coeff normalized by the heaving amplitude

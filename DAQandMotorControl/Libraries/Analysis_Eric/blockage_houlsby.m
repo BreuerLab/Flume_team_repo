@@ -40,7 +40,7 @@ function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = blockage_houlsby(pitch
 
         err = abs(u1_a - u1_b);
 
-        u2 = u2 + 0.00001;
+        u2 = u2 + 0.000001; % decreased the step size
         i = i + 1;
 
     end
