@@ -188,9 +188,9 @@ chout6.Name = 'Heave Wallace';
 disp('Analog outputs done. Syncing and Zeroing output...')
 
 %  PIV trigger and pulse train channels
-%     s.addDigitalChannel('dev2','Port0/line14','OutputOnly');% output a trigger signal to the PTU
-%     s.addDigitalChannel('dev2','Port0/line10','InputOnly'); % record the trigger signal
-%     s.addDigitalChannel('dev2','Port0/line9','InputOnly'); % record the pulse signal from the PTU
+    addoutput(dq,'dev2','Port0/line14','Digital');% output a trigger signal to the PTU, Dev2.2, P0.5
+    addinput(dq,'dev2','Port0/line10','Digital'); % record the trigger signal, Dev2.2, P0.1
+    addinput(dq,'dev2','Port0/line9','Digital'); % record the pulse signal from the PTU, Dev2.2, P0.0
 
 
 % addTriggerConnection(s,'Dev1/PFI4','Dev4/PFI0','StartTrigger');
