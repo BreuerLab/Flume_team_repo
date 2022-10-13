@@ -21,9 +21,9 @@ hprof3=linspace(last_out(6),last_out(6),bias_trialduration*dq.Rate)';
 
 pprof3=linspace(last_out(5),last_out(5),bias_trialduration*dq.Rate)';
 
-trigger=linspace(last_out(6),last_out(6),bias_trialduration*dq.Rate)';
+trigger=linspace(last_out(7),last_out(7),bias_trialduration*dq.Rate)';
 
-output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3];  % needs additional trigger channel for PIV
+output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger];  % needs additional trigger channel for PIV
 
 % figure(3)
 % plot(output)

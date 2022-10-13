@@ -14,12 +14,12 @@ span = 0.405;
 foil_shape = 'EC1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
-flume_height = 0.52;
-flume_hertz = 14.9;
+flume_height = 0.53;
+flume_hertz = 10.4;
 Number_of_foils = 1;
 foil_separation = 0; 
 foil_offset = 0;
-Temperature = 21.4;
+Temperature = 20.9;
 pitch_axis = 0.5;
 piv_var = 0;
 filt_var = 0;
@@ -91,8 +91,8 @@ mkdir([fname,'\data'])
 %     disp('ensure Vectrino and Vector are collecting data and recording to file')
 % end
 
-last_out = [0 0 0 0 0 0];
-write(dq,last_out)
+last_out = [0 0 0 0 0 0 0];
+  write(dq,last_out)
 
 
 % Find bias voltages for force and acceleration sensors

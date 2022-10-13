@@ -1,6 +1,6 @@
 function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi, foiltype]...
     = run_Motors(dq,last_out,pitch_bias,Wbias,Gbias,accbias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
-    num_cyc, transientcycs, constantamplitude)
+    num_cyc, transientcycs, constantamplitude, offset)
 %%
 % Given frequency [Hz], Pitch amplitude [deg] and heave amplitude [chords], this function will run 3 rigs for a set number of cycles
 % NOTE: Considering the frontmost rig was removed (Shawn), it's values are defaulted to 0
@@ -72,15 +72,15 @@ transientcycs2 = transientcycs*freq2/freq3;
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];
-Prof_out = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,pitch_bias); % let's hope this works <-- It does! But something is weird with the signs.
+Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,pitch_bias); % let's hope this works <-- It does! But something is weird with the signs.
 
 % For PIV trigger
 
-% trig_signal=ones(length(Prof_out_temp(:,1)),1);
-% trig_signal(1:round(1/freq*rate*offset))=0;
-% trig_signal(end-round(1/freq*rate)*1:end)=0;
-% 
-% Prof_out = [Prof_out_temp trig_signal];
+trig_signal=ones(length(Prof_out_temp(:,1)),1);
+trig_signal(1:round(1/freq*dq.Rate*offset))=0;
+trig_signal(end-round(1/freq*dq.Rate)*1:end)=0;
+
+Prof_out = [Prof_out_temp trig_signal];
 
 %% Run section
 tic
