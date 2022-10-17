@@ -3,15 +3,13 @@
 % relative to flume flow
 
 samplerate = 1000; % DAQ sample rate in measurements/second
-pitch_bias = [0 0 0];
-
 
 %% Experimental Setup
 % default values:
-chord = 0.0594;
-thcknss = 0.0238;
-span = 0.405;
-foil_shape = 'EC1';
+chord = 0.054;
+thcknss = 0.054;
+span = 0.447;
+foil_shape = 'C1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
 flume_height = 0.53;
@@ -19,7 +17,7 @@ flume_hertz = 10.4;
 Number_of_foils = 1;
 foil_separation = 0; 
 foil_offset = 0;
-Temperature = 20.9;
+Temperature = 20.68;
 pitch_axis = 0.5;
 piv_var = 0;
 filt_var = 0;
@@ -74,8 +72,6 @@ if isdir(fname)
 end
 mkdir([fname,'\data'])
 
-
-
 % disp('Checking velocimeters')
 % V(1) = system('tasklist /FI "IMAGENAME eq vectrino.exe" 2>NUL | find /I /N "vectrino.exe">NUL','-echo');
 % V(2) = system('tasklist /FI "IMAGENAME eq vector.exe" 2>NUL | find /I /N "vector.exe">NUL','-echo');
@@ -97,8 +93,9 @@ last_out = [0 0 0 0 0 0 0];
 
 % Find bias voltages for force and acceleration sensors
 disp('All set. Turn on motor power. Press any key to run find_bias_3rigs');
-[out,Wbias,Gbias,accbias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
+[out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
 
+bias.pitch = [0 0 0]; 
 % Find zero bias pitch angle by finding pitch with zero lift
-disp('Run flume.  Click <a href="matlab: [last_out,pitch_bias] = find_zero_pitch(dq,last_out,Wbias,Gbias,accbias,pitch_bias,foil);">find_zero_pitch</a> when at full speed.')
+disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil);">find_zero_pitch</a> when at full speed.')
 

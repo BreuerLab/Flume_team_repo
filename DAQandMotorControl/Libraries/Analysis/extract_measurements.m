@@ -1,5 +1,6 @@
 function    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_measured,force_D,force_L,inertialload_y,...
     flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,T,Prof_out_angle,out)
+    chord = 0.0594;
     % Define timesteps for each subtrial, excluding ramp up/down
     timesteps = length(out);
     timestep_start = round(transientcycs/(freq*T))+1;

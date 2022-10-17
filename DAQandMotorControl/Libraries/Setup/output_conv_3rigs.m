@@ -1,4 +1,4 @@
-function [out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias,foil)
+function [out,t]=output_conv_3rigs(dat,bias,foil)
 
 % Define conversions
 pitch_conv= 2*pi/10000; % rad/cnt
@@ -40,8 +40,8 @@ out(:,4)=(dat(:,4)).*heave_conv;
 %     out(:,7:12) = Wallace_conv(low_pass_filtfilt(dat(:,7:12)));
 %     out(:,17:22) = Gromit_conv(low_pass_filtfilt(dat(:,17:22)));
 % else
-    out(:,7:12) = Wallace_conv(dat(:,7:12),Wbias);
-    out(:,17:22) = Gromit_conv(dat(:,17:22),Gbias);
+    out(:,7:12) = Wallace_conv(dat(:,7:12),bias.Wallace);
+    out(:,17:22) = Gromit_conv(dat(:,17:22),bias.Gromit);
 % end
 
 % phase = abs(asind(dat(1,9)/.05602+.05158/.05602));
@@ -58,7 +58,7 @@ accscale = 9.81; % Convert from Volts to m/s^2
 loadmass = 0.6+foil.mass1; % Mass below force sensor in kg
 %  600g is aluminum mounting plate, 386g is cylinder mass as of 20220503,
 %  306g is vibrissae Beem 50x scale as of 20220518
-out(:,23) = loadmass*accscale*(dat(:,23) - accbias);%- mean(dat(:,23),1); % Accelerometer
+out(:,23) = loadmass*accscale*(dat(:,23) - bias.accmeter);%- mean(dat(:,23),1); % Accelerometer
 
 
 t = (0:numel(out(:,1))-1)/1000;
