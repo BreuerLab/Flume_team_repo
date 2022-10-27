@@ -6,18 +6,18 @@ samplerate = 1000; % DAQ sample rate in measurements/second
 
 %% Experimental Setup
 % default values:
-chord = 0.054;
-thcknss = 0.054;
-span = 0.447;
-foil_shape = 'C1';
+chord = 0.0535;
+thcknss = 0.0265;
+span = 0.401;
+foil_shape = 'V1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
 flume_height = 0.53;
-flume_hertz = 10.4;
+flume_hertz = 10.7;
 Number_of_foils = 1;
 foil_separation = 0; 
 foil_offset = 0;
-Temperature = 20.68;
+Temperature = 21.37;
 pitch_axis = 0.5;
 piv_var = 0;
 filt_var = 0;
@@ -62,10 +62,10 @@ addpath(genpath("Libraries"))
 
 [foil, rho, fs] = foils_database(foil_shape);
 
-if isdir(fname)
+if isfolder(fname)
     disp('Warning: experiment name already exists.  Apppending date and time')
     fname = [fname,'_',Date,'_',num2str(Time(4)),'_',num2str(Time(5)),'_',num2str(round(Time(6)))];
-    if isdir(fname)
+    if isfolder(fname)
         disp('Warning: folder name still taken. Appending time')
         fname = [fname,'_',num2str(Time(4)),'_',num2str(Time(5)),'_',num2str(Time(6))];
     end

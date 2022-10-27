@@ -54,7 +54,7 @@ if round(f(2)) < 0 || round(f(2)) > numel(prof(:,5))
     
     
     
-    pitch_bias(3) = mean([prof(round(f(2)),5) prof2(round(f1(2)),5)]);
+    bias.pitch(3) = mean([prof(round(f(2)),5) prof2(round(f1(2)),5)]);
     
     
     if round(f(2)) < 0 || round(f(2)) > numel(prof(:,5))
@@ -84,12 +84,12 @@ if round(f(2)) < 0 || round(f(2)) > numel(prof(:,5))
     
 end
 
-pitch_bias(3) = mean([prof(round(f(2)),5) prof2(round(f1(2)),5)]);          % Based on zero lift
+bias.pitch(3) = mean([prof(round(f(2)),5) prof2(round(f1(2)),5)]);          % Based on zero lift
 % pitch_bias(3) = mean([prof(round(f_tq(2)),5) prof2(round(f_tq1(2)),5)]);  % Based on zero torque
 
 disp(['Pitch Bias (volts):  ',num2str(bias.pitch)])
 
-[last_out] = move_to_zero(dq,last_out,bias.pitch);
+[last_out] = move_to_zero(dq,last_out,bias);
 
 % disp(['Pitch Bias (deg)',num2str(conv_last_out(last_out))])
 

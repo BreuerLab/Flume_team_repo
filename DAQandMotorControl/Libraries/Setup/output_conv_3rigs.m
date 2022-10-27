@@ -60,10 +60,10 @@ loadmass = 0.6+foil.mass1; % Mass below force sensor in kg
 %  306g is vibrissae Beem 50x scale as of 20220518
 out(:,23) = loadmass*accscale*(dat(:,23) - bias.accmeter);%- mean(dat(:,23),1); % Accelerometer
 
+% PIV channels
+out(:,24) = dat(:,24);
+out(:,25) = dat(:,25);
 
 t = (0:numel(out(:,1))-1)/1000;
 t = t';
-
-% out(:,23)=dat(:,23);
-% out(:,24)=dat(:,24);
 end

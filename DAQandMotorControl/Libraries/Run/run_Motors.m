@@ -43,9 +43,9 @@ end
 
 write(dq,last_out)
 
-heave1 = heave1*chord; % multiply the heave amplitude times the chord
-heave3 = heave3*chord; % the value for the chord comes from the "daq_setup_3rigs", where it's taken from "foils_database"
-heave2 = heave2*chord;
+% heave1 = heave1*thcknss; % multiply the heave amplitude times the chord
+% heave3 = heave3*thcknss; % the value for the chord comes from the "daq_setup_3rigs", where it's taken from "foils_database"
+% heave2 = heave2*thcknss;
 
 params = [freq1, pitch1, heave1, phase12r, phase13r, 90; %Shawn (first)
           freq1, pitch2, heave2, phase12r, phase13r, phi; %Wallace (last) % the order of this might be wrong

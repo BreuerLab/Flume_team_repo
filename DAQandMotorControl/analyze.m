@@ -4,7 +4,7 @@
 % filename = 'Data\20220526_foilandvib2\foilandvib_pitch=0deg,f2='; name2='Hz,A2=';
 % filename = ['foilandvib_pitch=0deg,f2='];
 %     load([filename,num2str(0.3),name2,num2str(0),'cm.mat']) %,constantpitch=-90deg
-chord = 0.0594;
+% chord = 0.0594;
 singletrial_analysis = 1;
 fstarvector = 0.2;
 Astarvector = 0;

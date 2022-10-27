@@ -1,5 +1,5 @@
 function [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
-bias_trialduration = 10;
+bias_trialduration = 15; % Changed from 10sec for bias drift check
 
 write(dq,last_out)
 fprintf('Checklist:\n  - Zero Flume Velocity\n')
