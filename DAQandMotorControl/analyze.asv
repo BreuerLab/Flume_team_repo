@@ -120,6 +120,7 @@ for Atrial = 1:Atrials
     flowspeed_measured_mean(ftrial,Atrial) = mean(flowspeed_measured);
     flowspeed_measured_stdev(ftrial,Atrial) = std(flowspeed_measured);
     Ustar_measured_mean(ftrial,Atrial) = flowspeed_measured_mean(ftrial,Atrial)/(thcknss*freq);
+
     f_star_commanded(ftrial,Atrial) = thcknss*freq/flowspeed_measured_mean(ftrial,Atrial);
     A_star_commanded(ftrial,Atrial) = (max(heave_commanded)-min(heave_commanded))/(2*thcknss);
     A_star_measured(ftrial,Atrial) = (max(heave_measured)-min(heave_measured))/(2*thcknss);

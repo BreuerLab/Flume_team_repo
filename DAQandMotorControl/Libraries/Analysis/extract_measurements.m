@@ -1,5 +1,5 @@
 function    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_measured,force_D,force_L,inertialload_y,...
-    flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,T,Prof_out_angle,out,thcknss)
+    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,T,Prof_out_angle,out,thcknss)
 
     % Define timesteps for each subtrial, excluding ramp up/down
     timesteps = length(out);
@@ -14,6 +14,10 @@ function    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_
     pitch_measured = out(timestep_start:timestep_end,5);
     force_x0 = out(timestep_start:timestep_end,7);
     force_y0 = out(timestep_start:timestep_end,8);
+    force_z0 = out(timestep_start:timestep_end,9);
+    torque_x0 = out(timestep_start:timestep_end,10);
+    torque_y0 = out(timestep_start:timestep_end,11);
+    torque_z0 = out(timestep_start:timestep_end,12);
     force_D = force_y0.*cos(pitch_measured) - force_x0.*sin(pitch_measured);
     force_L = force_x0.*cos(pitch_measured) + force_y0.*sin(pitch_measured);
     inertialload_y = out(timestep_start:timestep_end,23);
