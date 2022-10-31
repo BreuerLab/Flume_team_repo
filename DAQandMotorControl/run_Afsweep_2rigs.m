@@ -16,11 +16,11 @@ phase2 = 0;
 phi = 0;
 offset = 0; % Time (in cycles) from start of run to start PIV
 
-for fstar = 0.1:0.02:0.6 %0.3:0.02:0.3  
+for fstar = 0.3:0.02:0.3 %0.3:0.02:0.3  
         % fstar = 0.3 % bias drift test constant freq
         freq = fstar*U/thcknss;
 
-    for A2star = 0:0.05:1.1 %0.0:0.1:1.1
+    for A2star = 0:0.05:0 %0.0:0.1:1.1
         A2 = A2star*thcknss;
         A1 = A1star*thcknss;
 
