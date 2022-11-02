@@ -92,10 +92,18 @@ last_out = [0 0 0 0 0 0 0];
 
 
 % Find bias voltages for force and acceleration sensors
-disp('All set. Turn on motor power. Press any key to run find_bias_3rigs');
+disp('All set. Turn on motor power. Turn off flume. Press any key to run find_bias_3rigs');
+% fprintf('Checklist:\n  - Zero Flume Velocity\n')
+% fprintf('Press any key to continue\n\n')
+pause
 [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
 
 bias.pitch = [0 0 0]; 
 % Find zero bias pitch angle by finding pitch with zero lift
 disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil);">find_zero_pitch</a> when at full speed.')
 
+% Find bias voltages for force and acceleration sensors with flume flow at
+% experimental flow speed
+disp('Turn on the flume and take another bias measurement. Press any key to run find_bias_3rigs');
+pause
+[out,bias_loaded,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);

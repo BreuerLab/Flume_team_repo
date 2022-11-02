@@ -1,13 +1,13 @@
 % This script will run analysis on the data that is the folder/ specified by the variable "filename"
 
 % Load data
-% datadir = 'D:\Experiments\1foil\'; 
-trialdir = 'VibPower_31-Oct-2022_13_57_57\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
-datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
+datadir = 'D:\Experiments\1foil\'; 
+trialdir = 'TareTrialTest\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
 % trialdir = 'vib50xBeem\data\'; namepart1 = 'vib_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'CircCyl_20220919\data\'; namepart1 = 'CylPowerMap_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'EllipticalCyl_04-Jul-2022_16_7_4\data\'; namepart1 = 'EllipticalCyl_pitch=0deg,f='; namepart2='Hz,A=';
-% trialdir = 'Vib_27-Oct-2022_18_52_34\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'VibManyFreq_27-Oct-2022_18_52_34\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
 % filename = 'Data\20220620_foilandvib\vary_phase12\foilandvib_pitch=0deg,f='; name2='Hz,A='; name3='cm,phase12=';
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
@@ -15,12 +15,12 @@ filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
 load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 1;
-manytrial_analysis = 0;
+singletrial_analysis = 0;
+manytrial_analysis = 1;
 varyphase = 0;
 
 if manytrial_analysis==1
-fstarvector = (0.1:0.02:0.6);%(0.05:0.01:0.14);
+fstarvector = (0.3:0.02:0.4);%(0.05:0.01:0.14);
 Astarvector = (0.0:0.05:1.1);
 ftrials = length(fstarvector); Atrials = length(Astarvector);
     if varyphase==1
@@ -29,7 +29,7 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.3;
+fstarvector = 0.1;
 Astarvector = 0.0;
 ftrials = 1; Atrials = 1;
 end
@@ -84,7 +84,7 @@ for Atrial = 1:Atrials
     try
         load(trialname,'transientcycs','out','Prof_out_angle','freq','phase2')
     catch
-        disp(['Failed to load ',trialname])
+%         disp(['Failed to load ',trialname])
     end
 
     % Extract measured quantities
@@ -138,10 +138,10 @@ for Atrial = 1:Atrials
 % Calculate power
     power_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^3;
     power_fluid = force_L_corrected_filtered .*heave_velo;
-    power_damping = 0*heave_velo.^2;
+    power_damping = -0*heave_velo.^2;
     power_total = power_fluid + power_damping;
-    power_mean(ftrial,Atrial) = mean(power_fluid);
-    powercoef = power_fluid/power_scale(ftrial,Atrial);
+    power_mean(ftrial,Atrial) = mean(power_total);
+    powercoef = power_total/power_scale(ftrial,Atrial);
     powercoef_mean(ftrial,Atrial) = power_mean(ftrial,Atrial)/power_scale(ftrial,Atrial);
 
 % % heave spectrum
@@ -165,17 +165,20 @@ for Atrial = 1:Atrials
 %     spacing = (f_force(2)-f_force(1))/f;
 %     findpeaks(10*log10(force_powerspec),1/spacing,'MinPeakHeight',max_power-20)
 
-% %     % Find phase delay between heave and force
-% %     maxlag = round(1/(2*freq*T));  % Maximum lag to calculate xcorr (in timesteps)
-% %     [corrs,lags] = xcorr(heave_measured,force_y_corrected_filtered,maxlag);
-% % %     delay = freq*T*360*finddelay(heave_measured,force_y_corrected_filtered,maxlag)
-% %     hold on
-% %     plot(lags*freq*T*360,corrs)
-% %     [forcedelay_peak,forcedelay_peaklocs] = findpeaks(corrs,1);
-% %     forcedelay_deg = forcedelay_peaklocs*T*freq*360-180; % Delay in degrees
-% %     stem(forcedelay_deg,forcedelay_peak);
-% %     xlabel('Lag (degrees)'); ylabel('Correlation')
-% %     xlim([-180 180])
+%     % Find phase delay between heave and force
+%     maxlag = round(1/(2*freq*T));  % Maximum lag to calculate xcorr (in timesteps)
+%     [corrs,lags] = xcorr(heave_measured,force_L_corrected_filtered ,maxlag);
+% %     delay = freq*T*360*finddelay(heave_measured,force_y_corrected_filtered,maxlag)
+%     figure
+%     hold on
+%     plot(lags*freq*T*360,corrs)
+%     [forcedelay_peak,forcedelay_peaklocs] = findpeaks(corrs,1);
+%     forcedelay_deg = forcedelay_peaklocs*T*freq*360-180; % Delay in degrees
+%     stem(forcedelay_deg,forcedelay_peak);
+%     xlabel('Lag (degrees)'); ylabel('Correlation')
+%     xlim([-180 180])
+%     hold off
+%     drawnow
 % 
 % %     % Hilbert transform for instantaneous freq
 % %     window = floor(duration/10);
@@ -200,19 +203,21 @@ for Atrial = 1:Atrials
 
 % Plot force and motion
     if singletrial_analysis==1
-        close all
-    figure
     plot_PrescribedMotionForceAndVelocity(time_star,heave_star_measured,heave_velo,liftcoef,...
         dragcoef,powercoef,num_cyc,dragtorquecoef);
     drawnow
     end
+
 %     disp(['CD', num2str(mean(dragcoef)),'  CL',num2str(mean(liftcoef))]);
     liftcoef_alltrials(ftrial,Atrial) = mean(liftcoef);
     dragcoef_alltrials(ftrial,Atrial) = mean(dragcoef);
     inertialload_alltrials(ftrial,Atrial) = mean(inertialload_y);
 end
 
-
-
+ 
 end
-
+   if manytrial_analysis==1
+    figure
+    plot_PowerCoefContour;
+    drawnow
+    end

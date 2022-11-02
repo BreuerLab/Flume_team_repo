@@ -2,9 +2,6 @@ function [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
 bias_trialduration = 15; % Changed from 10sec for bias drift check
 
 write(dq,last_out)
-fprintf('Checklist:\n  - Zero Flume Velocity\n')
-fprintf('Press any key to continue\n\n')
-pause
 fprintf('Finding Bias ...\n')
 
 flume_hertz_old = flume_hertz;
@@ -50,17 +47,19 @@ out = output_conv_3rigs(dat,bias,foil);
 figure(1)
 subplot(2,1,2)
 % plot(dat(20:end-20,5:10) - repmat(bias.Wallace,numel(out(20:end-20,3)),1),'.')
-plot(out(20:end-20,7:9)./.125,'.')
+force_resolution = [1/32 1/32 1/16];
+plot(out(20:end-20,7:9)./force_resolution,'.')
 hold on 
-plot(out(20:end-20,10:12)*1333/10,'.')
+torque_resolution = (1/528);
+plot(out(20:end-20,10:12)/torque_resolution,'.')
 hold off
 title('Wallace (last)')
 ylabel('Forces and Torques (normalized by resolution)')
 subplot(2,1,1)
 % plot(dat(20:end-20,15:20) - repmat(bias.Gromit,numel(out(20:end-20,3)),1),'.')
-plot(out(20:end-20,17:19)./.125,'.')
+plot(out(20:end-20,17:19)./force_resolution,'.')
 hold on 
-plot(out(20:end-20,20:22)*1333/10,'.')
+plot(out(20:end-20,20:22)/torque_resolution,'.')
 hold off
 title('Gromit (middle)')
 ylabel('Forces and Torques (normalized by resolution)')
