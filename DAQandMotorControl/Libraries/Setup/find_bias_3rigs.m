@@ -55,6 +55,7 @@ plot(out(20:end-20,10:12)/torque_resolution,'.')
 hold off
 title('Wallace (last)')
 ylabel('Forces and Torques (normalized by resolution)')
+legend('Fy','Fx','Fz','Ty','Tx','Tz')
 subplot(2,1,1)
 % plot(dat(20:end-20,15:20) - repmat(bias.Gromit,numel(out(20:end-20,3)),1),'.')
 plot(out(20:end-20,17:19)./force_resolution,'.')
@@ -65,6 +66,7 @@ title('Gromit (middle)')
 ylabel('Forces and Torques (normalized by resolution)')
 hold on
 plot(out(20:end-20,23))
+legend('Fy','Fx','Fz','Ty','Tx','Tz','accely')
 hold off
 
 
