@@ -1,5 +1,5 @@
 function [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
-bias_trialduration = 15; % Changed from 10sec for bias drift check
+bias_trialduration = 30; % Changed from 10sec for bias drift check
 
 write(dq,last_out)
 fprintf('Finding Bias ...\n')
@@ -63,6 +63,9 @@ plot(out(20:end-20,20:22)/torque_resolution,'.')
 hold off
 title('Gromit (middle)')
 ylabel('Forces and Torques (normalized by resolution)')
+hold on
+plot(out(20:end-20,23))
+hold off
 
 
 % changed first term from "out" to "dat"

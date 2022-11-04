@@ -2,11 +2,12 @@
 % and automatically save the output data
 
 startexp = tic;
-experimentnamestr = 'Vib';
-foiltype='V1';
-chord=0.0535; % meters
-U = 0.2; % m/s
-num_cyc = 30; % must be even?
+experimentnamestr = 'CircCyl';
+foiltype='C1';
+chord=0.054; % meters
+thcknss = chord;
+U = 0.3; % m/s
+num_cyc = 60; % must be even?
 transientcycs = 5;
 constantpitch = 0; % 1 for constant pitch during trial, only last foil
 A2pitch = 0; % Pitch amplitude in degrees
@@ -16,13 +17,13 @@ phase2 = 0;
 phi = 0;
 offset = 0; % Time (in cycles) from start of run to start PIV
 
-% 
-
-for fstar = 0.3:0.02:0.4 %0.3:0.02:0.3  
+for fstar = 0.3:0.01:0.3 %0.3:0.02:0.3
+% for freq = 0.4328:0.0541:0.7574 %0.7574 % test case for Eric's foil
         % fstar = 0.3 % bias drift test constant freq
         freq = fstar*U/thcknss;
 
-    for A2star = 0:0.05:1.1 %0.0:0.1:1.1
+    for A2star = 0:0.05:0 %0.0:0.1:1.1
+%     for A2 = 0:1:0 %0.0488:0.0061:0.0488 % test case for Eric's foil
         A2 = A2star*thcknss;
         A1 = A1star*thcknss;
 

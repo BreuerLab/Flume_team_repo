@@ -15,12 +15,12 @@ filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
 load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 0;
-manytrial_analysis = 1;
+singletrial_analysis = 1;
+manytrial_analysis = 0;
 varyphase = 0;
 
 if manytrial_analysis==1
-fstarvector = (0.1:0.02:0.3);%(0.05:0.01:0.14);
+fstarvector = (0.3:0.02:0.4);%(0.05:0.01:0.14);
 Astarvector = (0.0:0.05:1.1);
 ftrials = length(fstarvector); Atrials = length(Astarvector);
     if varyphase==1
@@ -29,10 +29,10 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.22;
+fstarvector = 0.1;
 % % fvector = 0.4328;
 % % Avector = 0;
-Astarvector = 1.05;
+Astarvector = 0.0;
 ftrials = 1; Atrials = 1;
 end
 
@@ -137,7 +137,7 @@ for Atrial = 1:Atrials
     A_star_measured(ftrial,Atrial) = (max(heave_measured)-min(heave_measured))/(2*thcknss);
 
 % Filter force data
-    force_L_corrected = force_L; %+inertialload_y;
+    force_L_corrected = force_L+inertialload_y;
     [b,a] = butter(6,10*freq*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
     force_L_corrected_filtered = force_L_corrected; %filtfilt(b,a,squeeze(force_L_corrected)); 
     force_D_filtered = force_D; %filtfilt(b,a,squeeze(force_D));
