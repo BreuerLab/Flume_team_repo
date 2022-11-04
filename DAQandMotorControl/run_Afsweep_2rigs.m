@@ -2,11 +2,12 @@
 % and automatically save the output data
 
 startexp = tic;
-experimentnamestr = 'vibPIV';
-foiltype='V1';
-chord=0.024; % meters
-U = 0.2; % m/s
-num_cyc = 50; % must be even?
+experimentnamestr = 'CircCyl';
+foiltype='C1';
+chord=0.054; % meters
+thcknss = chord;
+U = 0.3; % m/s
+num_cyc = 60; % must be even?
 transientcycs = 5;
 constantpitch = 0; % 1 for constant pitch during trial, only last foil
 A2pitch = 0; % Pitch amplitude in degrees
@@ -14,30 +15,49 @@ A1pitch = 0; % pitch amplitude of upstream foil in degrees
 A1star = 0; % heave amplitude of upstream foil in meters
 phase2 = 0;
 phi = 0;
-offset = 10; % Time (in cycles) from start of run to start PIV
+offset = 0; % Time (in cycles) from start of run to start PIV
 
-for fstar = 0.24:0.02:0.24 %0.06:0.02:0.24  
-        freq = fstar*U/chord;
+for fstar = 0.3:0.01:0.3 %0.3:0.02:0.3
+% for freq = 0.4328:0.0541:0.7574 %0.7574 % test case for Eric's foil
+        % fstar = 0.3 % bias drift test constant freq
+        freq = fstar*U/thcknss;
 
-    for A2star = 0:0.1:0 %0.0:0.1:1.1
-        A2 = A2star*chord*100;
+    for A2star = 0:0.05:0 %0.0:0.1:1.1
+%     for A2 = 0:1:0 %0.0488:0.0061:0.0488 % test case for Eric's foil
+        A2 = A2star*thcknss;
+        A1 = A1star*thcknss;
 
         % Used to specify heave velocity and acceleration limits
-        heavevelocommandmax = A2*2*pi*freq/100;
-        heaveaccelcommandmax = A2*(2*pi*freq)^2/100;
-        if heavevelocommandmax > 0.50 || heaveaccelcommandmax > 4.9 
+        heavevelocommandmax = A2*2*pi*freq;
+        heaveaccelcommandmax = A2*(2*pi*freq)^2;
+        if heavevelocommandmax > 0.50 % m/s
+            disp('Commanded velocity limit exceeded, skipping this trial')
+            break
+        elseif heaveaccelcommandmax > 3.5 % m/s^2
+            disp('Commanded acceleration limit exceeded, skipping this trial')
+            break
+        elseif A1 > 0.12 || A2 > 0.12 % meters
+            disp('Commanded heave limit exceeded, skipping this trial')
             break
         end
         
-        disp(['Running trial at f=',num2str(freq,3),'Hz and A=',num2str(A2,3),'cm'])
+        % Take another force sensor tare measurement right before the trial starts
+        [~,bias_newloaded,~] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
+        % bias_trial -> bias_new - bias_loaded + bias
+        bias_trial.Wallace = bias_newloaded.Wallace - bias_loaded.Wallace + bias.Wallace;
+        bias_trial.Gromit = bias_newloaded.Gromit - bias_loaded.Gromit + bias.Gromit;
+        bias_trial.accmeter = bias_newloaded.accmeter - bias_loaded.accmeter + bias.accmeter;
+        bias_trial.pitch = bias.pitch;
+
+        disp(['Running trial at f=',num2str(freq,3),'Hz and A=',num2str(A2*100,3),'cm'])
         
         % Runs the function that moves the motors ("run_Motors")
         [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi,...
             foiltype]...
-        = run_Motors(dq,last_out,pitch_bias,Wbias,Gbias,accbias,foiltype, freq, A1pitch, A1star, A2pitch, A2star, phase2,...
+        = run_Motors(dq,last_out,bias_trial,foiltype, freq, A1pitch, A1, A2pitch, A2, phase2,...
         phi, num_cyc, transientcycs, constantpitch, offset);
         
-        trialname = [fname,'\data\',experimentnamestr,'_pitch=',num2str(A2pitch,3),'deg,f=',num2str(freq,3),'Hz,A=',num2str(A2,3),'cm.mat'];
+        trialname = [fname,'\data\',experimentnamestr,'_pitch=',num2str(A2pitch,3),'deg,f=',num2str(freq,3),'Hz,A=',num2str(100*A2,3),'cm.mat'];
 %         disp('Trial complete, saving data.')
         save(trialname)
     end

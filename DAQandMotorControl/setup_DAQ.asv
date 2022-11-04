@@ -6,18 +6,18 @@ samplerate = 1000; % DAQ sample rate in measurements/second
 
 %% Experimental Setup
 % default values:
-chord = 0.054;
-thcknss = 0.054;
-span = 0.447;
-foil_shape = 'C1';
+chord = 0.0535;
+thcknss = 0.0265;
+span = 0.401;
+foil_shape = 'V1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
-flume_height = 0.55;
-flume_hertz = 16.1;
+flume_height = 0.53;
+flume_hertz = 10.5;
 Number_of_foils = 1;
 foil_separation = 0; 
 foil_offset = 0;
-Temperature = 21.37;
+Temperature = 21.02;
 pitch_axis = 0.5;
 piv_var = 0;
 filt_var = 0;
@@ -92,7 +92,8 @@ last_out = [0 0 0 0 0 0 0];
 
 
 % Find bias voltages for force and acceleration sensors
-disp(['All set. Press any key to run find_bias_3rigs',newline,'Turn on motors, turn off flume']);
+disp_string
+disp('All set. Press any key to run find_bias_3rigs'+newline+'Turn on motors, turn off flume');
 % fprintf('Checklist:\n  - Zero Flume Velocity\n')
 % fprintf('Press any key to continue\n\n')
 pause
@@ -100,14 +101,14 @@ pause
 
 bias.pitch = [0 0 0]; 
 % Find zero bias pitch angle by finding pitch with zero lift
-zero_pitch = 0;
+zero_pitch =0;
 while zero_pitch == 0
 user_ans = input(['Would you like to run find_zero_pitch? Enter "y" or "n" and hit enter.', ...
-    'If yes, turn on the flume flow first.',newline],"s");
+    'If yes, turn on the flume flow first.'+newline],"s");
 if user_ans == 'y'
     [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil);
 end
-user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s");
+user_ans2 = input('Would you like to repeat find_zero_pitch? y/n'+newline,"s");
     if user_ans2 == 'n'
         zero_pitch = 1;
     end
@@ -117,7 +118,7 @@ end
 
 % Find bias voltages for force and acceleration sensors with flume flow at
 % experimental flow speed
-disp(['Take another bias measurement. Press any key to run find_bias_3rigs',newline,'Make sure flume is on at experiment flowspeed!']);
+disp('With the flume running at flow speed for experiment, take another bias measurement. Press any key to run find_bias_3rigs');
 pause
 [out,bias_loaded,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
 

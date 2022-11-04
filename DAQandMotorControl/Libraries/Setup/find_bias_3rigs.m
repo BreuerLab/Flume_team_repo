@@ -1,10 +1,7 @@
-function [out,Wbias,Gbias,accbias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
-bias_trialduration = 10;
+function [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil)
+bias_trialduration = 30; % Changed from 10sec for bias drift check
 
 write(dq,last_out)
-fprintf('Checklist:\n  - Zero Flume Velocity\n')
-fprintf('Press any key to continue\n\n')
-pause
 fprintf('Finding Bias ...\n')
 
 flume_hertz_old = flume_hertz;
@@ -37,54 +34,59 @@ dat = readwrite(dq,output,"OutputFormat","Matrix");
 % for ii = [5:10 15:20]
 % dat(:,ii) = medfilt1(dat(:,ii),10);
 % end
-Wbias = mean(dat(:,7:12),1);
-Wstd = std(dat(:,7:12),1);
-Gbias = mean(dat(:,17:22),1);
-Gstd = std(dat(:,17:22),1);
-accbias = mean(dat(:,23),1);
-accstd = std(dat(:,23),1);
+bias.Wallace = mean(dat(:,7:12),1);
+bias.WallaceStdev = std(dat(:,7:12),1);
+bias.Gromit = mean(dat(:,17:22),1);
+bias.GromitStdev = std(dat(:,17:22),1);
+bias.accmeter = mean(dat(:,23),1);
+bias.accStdev = std(dat(:,23),1);
 
 % Heave_voltage = mean(dat(:,9),1);
 % -.05158-.05602*sin(2*pi*.2704)
-out = output_conv_3rigs(dat,Wbias,Gbias,accbias,foil);
+out = output_conv_3rigs(dat,bias,foil);
 figure(1)
 subplot(2,1,2)
-% plot(dat(20:end-20,5:10) - repmat(Wbias,numel(out(20:end-20,3)),1),'.')
-plot(out(20:end-20,7:9)./.125,'.')
+% plot(dat(20:end-20,5:10) - repmat(bias.Wallace,numel(out(20:end-20,3)),1),'.')
+force_resolution = [1/32 1/32 1/16];
+plot(out(20:end-20,7:9)./force_resolution,'.')
 hold on 
-plot(out(20:end-20,10:12)*1333/10,'.')
+torque_resolution = (1/528);
+plot(out(20:end-20,10:12)/torque_resolution,'.')
 hold off
 title('Wallace (last)')
 ylabel('Forces and Torques (normalized by resolution)')
 subplot(2,1,1)
-% plot(dat(20:end-20,15:20) - repmat(Gbias,numel(out(20:end-20,3)),1),'.')
-plot(out(20:end-20,17:19)./.125,'.')
+% plot(dat(20:end-20,15:20) - repmat(bias.Gromit,numel(out(20:end-20,3)),1),'.')
+plot(out(20:end-20,17:19)./force_resolution,'.')
 hold on 
-plot(out(20:end-20,20:22)*1333/10,'.')
+plot(out(20:end-20,20:22)/torque_resolution,'.')
 hold off
 title('Gromit (middle)')
 ylabel('Forces and Torques (normalized by resolution)')
+hold on
+plot(out(20:end-20,23))
+hold off
 
 
 % changed first term from "out" to "dat"
-RMSEW = sqrt(mean((dat(:,7:12) - repmat(Wbias,numel(out(:,3)),1)).^2));
-if sum(RMSEW>[.15 .15 .3 .1 .1 .1])>0 
-        disp(RMSEW);
+bias.RMSEW = sqrt(mean((dat(:,7:12) - repmat(bias.Wallace,numel(out(:,3)),1)).^2));
+if sum(bias.RMSEW>[.15 .15 .3 .1 .1 .1])>0 
+        disp(bias.RMSEW);
     disp('Warning: Wallace error signal above normal. Check wiring/ grounding.')
 end
-RMSEG = sqrt(mean((dat(:,17:22) - repmat(Gbias,numel(out(:,3)),1)).^2));
-if sum(RMSEG>[.15 .15 .3 .1 .1 .1])>0 
+bias.RMSEG = sqrt(mean((dat(:,17:22) - repmat(bias.Gromit,numel(out(:,3)),1)).^2));
+if sum(bias.RMSEG>[.15 .15 .3 .1 .1 .1])>0 
     disp('Warning: Gromit error signal above normal. Check wiring/ grounding.')
 end
 
-    disp(['Accelerometer voltage: ',num2str(accbias)]);
-if accbias < 1.5 || accbias > 1.8
+    disp(['Accelerometer voltage: ',num2str(bias.accmeter)]);
+if bias.accmeter < 1.5 || bias.accmeter > 1.8
     disp('Accelmeter voltage far from expected ~1.68V, power cycle and try again.');
 end
     
 
-Percent_fullrange_error = RMSEW./[660 660 1980 60 60 60]*100;
-Percent_fullrange_errorG = RMSEG./[660 660 1980 60 60 60]*100;
+Percent_fullrange_error = bias.RMSEW./[660 660 1980 60 60 60]*100;
+Percent_fullrange_errorG = bias.RMSEG./[660 660 1980 60 60 60]*100;
 time = clock;
 d=datevec(date);
 
@@ -94,6 +96,6 @@ numfiles = dir([folder_name,'\bias*']);
 jj = numel(numfiles)+1;
 filename=[folder_name,'\bias_',num2str(jj)];
 
-save(filename,'Gbias','Gstd','Wbias','Wstd','RMSEW','time','RMSEG','dat');
+save(filename,'bias','time','dat');
 flume_hertz = flume_hertz_old;
 end

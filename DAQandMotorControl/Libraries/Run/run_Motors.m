@@ -1,5 +1,5 @@
 function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi, foiltype]...
-    = run_Motors(dq,last_out,pitch_bias,Wbias,Gbias,accbias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
+    = run_Motors(dq,last_out,bias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
     num_cyc, transientcycs, constantamplitude, offset)
 %%
 % Given frequency [Hz], Pitch amplitude [deg] and heave amplitude [chords], this function will run 3 rigs for a set number of cycles
@@ -43,15 +43,15 @@ end
 
 write(dq,last_out)
 
-heave1 = heave1*chord; % multiply the heave amplitude times the chord
-heave3 = heave3*chord; % the value for the chord comes from the "daq_setup_3rigs", where it's taken from "foils_database"
-heave2 = heave2*chord;
+% heave1 = heave1*thcknss; % multiply the heave amplitude times the chord
+% heave3 = heave3*thcknss; % the value for the chord comes from the "daq_setup_3rigs", where it's taken from "foils_database"
+% heave2 = heave2*thcknss;
 
 params = [freq1, pitch1, heave1, phase12r, phase13r, 90; %Shawn (first)
           freq1, pitch2, heave2, phase12r, phase13r, phi; %Wallace (last) % the order of this might be wrong
           freq1, pitch3, heave3, phase12r, phase13r, phi]; %Gromit (mid)
       
-last_pos = conv_last_out(last_out,pitch_bias); % dunno what this is for
+last_pos = conv_last_out(last_out,bias.pitch); % dunno what this is for
 
 %% Profile generation
 % Pitch and heave values have to be taken as negative in order to have the
@@ -72,7 +72,7 @@ transientcycs2 = transientcycs*freq2/freq3;
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];
-Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,pitch_bias); % let's hope this works <-- It does! But something is weird with the signs.
+Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,bias.pitch); % let's hope this works <-- It does! But something is weird with the signs.
 
 % For PIV trigger
 
@@ -92,7 +92,7 @@ disp(['Time taken to run DAQ foreground scan: ',num2str(scantime),' seconds.'])
 
 
 % Convert raw voltages to useful data
-[out,t]=output_conv_3rigs(dat,Wbias,Gbias,accbias,foil); % output angle is in radians
+[out,t]=output_conv_3rigs(dat,bias,foil); % output angle is in radians
 Length = numel(out(:,1))/1000;
 flume = 0;
 
