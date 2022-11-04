@@ -1,10 +1,10 @@
 % This script will run analysis on the data that is the folder/ specified by the variable "filename"
 
 % Load data
-% datadir = 'D:\Experiments\1foil\'; 
+datadir = 'D:\Experiments\1foil\'; 
 % trialdir = 'Enter descriptive name_03-Nov-2022_17_27_4\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
-datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\'; namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
+% datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
+trialdir = 'Enter descriptive name_04-Nov-2022_17_2_18\data\'; namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'CircCyl_20220919\data\'; namepart1 = 'CylPowerMap_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'EllipticalCyl_04-Jul-2022_16_7_4\data\'; namepart1 = 'EllipticalCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'VibManyFreq_27-Oct-2022_18_52_34\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
@@ -13,10 +13,10 @@ trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\'; namepart1 = 'CircCyl_pit
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
 filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
-load([datadir,trialdir,trialfiles(4).name]);
+% load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 0;
-manytrial_analysis = 1;
+singletrial_analysis = 1;
+manytrial_analysis = 0;
 varyphase = 0;
 
 if manytrial_analysis==1
@@ -29,10 +29,10 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.22;
+fstarvector = 0.3;
 % % fvector = 0.4328;
 % % Avector = 0;
-Astarvector = 1.05;
+Astarvector = 0;
 ftrials = 1; Atrials = 1;
 end
 
@@ -135,6 +135,9 @@ for Atrial = 1:Atrials
     f_star_commanded(ftrial,Atrial) = thcknss*freq/flowspeed_measured_mean(ftrial,Atrial);
     A_star_commanded(ftrial,Atrial) = (max(heave_commanded)-min(heave_commanded))/(2*thcknss);
     A_star_measured(ftrial,Atrial) = (max(heave_measured)-min(heave_measured))/(2*thcknss);
+
+% Calculate heave acceleration from heave position
+    accel_heave = del2(heave_measured,T);
 
 % Filter force data
     force_L_corrected = force_L; %+inertialload_y;
