@@ -2,10 +2,10 @@
 % and automatically save the output data
 
 startexp = tic;
-experimentnamestr = 'CircCyl';
-foiltype='C1';
-chord=0.054; % meters
-thcknss = chord;
+experimentnamestr = 'EllipticCyl';
+foiltype='EC1';
+chord=0.0594; % meters
+thcknss = 0.0238;
 U = 0.3; % m/s
 num_cyc = 60; % must be even?
 transientcycs = 5;
@@ -17,13 +17,10 @@ phase2 = 0;
 phi = 0;
 offset = 0; % Time (in cycles) from start of run to start PIV
 
-for fstar = 0.3:0.01:0.3 %0.3:0.02:0.3
-% for freq = 0.4328:0.0541:0.7574 %0.7574 % test case for Eric's foil
-        % fstar = 0.3 % bias drift test constant freq
+for fstar = 0.1:0.01:0.4 %0.3:0.02:0.3
         freq = fstar*U/thcknss;
 
-    for A2star = 0:0.05:0 %0.0:0.1:1.1
-%     for A2 = 0:1:0 %0.0488:0.0061:0.0488 % test case for Eric's foil
+    for A2star = 0:0.05:1.1 %0.0:0.1:1.1
         A2 = A2star*thcknss;
         A1 = A1star*thcknss;
 

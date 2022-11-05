@@ -1,6 +1,6 @@
 close all;
-plot_w_fstar = 0;
-plot_w_Ustar = 1;
+plot_w_fstar = 1;
+plot_w_Ustar = 0;
 
 % Sort the trials by frequency (needed for countorf function)
 [f_star_sorted,sort_index] = sortrows(f_star_commanded);
@@ -49,8 +49,8 @@ grid off
 % fstarvalues_extended = (0:0.025:0.3);
 heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
-a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(U.*fstarvector/thcknss)).^2);
-v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(U.*fstarvector/thcknss)));
+a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)).^2);
+v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)));
 plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','b','LineStyle','-.')
 plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','r','LineStyle','-.')
 

@@ -11,8 +11,8 @@ plot(time_star,dragcoef,'DisplayName','{\it C}_D','Color','blue','LineWidth',4)
 hold off
 
 legend()
-ylim([-5 5])
-xlim([5 15]) %xlim([10 15]) %
+ylim([-10 10])
+xlim([30 35]) %xlim([10 15]) %
 xlabel('Time (cycles)')
 % ylabel('Heave (cm), Force (N), Power (W)')
 set(gca,"FontName","Arial"); set(gca,"FontSize",36); set(gca,"LineWidth",2); 
