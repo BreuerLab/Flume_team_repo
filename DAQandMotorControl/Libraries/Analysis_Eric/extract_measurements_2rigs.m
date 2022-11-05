@@ -2,7 +2,7 @@
 
 % EP --> Experiment Parameters (saved after the experiment)
 
-function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs, foil_separation)
+function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs, foil_separation, flume_height, U_wake)
 
     [foil, ~, ~] = foils_database(foiltype);
 
@@ -36,6 +36,12 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     %% Flow speed
     
     U = round(mean(abs(out(:,13))),4);%*1.026; % flow speed (with LDV correction)
+    
+    if ~exist('U_wake','var')
+        % parameter does not exist, default it to the following:
+        U_wake = U; % if wake velocity has not been calculated or isn't measured, the freestream value is used instead
+        warn = ['Average wake velocity measurement, freestream velocity used instead']; % instead of showing it every time, it just stores a warning variable
+    end
     
     %% Frequency
     
@@ -151,7 +157,7 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     par.flume_height = flume_height; % depth of water in the flume [m]
     par.num_cyc = num_cyc; % number of full amplitude experimental cycles
     par.transientcycs = transientcycs; % transient cycles (ramp up/down)
-    par.U = U; % flow speed [m/s]
+    
     par.srate = srate; % sampling frequency [Hz]
     par.freq = freq; % experiment frequency [Hz]
     par.fred = fred; % reduced frequency
@@ -159,6 +165,9 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
     par.Fr = Fr; % Froude
 %     par.St_c = St_c; % Strouhal (normalized with chord length)
 %     par.St_h = St_h; % Strouhal (normalized with heave amplitude)
+
+    par.U = U; % flow speed [m/s]
+    par.U_wake = U_wake; % average wake velocity behind the leading foil [m/s]
 
     par.alphaT4_2 = alphaT4_2; % angle of attack at 1/4 stroke (leading)
     par.alphaT4_3 = alphaT4_3; % angle of attack at 1/4 stroke (trailing)

@@ -18,8 +18,9 @@ function [beta, U_prime, U_wake, U_wake_prime, Eff_prime, CD_norm, CD_norm_p] = 
     
     % Normalization of average CD
 
-    [~, ~, CD_cyc] = cycle_avg_data(pitch_prof,CD); % phase-averaged drag coeff
-    CD_avg = mean(mean(CD_cyc)); % mean drag coefficient per cycle
+%     [~, ~, CD_cyc] = cycle_avg_data(pitch_prof,CD); % phase-averaged drag coeff
+%     CD_avg = mean(mean(CD_cyc)); % mean drag coefficient per cycle
+    CD_avg = mean(CD);
 
     CD_norm = CD_avg*(foil.chord/(2*H)); % normalized drag coeff to be used in calculations
     beta = (2*H*foil.span)/(width*depth); % blockage ratio

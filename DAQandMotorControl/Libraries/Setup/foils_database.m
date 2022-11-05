@@ -3,7 +3,7 @@
 % This function acts as a database for the different foil pairs that may be
 % used in the Flume. It requires a string of the desired foil/foils as an input.
 
-% Eric Handy, Dec 2022 - last edit
+% Eric Handy, Aug 2022 - last edit
 
 function [foil, rho, fs] = foils_database(foiltype)
 %% Mostly non-changing variables
@@ -26,11 +26,13 @@ V1  = [      0.06;            6.68;         0.306;           0;          "Vibris
 T1  = [   3*0.0254;            6;           0.000;           0.744;         "Triangular";    "Aluminum"     ;     "No"    ];
 M1  = [   0.075;               4;           0.000;           0.968;         "Membrane";     "Silicone/Steel" ;    "Yes"    ]; % Ilan's membrane
 I1  = [   0.075;               4;           0.000;           0.968;         "0 c inext.";   "Mylar/Steel"    ;    "Yes"    ]; % Ilan's membrane
+A3E = [   0.061;               6;           0.538;           0.538;         "Rectangular";   "Aluminum"     ;     "Yes"   ]; % Eric's main medium foils
+A4E = [   0.075;             3.5;           0.900;           0.900;         "Rectangular";   "Aluminum"     ;     "Yes"   ]; % Nick's small foils
 
 
 
 
-foils = table(FoilProperties, E1, E1E, A1, A1E, A2, A2E, C1 ,V1, T1, M1, I1); % constructing a table out of the foil data
+foils = table(FoilProperties, E1, E1E, A1, A1E, A2, A2E, C1 ,V1, T1, M1, I1, A3E, A4E); % constructing a table out of the foil data
 
 selected_data = foils.(foiltype); % identifies the column of the selected foils
 

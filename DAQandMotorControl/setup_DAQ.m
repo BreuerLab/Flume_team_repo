@@ -7,15 +7,15 @@ pitch_bias = [0 0 0];
 
 %% Experimental Setup
 % default values:
-chord = 0.06;
-span = 0.401;
-foil_shape = 'V1';
+chord = 0.061;
+span = 0.366;
+foil_shape = 'A3E';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
-flume_height = 0.52;
-flume_hertz = 14.8;
+flume_height = 0.57;
+flume_hertz = 18;
 Number_of_foils = 2;
-foil_separation = 0.68;
+foil_separation = 0.366;
 foil_offset = 0;
 Temperature = 21.4;
 pitch_axis = 0.5;
@@ -38,7 +38,7 @@ answer = inputdlg(prompt,name,num_lines,defaultanswers);
 
 chord = str2double(answer{1});
 span = str2double(answer{2});
-foil_shape = answer(3);
+foil_shape = string(answer(3));
 Wall_distance_left = str2double(answer{4});
 Wall_distance_right = str2double(answer{5});
 flume_height = str2double(answer{6});
@@ -55,19 +55,21 @@ exp_name = answer{15};
 Date  = date;
 Time = clock;
 
-if isdir(fname)
+%  Establish DAQ channels to use
+addpath(genpath("Libraries"))
+[dq] = setup_DAQ_channels(samplerate);
+
+[foil, rho, fs] = foils_database(foil_shape);
+
+if isfolder(fname)
     disp('Warning: experiment name already exists.  Apppending date and time')
     fname = [fname,'_',Date,'_',num2str(Time(4)),'_',num2str(Time(5)),'_',num2str(round(Time(6)))];
-    if isdir(fname)
+    if isfolder(fname)
         disp('Warning: folder name still taken. Appending time')
         fname = [fname,'_',num2str(Time(4)),'_',num2str(Time(5)),'_',num2str(Time(6))];
     end
 end
 mkdir([fname,'\data'])
-
-%  Establish DAQ channels to use
-addpath(genpath("Libraries"))
-[dq] = setup_DAQ_channels(samplerate);
 
 
 % disp('Checking velocimeters')
@@ -85,16 +87,27 @@ addpath(genpath("Libraries"))
 %     disp('ensure Vectrino and Vector are collecting data and recording to file')
 % end
 
-last_out = [0 0 0 0 0 0];
+last_out = [0 0 0 0 0 0 0];
 write(dq,last_out)
 
 
 % Find bias voltages for force and acceleration sensors
-disp('All set. Turn on motor power. Press any key to run find_bias_3rigs');
-[out,Wbias,Gbias,accbias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname);
+disp('All set. Turn on motor power. Turn off flume. Press any key to run find_bias_3rigs');
+% fprintf('Checklist:\n  - Zero Flume Velocity\n')
+% fprintf('Press any key to continue\n\n')
+pause
+[out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
+
+bias.pitch = [0 0 0]; 
 
 % Find zero bias pitch angle by finding pitch with zero lift
-disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch</a> when at full speed.')
-disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch_Gromit(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch_Gromit</a> when at full speed.')
-disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch_Wallace(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch_Wallace</a> when at full speed.')
+% disp('Run flume.  Click <a href="matlab: [last_out] = find_zero_pitch(dq,last_out,Wbias,Gbias,accbias,pitch_bias);">find_zero_pitch</a> when at full speed.')
+disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch_Gromit(dq,last_out,bias,foil);">find_zero_pitch_Gromit</a> when at full speed.')
+disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch_Wallace(dq,last_out,bias,foil);">find_zero_pitch_Wallace</a> when at full speed.')
 
+
+% Find bias voltages for force and acceleration sensors with flume flow at
+% experimental flow speed
+disp('Turn on the flume and take another bias measurement. Press any key to run find_bias_3rigs');
+pause
+[out,bias_loaded,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);

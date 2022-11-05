@@ -12,6 +12,8 @@
 
 function [toverT, pitch_cycle, data_cycle] = cycle_avg_data(raw_pitch, data, srate, zero_start, cycle_number)
 
+% zero_start == 1 to enforce starting the cycle at max pitch
+
 if ~exist('zero_start','var')
     zero_start = 0;
 end
@@ -23,7 +25,7 @@ end
 
 % srate = 100000; % yuanhang's data
 
-t = 0:1/srate:length(raw_pitch)/srate-1/srate;
+t = 0:1/srate:length(raw_pitch)*(1/srate)-(1/srate);
 t = t';
 
 % finding peaks and their locations in the pitch data

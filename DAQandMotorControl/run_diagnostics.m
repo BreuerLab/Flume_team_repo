@@ -137,6 +137,8 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,freq
 
     % psd
     function [] = plot_tiled_psd(data,w,psd)
+        figure(1)
+        
         nexttile
         plot(data);
         nexttile
@@ -188,49 +190,51 @@ function [diagnostics,continue_exp] = run_diagnostics(Prof_out_angle,out,fs,freq
     diagnostics.tfy_pois = evaluate_force(tfx,tfx_n);
     diagnostics.ttz_pois = evaluate_force(ttz,ttz_n);
 
-    % standard deviation margin for cycle averaging
-    function [norm_dev] = norm_cycle_std(cycle,data,name)
-        [toverT,pitch_cycle,data_cycle] = cycle_avg_data(cycle,data);
+%     % standard deviation margin for cycle averaging % COMMENTED 20220810
+%     function [norm_dev] = norm_cycle_std(cycle,data,name)
+%         [toverT,pitch_cycle,data_cycle] = cycle_avg_data(cycle,data);
+% 
+%         mean_line = mean(data_cycle(4:30,:));
+%         dev = std(data_cycle(4:30,:));
+%         
+%         [b,a] = butter(5,20*freq/(fs/2));
+%         f_mean_line = filtfilt(b,a,mean_line);
+%         f_dev = filtfilt(b,a,dev);
+% 
+%         [norm_mean,c,s] = normalize(f_mean_line,'range',[-1 1]);
+%         norm_dev = normalize(f_dev,'center',c,'scale',s);
+% 
+%         if (max(norm_dev) > 0.5)
+%             amt_over = length(find(norm_dev > 0.5));
+%             warning(name + "'s standard deviation is " + amt_over/length(norm_dev)*100 ... ...
+%                 + "% over 1/2 the amplitude of the average cycle.")
+%         end
+% 
+%         nexttile
+%         hold on
+% 
+%         plot(toverT,mean(pitch_cycle(4:30,:)))
+% 
+%         above = norm_mean + norm_dev;
+%         below = norm_mean - norm_dev;
+%         t2 = [toverT,fliplr(toverT)];
+%         between = [below,fliplr(above)];
+%         fill(t2,between,[0 0.2235 0.3705]);
+% 
+%         plot(toverT,norm_mean,"LineWidth",2);
+%         %plot(pitch_cycle(4:30,:),data_cycle(4:30,:));
+%     end
+% 
+%     figure
+%     tiledlayout(2,3);
+%     diagnostics.lfy_normdev = norm_cycle_std(p2c,lfy,lfy_n);
+%     diagnostics.lfx_normdev = norm_cycle_std(p2c,lfx,lfx_n);
+%     diagnostics.ltz_normdev = norm_cycle_std(p2c,ltz,ltz_n);
+%     diagnostics.tfy_normdev = norm_cycle_std(p3c,tfy,tfy_n);
+%     diagnostics.tfx_normdev = norm_cycle_std(p3c,tfx,tfx_n);
+%     diagnostics.ttz_normdev = norm_cycle_std(p3c,ttz,ttz_n);
 
-        mean_line = mean(data_cycle(4:30,:));
-        dev = std(data_cycle(4:30,:));
-        
-        [b,a] = butter(5,20*freq/(fs/2));
-        f_mean_line = filtfilt(b,a,mean_line);
-        f_dev = filtfilt(b,a,dev);
 
-        [norm_mean,c,s] = normalize(f_mean_line,'range',[-1 1]);
-        norm_dev = normalize(f_dev,'center',c,'scale',s);
-
-        if (max(norm_dev) > 0.5)
-            amt_over = length(find(norm_dev > 0.5));
-            warning(name + "'s standard deviation is " + amt_over/length(norm_dev)*100 ... ...
-                + "% over 1/2 the amplitude of the average cycle.")
-        end
-
-        nexttile
-        hold on
-
-        plot(toverT,mean(pitch_cycle(4:30,:)))
-
-        above = norm_mean + norm_dev;
-        below = norm_mean - norm_dev;
-        t2 = [toverT,fliplr(toverT)];
-        between = [below,fliplr(above)];
-        fill(t2,between,[0 0.2235 0.3705]);
-
-        plot(toverT,norm_mean,"LineWidth",2);
-        %plot(pitch_cycle(4:30,:),data_cycle(4:30,:));
-    end
-
-    figure
-    tiledlayout(2,3);
-    diagnostics.lfy_normdev = norm_cycle_std(p2c,lfy,lfy_n);
-    diagnostics.lfx_normdev = norm_cycle_std(p2c,lfx,lfx_n);
-    diagnostics.ltz_normdev = norm_cycle_std(p2c,ltz,ltz_n);
-    diagnostics.tfy_normdev = norm_cycle_std(p3c,tfy,tfy_n);
-    diagnostics.tfx_normdev = norm_cycle_std(p3c,tfx,tfx_n);
-    diagnostics.ttz_normdev = norm_cycle_std(p3c,ttz,ttz_n);
     % if catastrophic errors happen kill experiment send eric distraught
     % email
     % check if vectrino speed of current experiment is same as previous
