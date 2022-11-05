@@ -1,5 +1,6 @@
 close all;
-
+plot_w_fstar = 0;
+plot_w_Ustar = 1;
 
 % Sort the trials by frequency (needed for countorf function)
 [f_star_sorted,sort_index] = sortrows(f_star_commanded);
@@ -13,15 +14,21 @@ powercoef_mean_sorted_smoothed = smooth2a(powercoef_mean_sorted,movmeanpower_poi
 delay_sorted = delay(sort_index,:);
 % powercoef_conv = powercoef_convtest(1,sort_index,:);
 
-% Plot acceleration limit
-% acc_limit = 6.5; % Acceleration limit in m/s^2
-% v_limit = 0.3;
+if plot_w_fstar == 1
+    independent_var = f_star_sorted;
+    xlimits = [0.09 0.31];
+    xlabelstr = '{\it f} * = {\it f D/U }';
+elseif plot_w_Ustar == 1
+    independent_var = 1./f_star_sorted;
+    xlimits = [0 18];
+    xlabelstr = '{\it U} * = {\it U/Df }';
+end
 
 hold on
 
 % Plot Cp vs. A* and f*
 % contourf(f_star_sorted,A_star_sorted,power_mean_sorted,120,'LineStyle','none')
-contourf(1./f_star_sorted,A_star_sorted,powercoef_mean_sorted_smoothed,120,'LineStyle','none')%,[],'LineStyle','none'
+contourf(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,120,'LineStyle','none')%,[],'LineStyle','none'
 % contourf(f_star_sorted,A_star_sorted,squeeze(powercoef_conv(1,:,:))./powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
 % quiver(f_star_sorted,A_star_sorted,gradA,gradf)
 
@@ -29,12 +36,12 @@ caxis([-1 0.2])
 % colorbarpwn(-6.0,0.2,'colorN',[0 0.5 1],'log',1.5)
 colormap(bluewhitered)
 
-contour(1./f_star_sorted,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','--')
-scatter(1./f_star_sorted,A_star_sorted,60,'.','k')
+contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','--')
+scatter(independent_var,A_star_sorted,60,'.','k')
 grid on
-xlabel('{\it f} * = {\it f D/U}')
+xlabel(xlabelstr)
 ylabel('{\it A} * = {\it A/D}')
-xlim([ 0 18])% xlim([0.09 0.27]) %xlim([0.047 0.145]) %
+xlim(xlimits)% xlim([0.09 0.27]) %xlim([0.047 0.145]) %
 ylim([-0.04 1.12])
 % xticks([0.10 0.14 0.18 0.22 0.26])
 set(gca, 'Layer', 'top')
@@ -44,8 +51,8 @@ heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
 a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(U.*fstarvector/thcknss)).^2);
 v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(U.*fstarvector/thcknss)));
-plot(fstarvector,a_limit_curve,'LineWidth',4,'Color','b','LineStyle','-.')
-plot(fstarvector,v_limit_curve,'LineWidth',4,'Color','r','LineStyle','-.')
+plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','b','LineStyle','-.')
+plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','r','LineStyle','-.')
 
 % % Plot Cp vs. A* and U*
 % % contourf(U_star_sorted,A_star_sorted,powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
