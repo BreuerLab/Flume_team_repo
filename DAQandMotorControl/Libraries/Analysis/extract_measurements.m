@@ -23,7 +23,8 @@ function    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_
     inertialload_y = out(timestep_start:timestep_end,23);
     flowspeed_measured = abs(out(timestep_start:timestep_end,13));
 
-    heave_velo = movmean((1/T)*gradient(squeeze(heave_measured)),100);
-    heave_accel = movmean((1/T)*gradient(squeeze(heave_velo)),100);
+    movmean_points = 100;
+    heave_velo = movmean((1/T)*gradient(squeeze(heave_measured)),movmean_points);
+    heave_accel = movmean((1/T)*gradient(squeeze(heave_velo)),movmean_points);
 
 end
