@@ -156,7 +156,7 @@ for Atrial = 1:Atrials
     power_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^3;
     power_fluid = force_L_corrected_filtered .*heave_velo;
     m_star = 2.4; damping_ratio = 0.0045;
-    damping_coef = 4*pi*freq*m_star*(pi*(chord/2)^2*span)*damping_ratio; % dimensions of kg/s
+    damping_coef = 4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
     power_damping = -damping_coef*heave_velo.^2;
     power_total = power_fluid + power_damping;
     power_mean(ftrial,Atrial) = mean(power_total);
