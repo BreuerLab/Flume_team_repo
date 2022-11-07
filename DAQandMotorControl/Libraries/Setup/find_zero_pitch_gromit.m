@@ -126,8 +126,13 @@ end
 
 disp(['Pitch Bias (volts):  ',num2str(bias.pitch)])
 
-% comment out to keep motor from moving
-[last_out] = move_to_zero(dq,last_out,bias);
+pitch_check = input(['Does this look alright to you? y/n',newline],"s");
+if pitch_check == 'y'
+
+    % comment out to keep motor from moving
+    [~,~,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0],5,bias,foil);
+    % [last_out] = move_to_zero(dq,last_out,bias);
+end
 
 % disp(['Pitch Bias (deg)',num2str(conv_last_out(last_out))])
 

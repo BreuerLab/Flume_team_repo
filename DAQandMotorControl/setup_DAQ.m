@@ -99,22 +99,8 @@ pause
 [out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
 
 bias.pitch = [0 0 0]; 
-% Find zero bias pitch angle by finding pitch with zero lift
-zero_pitch = 0;
-while zero_pitch == 0 % for Wallace
-user_ans = input(['Would you like to run find_zero_pitch for Wallace? Enter "y" or "n" and hit enter.', ...
-    'If yes, turn on the flume flow first.',newline],"s");
-if user_ans == 'y'
-    [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0,0,0,0.1,0,0],5,bias,foil);
-    [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil); % for wallace
-end
-user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s");
-    if user_ans2 == 'n'
-        zero_pitch = 1;
-    end
-end
-[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0,0,0,0,0,0],5,bias,foil); % move to original position
 
+% Find zero bias pitch angle by finding pitch with zero lift
 zero_pitch = 0;
 while zero_pitch == 0 % for Gromit
 user_ans = input(['Would you like to run find_zero_pitch for Gromit? Enter "y" or "n" and hit enter.', ...
@@ -127,6 +113,22 @@ user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s")
         zero_pitch = 1;
     end
 end
+
+zero_pitch = 0;
+while zero_pitch == 0 % for Wallace
+user_ans = input(['Would you like to run find_zero_pitch for Wallace? Enter "y" or "n" and hit enter.', ...
+    'If yes, turn on the flume flow first.',newline],"s");
+if user_ans == 'y'
+    out_of_the_way = [0,0,0,0.15,0,0]; % position of gromit to move out of the way
+    [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,out_of_the_way,5,bias,foil);
+    [last_out,bias] = find_zero_pitch_wallace(dq,last_out,bias,foil,out_of_the_way); % for wallace
+end
+user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s");
+    if user_ans2 == 'n'
+        zero_pitch = 1;
+    end
+end
+[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0,0,0,0,0,0],5,bias,foil); % move gromit to original position
 
 % disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil);">find_zero_pitch</a> when at full speed.')
 

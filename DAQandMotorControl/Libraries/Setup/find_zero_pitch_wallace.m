@@ -1,12 +1,13 @@
-function [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil)
+function [last_out,bias] = find_zero_pitch_wallace(dq,last_out,bias,foil,out_of_the_way)
 % Finds the minimum lift on wallace hydrofoil while under flow.
 
+heave_gromit = out_of_the_way(4);
 disp('finding zero.  Wallace will now move +/- 5 degrees')
-[~,~,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 0 5 0],5,bias,foil);
+[~,~,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 5 0],5,bias,foil);
 scan_time = 30;
 pause(10);
 b1_Vtheta = last_out(5);
- [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 -5 0],scan_time,bias,foil);
+ [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit -5 0],scan_time,bias,foil);
 a1_Vtheta = (last_out(5)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -24,7 +25,7 @@ aL1 = coefL1(1); bL1 = coefL1(2);
 plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
 
 b2_Vtheta = last_out(5);
- [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 5 0],scan_time,bias,foil);
+ [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 5 0],scan_time,bias,foil);
 a2_Vtheta = (last_out(5)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -45,9 +46,9 @@ legend('Pitch negative','Lift smoothed','Linear fit','Pitch positive','Lift smoo
 
 if max(aL1*(1:numel(Lift))+bL1) < 0 || min(aL1*(1:numel(Lift))+bL1) > 0
     disp('Pitch out of range. Expanding search.')
- [~,~,last_out] =   move_new_pos_3rigs(dq,last_out,[0 0 0 0 15 0],5,bias,foil);
+ [~,~,last_out] =   move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 15 0],5,bias,foil);
  b1_Vtheta = last_out(5);
- [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 -15 0],scan_time,bias,foil);
+ [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit -15 0],scan_time,bias,foil);
  a1_Vtheta = (last_out(5)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -61,7 +62,7 @@ Lift(:,1) = out(:,7);
     hold on
 
     b2_Vtheta = last_out(5);
- [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 15 0],scan_time,bias,foil);
+ [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 15 0],scan_time,bias,foil);
  a2_Vtheta = (last_out(5)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -85,9 +86,9 @@ Lift(:,1) = out(:,7);
         disp('Pitch out of range.  Manually align pitch.')
     end
     
-    [~,~,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 0 5 0],5,bias,foil);
+    [~,~,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 5 0],5,bias,foil);
      b1_Vtheta = last_out(5);
-    [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 -5 0],scan_time,bias,foil);
+    [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit -5 0],scan_time,bias,foil);
      a1_Vtheta = (last_out(5)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -101,7 +102,7 @@ Lift(:,1) = out(:,7);
     % 1:numel(lift) = Lift*a + b
     %Lift = (1:numel(Lift)-b)./a)
     b2_Vtheta = last_out(5);
-    [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 5 0],scan_time,bias,foil);
+    [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 5 0],scan_time,bias,foil);
     a2_Vtheta = (last_out(5)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,7);
@@ -125,10 +126,13 @@ end
     bias.pitch(3) = mean([pitch_voltbias1 pitch_voltbias2]);
 
 disp(['Pitch Bias (volts):  ',num2str(bias.pitch)])
+pitch_check = input(['Does this look alright to you? y/n',newline],"s");
+if pitch_check == 'y'
 
-% comment out to keep motor from moving
-[last_out] = move_to_zero(dq,last_out,bias);
-
+    % comment out to keep motor from moving
+    [~,~,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 0 0],5,bias,foil);
+    % [last_out] = move_to_zero(dq,last_out,bias);
+end
 % disp(['Pitch Bias (deg)',num2str(conv_last_out(last_out))])
 
 end
