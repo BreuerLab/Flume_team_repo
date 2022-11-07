@@ -21,9 +21,10 @@ A2 = [   3*0.0254;            6;           0.800;           0.800;         "Rect
 C1 = [     0.054;             8.28;        0.386;           0;         "Cylindrical";   "Carbon fiber"  ]; % Joel's cylinder
 V1 = [      0.0535;           7.50;        0.306;           0;          "VibrissaeBeem50x"; "PLA3DprintWepoxy"]; % Joel's vibrissae model
 EC1 = [      0.0594;           6.81;       0.302;           0;          "Elliptical"; "PLA3DprintWepoxy"]; % Joel's vibrissae model
+A3E = [   0.061;               6;           0.538;           0.538;         "Rectangular";   "Aluminum"]; % Eric's main medium foils
 
 
-foils = table(FoilProperties, E1, A1, A2, C1 ,V1,EC1); % constructing a table out of the foil data
+foils = table(FoilProperties, E1, A1, A2, C1 ,V1,EC1,A3E); % constructing a table out of the foil data
 
 selected_data = foils.(foiltype); % identifies the column of the selected foils
 
