@@ -19,7 +19,7 @@ E1 = [     0.1;              3.5;          0.450;           0.450;         "Elli
 A1 = [     0.1;              3.5;          1.026;           1.174;         "Rectangular";   "Aluminum"      ]; % Nick's foils
 A2 = [   3*0.0254;            6;           0.800;           0.800;         "Rectangular";   "Aluminum"      ]; % Yunxing's foils
 C1 = [     0.054;             8.28;        0.386;           0;         "Cylindrical";   "Carbon fiber"  ]; % Joel's cylinder
-V1 = [      0.0535;           6.68;       0.306;           0;          "VibrissaeBeem50x"; "PLA3DprintWepoxy"]; % Joel's vibrissae model
+V1 = [      0.0535;           7.50;        0.306;           0;          "VibrissaeBeem50x"; "PLA3DprintWepoxy"]; % Joel's vibrissae model
 EC1 = [      0.0594;           6.81;       0.302;           0;          "Elliptical"; "PLA3DprintWepoxy"]; % Joel's vibrissae model
 
 
