@@ -16,7 +16,7 @@ delay_sorted = delay(sort_index,:);
 
 if plot_w_fstar == 1
     independent_var = f_star_sorted;
-    xlimits = [0.09 0.31];
+    xlimits = [0.09 0.41];
     xlabelstr = '{\it f} * = {\it f D/U }';
 elseif plot_w_Ustar == 1
     independent_var = 1./f_star_sorted;
@@ -51,8 +51,8 @@ heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
 a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)).^2);
 v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)));
-plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','b','LineStyle','-.')
-plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','r','LineStyle','-.')
+plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
+plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','red','LineStyle','-.')
 
 % % Plot Cp vs. A* and U*
 % % contourf(U_star_sorted,A_star_sorted,powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'

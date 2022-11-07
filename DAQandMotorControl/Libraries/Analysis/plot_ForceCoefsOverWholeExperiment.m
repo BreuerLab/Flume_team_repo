@@ -1,7 +1,9 @@
 close all
 hold on;
+% All cases
 plot(reshape(liftcoef_alltrials',[1,numel(liftcoef_alltrials)]),'DisplayName','{\it C}_L','Color','red','LineWidth',4)
 plot(reshape(dragcoef_alltrials',[1,numel(dragcoef_alltrials)]),'DisplayName','{\it C}_D','Color','blue','LineWidth',4)
+% % Zero amplitude cases
 % plot(liftcoef_alltrials(:,1),'DisplayName','{\it C}_L','Color','red','LineWidth',4)
 % plot(dragcoef_alltrials(:,1),'DisplayName','{\it C}_D','Color','blue','LineWidth',4)
 ylim([-1 4])
