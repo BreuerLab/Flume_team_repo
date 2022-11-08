@@ -73,7 +73,7 @@ Prof_out(:,1) = -profs(:,1).*5./(360)*2*45/56*5 + pitch_bias(1); % Pitch 1 (Shaw
 % Prof_out(:,3) = -profs(:,3).*5./(360)*2*60/74 + pitch_offset2;%/1.0126
 % below is for Parker Motion motor
 % Prof_out(:,5) = -profs(:,5)*5.*10/30000*12800/360*1.00+pitch_bias(3); % 5:1 gear *( 10 volts /30000 steps) * (12800 steps/ revolution) * calibration gain 4/4/2016
-Prof_out(:,5) = -profs(:,5)*5.*1/184.613+pitch_bias(3); % 5:1 gear *(1 Volt/ 184.613 deg) for new Teknic servo motor
+Prof_out(:,5) = -profs(:,5)*5.*0.022222+pitch_bias(3); % 5:1 gear *(1 Volt/ 184.613 deg) for new Teknic servo motor
 % ^^^^^ Supposedly this is sent out to Wallace?
 
 %% Pitch 3 (Servo motor)
