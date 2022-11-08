@@ -18,7 +18,7 @@ filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
 load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 1;
+singletrial_analysis = 0;
 manytrial_analysis = 1;
 varyphase = 0;
 

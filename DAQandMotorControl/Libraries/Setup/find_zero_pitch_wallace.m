@@ -22,7 +22,7 @@ aL1 = coefL1(1); bL1 = coefL1(2);
 % plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f(2))./f(1))
 % 1:numel(lift) = Lift*a + b
 %Lift = (1:numel(Lift)-b)./a)
-plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
+plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
 
 b2_Vtheta = last_out(5);
  [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 heave_gromit 5 0],scan_time,bias,foil);
@@ -38,7 +38,7 @@ aL2 = coefL2(1); bL2 = coefL2(2);
 
 hold on
 % plot(1:numel(prof2(:,1)),prof2(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f1(2))./f1(1))
-plot(1:numel(prof2(:,1)),prof2(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
+plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
 hold off
 legend('Pitch negative','Lift smoothed','Linear fit','Pitch positive','Lift smoothed','Linear fit')
 
@@ -58,7 +58,7 @@ Lift(:,1) = out(:,7);
     coefL1=polyfit(1:numel(Lift),smooth(Lift,100)',1);
     aL1 = coefL1(1); bL1 = coefL1(2);
 %     plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f(2))./f(1))
-    plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
+    plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
     hold on
 
     b2_Vtheta = last_out(5);
@@ -77,7 +77,7 @@ Lift(:,1) = out(:,7);
     bias.pitch(3) = mean([pitch_voltbias1 pitch_voltbias2]);
 
     %     plot(1:numel(prof2(:,1)),prof2(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f1(2))./f1(1))
-    plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
+    plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
     hold off
     
     
@@ -98,7 +98,7 @@ Lift(:,1) = out(:,7);
     coefL1=polyfit(1:numel(Lift),smooth(Lift,100)',1);
     aL1 = coefL1(1); bL1 = coefL1(2);
 %     plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f(2))./f(1))
-    plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
+    plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
     % 1:numel(lift) = Lift*a + b
     %Lift = (1:numel(Lift)-b)./a)
     b2_Vtheta = last_out(5);
@@ -113,7 +113,7 @@ Lift(:,1) = out(:,7);
     aL2 = coefL2(1); bL2 = coefL2(2);
     hold on
 %     plot(1:numel(prof2(:,1)),prof2(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),((1:numel(Lift))-f1(2))./f1(1))
-    plot(1:numel(prof(:,1)),prof(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
+    plot(1:numel(out(:,5)),out(:,5),1:numel(out(:,8)),smooth(Lift,100),1:numel(Lift),aL2*(1:numel(Lift))+bL2)
     hold off
     
     
