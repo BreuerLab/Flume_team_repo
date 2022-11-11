@@ -25,12 +25,14 @@ for fstar = 0.1:0.01:0.4 %0.3:0.02:0.3
         A1 = A1star*thcknss;
 
         % Used to specify heave velocity and acceleration limits
-        heavevelocommandmax = A2*2*pi*freq;
-        heaveaccelcommandmax = A2*(2*pi*freq)^2;
-        if heavevelocommandmax > 0.50 % m/s
+        heavevelocommandmax1 = A1*2*pi*freq;
+        heavevelocommandmax2 = A2*2*pi*freq;
+        heaveaccelcommandmax1 = A1*(2*pi*freq)^2;
+        heaveaccelcommandmax2 = A2*(2*pi*freq)^2;
+        if heavevelocommandmax1 > 0.5 || heavevelocommandmax2 > 0.50 % m/s
             disp('Commanded velocity limit exceeded, skipping this trial')
             break
-        elseif heaveaccelcommandmax > 3.5 % m/s^2
+        elseif heaveaccelcommandmax1 > 3.5 || heaveaccelcommandmax2 > 3.5 % m/s^2
             disp('Commanded acceleration limit exceeded, skipping this trial')
             break
         elseif A1 > 0.12 || A2 > 0.12 % meters
