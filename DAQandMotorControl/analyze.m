@@ -2,10 +2,10 @@
 
 % Load data
 % datadir = 'C:\Users\Joel\Documents\Brown Data\';
-% datadir = 'D:\Experiments\1foil\'; 
-% trialdir = 'Enter descriptive name_03-Nov-2022_17_27_4\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
-datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
+datadir = 'D:\Experiments\2foil\'; 
+trialdir = 'FoilAndVib_10-Nov-2022_17_28_47\data\'; namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
+% datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
+% trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'Enter descriptive name_04-Nov-2022_17_2_18\data\'; namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'CircCyl_20220919\data\'; namepart1 = 'CylPowerMap_pitch=0deg,f='; namepart2='Hz,A=';
@@ -16,14 +16,14 @@ trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'Ellip
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
 filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
-load([datadir,trialdir,trialfiles(4).name]);
+load([datadir,trialdir,trialfiles(end-3).name]);
 
-singletrial_analysis = 0;
-manytrial_analysis = 1;
+singletrial_analysis = 1;
+manytrial_analysis = 0;
 varyphase = 0;
 
 if manytrial_analysis==1
-fstarvector = (0.1:0.02:0.4);%(0.05:0.01:0.14);
+fstarvector = (0.1:0.01:0.3);%(0.05:0.01:0.14);
 Astarvector = (0.0:0.05:1.1);
 ftrials = length(fstarvector); Atrials = length(Astarvector);
     if varyphase==1
@@ -32,10 +32,10 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.24;
+fstarvector = 0.3;
 % % fvector = 0.4328;
 % % Avector = 0;
-Astarvector = 0.4;
+Astarvector = 0;
 ftrials = 1; Atrials = 1;
 end
 
@@ -78,6 +78,7 @@ dragcoef_alltrials = nan(ftrials,Atrials);
 dragcoef_max = nan(ftrials,Atrials);
 dragcoef_min = nan(ftrials,Atrials);
 inertialload_alltrials = nan(ftrials,Atrials);
+pitch1_mean = nan(ftrials,Atrials);
 
 % Loop through trials with different flow speed U
 for ftrial = 1:ftrials
@@ -104,7 +105,7 @@ for Atrial = 1:Atrials
     end
 
     % Extract measured quantities
-    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_measured,force_D,force_L,inertialload_y,...
+    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch1_measured,pitch2_measured,force_D,force_L,inertialload_y,...
     torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,1/samplerate,Prof_out_angle,out,thcknss);
 
 %     % Define timesteps for each subtrial, excluding ramp up/down
@@ -139,6 +140,7 @@ for Atrial = 1:Atrials
     f_star_commanded(ftrial,Atrial) = thcknss*freq/flowspeed_measured_mean(ftrial,Atrial);
     A_star_commanded(ftrial,Atrial) = (max(heave_commanded)-min(heave_commanded))/(2*thcknss);
     A_star_measured(ftrial,Atrial) = (max(heave_measured)-min(heave_measured))/(2*thcknss);
+    pitch1_mean(ftrial,Atrial) = mean(pitch1_measured);
 
 % Calculate heave acceleration from heave position
 %     accel_heave = del2(heave_measured,T);
@@ -146,8 +148,8 @@ for Atrial = 1:Atrials
 % Filter force data
     force_L_corrected = force_L+(foil.mass1+0.6)*heave_accel; %+inertialload_y;
     [b,a] = butter(6,10*freq*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
-    force_L_corrected_filtered = force_L_corrected; %filtfilt(b,a,squeeze(force_L_corrected)); %
-    force_D_filtered =  force_D; %filtfilt(b,a,squeeze(force_D)); %
+    force_L_corrected_filtered = filtfilt(b,a,squeeze(force_L_corrected)); %force_L_corrected; %
+    force_D_filtered =  filtfilt(b,a,squeeze(force_D)); %force_D; %
     torque_x0_filtered = filtfilt(b,a,squeeze(torque_x0));
     force_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^2;
     liftcoef = force_L_corrected_filtered/force_scale(ftrial,Atrial);
@@ -158,7 +160,7 @@ for Atrial = 1:Atrials
     power_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^3;
     power_fluid = force_L_corrected_filtered .*heave_velo;
     m_star = 2.4; damping_ratio = 0.0045;
-    damping_coef = 4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
+    damping_coef = 0; %4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
     power_damping = -damping_coef*heave_velo.^2;
     power_total = power_fluid + power_damping;
     power_mean(ftrial,Atrial) = mean(power_total);

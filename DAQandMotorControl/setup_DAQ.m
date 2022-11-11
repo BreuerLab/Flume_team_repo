@@ -6,18 +6,18 @@ samplerate = 1000; % DAQ sample rate in measurements/second
 
 %% Experimental Setup
 % default values:
-chord = 0.061;
-thcknss = 0.0238;
-span = 6*0.061;
-foil_shape = 'A3E';
+chord = 0.0535;
+thcknss = 0.0265;
+span = 0.401;
+foil_shape = 'V1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
-flume_height = 0.55;
-flume_hertz = 18;
+flume_height = 0.555;
+flume_hertz = 16.4;
 Number_of_foils = 2;
-foil_separation = 6*0.061; 
+foil_separation = 0.60; 
 foil_offset = 0;
-Temperature = 22.24;
+Temperature = 21.54;
 pitch_axis = 0.5;
 piv_var = 0;
 filt_var = 0;

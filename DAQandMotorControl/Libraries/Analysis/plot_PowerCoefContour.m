@@ -36,7 +36,7 @@ caxis([-1 0.2])
 % colorbarpwn(-6.0,0.2,'colorN',[0 0.5 1],'log',1.5)
 colormap(bluewhitered)
 
-contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','--')
+contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[1e-4 1e-4],'LineWidth',4,'LineColor','k','LineStyle','--')
 scatter(independent_var,A_star_sorted,60,'.','k')
 grid on
 xlabel(xlabelstr)
