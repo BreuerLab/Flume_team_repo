@@ -3,9 +3,15 @@
 % Load data
 % datadir = 'C:\Users\Joel\Documents\Brown Data\';
 % datadir = 'D:\Experiments\2foil\'; 
+% trialdir = 'FoilAndVib_10-Nov-2022_17_28_47\data\'; namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
 datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
 % trialdir = 'FoilAndVib_13-Nov-2022_14_11_29\data\';namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
-% freq = freq2;
+% trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'Enter descriptive name_04-Nov-2022_17_2_18\data\'; namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
+trialdir = 'CircCyl_20220919\data\'; namepart1 = 'CylPowerMap_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'EllipticalCyl_04-Jul-2022_16_7_4\data\'; namepart1 = 'EllipticalCyl_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'VibManyFreq_27-Oct-2022_18_52_34\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% filename = 'Data\20220620_foilandvib\vary_phase12\foilandvib_pitch=0deg,f='; name2='Hz,A='; name3='cm,phase12=';
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
 filename = [datadir,trialdir,namepart1];
@@ -77,9 +83,9 @@ pitch1_mean = nan(ftrials,Atrials);
 % Loop through trials with different flow speed U
 for ftrial = 1:ftrials
         T = 1/samplerate;
-        timesteps_persubtrial = round((num_cyc/freq)/T);
-        timesteps_subtrialcropped = round((num_cyc/freq)/T);
-        transient_timesteps = round((transientcycs/freq)/T); % duration in seconds of transient heaving to crop off at beginning and end
+        timesteps_persubtrial = round((num_cyc/freq3)/T);
+        timesteps_subtrialcropped = round((num_cyc/freq3)/T);
+        transient_timesteps = round((transientcycs/freq3)/T); % duration in seconds of transient heaving to crop off at beginning and end
     
     % Loop through subtrials with different heave amplitude A
 for Atrial = 1:Atrials
@@ -92,7 +98,7 @@ for Atrial = 1:Atrials
     end
 
     try
-        load(trialname,'transientcycs','out','Prof_out_angle','freq','phase2')
+        load(trialname,'transientcycs','out','Prof_out_angle','freq3','phase2')
     catch
         disp(['Failed to load ',trialname])
         break
@@ -100,14 +106,14 @@ for Atrial = 1:Atrials
 
     % Extract measured quantities
     [time_star,heave_commanded,heave_measured,heave_star_measured,pitch1_measured,pitch2_measured,force_D,force_L,inertialload_y,...
-    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,1/samplerate,Prof_out_angle,out,thcknss);
+    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq3,1/samplerate,Prof_out_angle,out,thcknss);
 
 %     % Define timesteps for each subtrial, excluding ramp up/down
 %     timesteps = length(out);
-%     timestep_start = round(transientcycs/(freq*T))+1;
-%     timestep_end = round(timesteps-transientcycs/(freq*T));
+%     timestep_start = round(transientcycs/(freq2*T))+1;
+%     timestep_end = round(timesteps-transientcycs/(freq2*T));
 %     times = T*(1:timestep_end-timestep_start+1);
-%     time_star = times*freq;
+%     time_star = times*freq2;
 %     phase12(ftrial,Atrial) = phase2;
 % 
 %     heave_commanded = Prof_out_angle(timestep_start:timestep_end,6);
@@ -130,8 +136,8 @@ for Atrial = 1:Atrials
 
     flowspeed_measured_mean(ftrial,Atrial) = mean(flowspeed_measured);
     flowspeed_measured_stdev(ftrial,Atrial) = std(flowspeed_measured);
-    Ustar_measured_mean(ftrial,Atrial) = flowspeed_measured_mean(ftrial,Atrial)/(thcknss*freq);
-    f_star_commanded(ftrial,Atrial) = thcknss*freq/flowspeed_measured_mean(ftrial,Atrial);
+    Ustar_measured_mean(ftrial,Atrial) = flowspeed_measured_mean(ftrial,Atrial)/(thcknss*freq3);
+    f_star_commanded(ftrial,Atrial) = thcknss*freq2/flowspeed_measured_mean(ftrial,Atrial);
     A_star_commanded(ftrial,Atrial) = (max(heave_commanded)-min(heave_commanded))/(2*thcknss);
     A_star_measured(ftrial,Atrial) = (max(heave_measured)-min(heave_measured))/(2*thcknss);
     pitch1_mean(ftrial,Atrial) = mean(pitch1_measured);
@@ -141,7 +147,7 @@ for Atrial = 1:Atrials
 
 % Filter force data
     force_L_corrected = force_L+(foil.mass1+0.6)*heave_accel; %+inertialload_y;
-    [b,a] = butter(6,10*freq*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
+    [b,a] = butter(6,10*freq2*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
     force_L_corrected_filtered = filtfilt(b,a,squeeze(force_L_corrected)); %force_L_corrected; %
     force_D_filtered =  filtfilt(b,a,squeeze(force_D)); %force_D; %
     torque_x0_filtered = filtfilt(b,a,squeeze(torque_x0));
@@ -162,7 +168,7 @@ for Atrial = 1:Atrials
     powercoef_mean(ftrial,Atrial) = power_mean(ftrial,Atrial)/power_scale(ftrial,Atrial);
 
 % % heave spectrum
-    duration = max(time_star/freq)/T;
+    duration = max(time_star/freq2)/T;
     window_duration = round(duration/2); % size of hilbert windows measured in samples
     overlap = round(0*window_duration);
     heave_star_hilbert =  hilbert(heave_star_measured);
@@ -172,7 +178,7 @@ for Atrial = 1:Atrials
 
 
  % force corrected+filtered spectrum using Welch's method
-    duration = round(max(time_star/freq)/T);
+    duration = round(max(time_star/freq2)/T);
     window_duration = round(duration/2); % size of hilbert windows measured in samples
     overlap = round(window_duration*7/8);
     force_hilbert =  hilbert(liftcoef);
@@ -183,31 +189,31 @@ for Atrial = 1:Atrials
 %     findpeaks(10*log10(force_powerspec),1/spacing,'MinPeakHeight',max_power-20)
 
 %     % Find phase delay between heave and force
-%     maxlag = round(1/(2*freq*T));  % Maximum lag to calculate xcorr (in timesteps)
+%     maxlag = round(1/(2*freq2*T));  % Maximum lag to calculate xcorr (in timesteps)
 %     [corrs,lags] = xcorr(heave_measured,force_L_corrected_filtered ,maxlag);
-% %     delay = freq*T*360*finddelay(heave_measured,force_y_corrected_filtered,maxlag)
+% %     delay = freq2*T*360*finddelay(heave_measured,force_y_corrected_filtered,maxlag)
 %     figure
 %     hold on
-%     plot(lags*freq*T*360,corrs)
+%     plot(lags*freq2*T*360,corrs)
 %     [forcedelay_peak,forcedelay_peaklocs] = findpeaks(corrs,1);
-%     forcedelay_deg = forcedelay_peaklocs*T*freq*360-180; % Delay in degrees
+%     forcedelay_deg = forcedelay_peaklocs*T*freq2*360-180; % Delay in degrees
 %     stem(forcedelay_deg,forcedelay_peak);
 %     xlabel('Lag (degrees)'); ylabel('Correlation')
 %     xlim([-180 180])
 %     hold off
 %     drawnow
 % 
-% %     % Hilbert transform for instantaneous freq
+% %     % Hilbert transform for instantaneous freq2
 % %     window = floor(duration/10);
 % %     noverlap = floor(window/4);
 % %     fftpoints = window;
 % %     spectrogram(liftcoef,window,noverlap,fftpoints,1/T,'yaxis');
 % %     caxis([-30 10])
-% %     ylim([0 10*freq])
+% %     ylim([0 10*freq2])
 % %     xlim([0 max(times)])
 % 
 %    % Find peaks
-% spacing = (f_force(2)-f_force(1))/freq;
+% spacing = (f_force(2)-f_force(1))/freq2;
 %     [forcespec_peakpowers,forcespec_peaklocs] = findpeaks(10*log10(force_powerspec),1/spacing, ...
 %     'MinPeakHeight',max_force_power-20,'MinPeakDistance',0.5);
 %     num_forcespecpeaks = size(forcespec_peaklocs,1);
@@ -216,12 +222,12 @@ for Atrial = 1:Atrials
 % St = 0.21; % estimated Strouhal number
 % f_vortex = St*(flowspeed_measured_mean(ftrial,Atrial)/chord);
 % plot_PrescribedMotionPowerSpectrum_MATLABin
-% %(freq,f_vortex,f_heave_dom,f_heave,heave_powerspec,f_force,force_powerspec)
+% %(freq2,f_vortex,f_heave_dom,f_heave,heave_powerspec,f_force,force_powerspec)
 
 % Plot force and motion
     if singletrial_analysis==1
         close all
-%         time_star = time_star/freq; % Restore seconds to time
+%         time_star = time_star/freq2; % Restore seconds to time
     plot_PrescribedMotionForceAndVelocity(time_star,heave_star_measured,heave_velo,liftcoef,...
         dragcoef,powercoef,num_cyc,dragtorquecoef);
     drawnow

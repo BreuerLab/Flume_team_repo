@@ -14,22 +14,23 @@ A2pitch = 0; % Pitch amplitude in degrees
 A1pitch = 30; % pitch amplitude of upstream foil in degrees
 % A1star = 0; % heave amplitude of upstream foil in meters
 A1 = 0.024;
+freq1 = 0.16*U/thcknss; 
 phase2 = -104.75;
 phi = -90;
 offset = 0; % Time (in cycles) from start of run to start PIV
 
-for fstar = 0.1:0.01:0.3 %0.3:0.02:0.3
-        freq = fstar*U/thcknss;
+for fstar = 0.1:0.01:0.3 %0.1:0.01:0.3
+        freq2 = fstar*U/thcknss;
 
-    for A2star = 0:0.05:1.1 %0.0:0.1:1.1
+    for A2star = 0.0:0.05:1.1 %0.0:0.05:1.1
         A2 = A2star*thcknss;
 %         A1 = A1star*thcknss;
 
         % Used to specify heave velocity and acceleration limits
-        heavevelocommandmax1 = A1*2*pi*freq;
-        heavevelocommandmax2 = A2*2*pi*freq;
-        heaveaccelcommandmax1 = A1*(2*pi*freq)^2;
-        heaveaccelcommandmax2 = A2*(2*pi*freq)^2;
+        heavevelocommandmax1 = A1*2*pi*freq1;
+        heavevelocommandmax2 = A2*2*pi*freq2;
+        heaveaccelcommandmax1 = A1*(2*pi*freq1)^2;
+        heaveaccelcommandmax2 = A2*(2*pi*freq2)^2;
         if heavevelocommandmax1 > 0.5 || heavevelocommandmax2 > 0.50 % m/s
             disp('Commanded velocity limit exceeded, skipping this trial')
             break
@@ -49,15 +50,15 @@ for fstar = 0.1:0.01:0.3 %0.3:0.02:0.3
         bias_trial.accmeter = bias_newloaded.accmeter - bias_loaded.accmeter + bias.accmeter;
         bias_trial.pitch = bias.pitch;
 
-        disp(['Running trial at f=',num2str(freq,3),'Hz and A=',num2str(A2*100,3),'cm'])
+        disp(['Running trial at f=',num2str(freq2,3),'Hz and A=',num2str(A2*100,3),'cm'])
         
         % Runs the function that moves the motors ("run_Motors")
-        [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi,...
+        [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq1,freq2,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi,...
             foiltype]...
-        = run_Motors(dq,last_out,bias_trial,foiltype, freq, A1pitch, A1, A2pitch, A2, phase2,...
+        = run_Motors(dq,last_out,bias_trial,foiltype, freq1,freq2, A1pitch, A1, A2pitch, A2, phase2,...
         phi, num_cyc, transientcycs, constantpitch, offset);
         
-        trialname = [fname,'\data\',experimentnamestr,'_pitch=',num2str(A2pitch,3),'deg,f=',num2str(freq,3),'Hz,A=',num2str(100*A2,3),'cm.mat'];
+        trialname = [fname,'\data\',experimentnamestr,'_pitch=',num2str(A2pitch,3),'deg,f=',num2str(freq2,3),'Hz,A=',num2str(100*A2,3),'cm.mat'];
 %         disp('Trial complete, saving data.')
         save(trialname)
     end

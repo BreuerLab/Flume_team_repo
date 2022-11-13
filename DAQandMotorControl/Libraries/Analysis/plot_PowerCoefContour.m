@@ -17,11 +17,11 @@ delay_sorted = delay(sort_index,:);
 if plot_w_fstar == 1
     independent_var = f_star_sorted;
     xlimits = [0.09 0.41];
-    xlabelstr = '{\it f} * = {\it f D/U }';
+    xlabelstr = '{\it f} * = {\it f d/U }';
 elseif plot_w_Ustar == 1
     independent_var = 1./f_star_sorted;
     xlimits = [0 18];
-    xlabelstr = '{\it U} * = {\it U/Df }';
+    xlabelstr = '{\it U} * = {\it U/df }';
 end
 
 hold on
@@ -40,7 +40,7 @@ contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[1e-4 1e-4]
 scatter(independent_var,A_star_sorted,60,'.','k')
 grid on
 xlabel(xlabelstr)
-ylabel('{\it A} * = {\it A/D}')
+ylabel('{\it A} * = {\it A/d}')
 xlim(xlimits)% xlim([0.09 0.27]) %xlim([0.047 0.145]) %
 ylim([-0.04 1.12])
 % xticks([0.10 0.14 0.18 0.22 0.26])
@@ -49,10 +49,10 @@ grid off
 % fstarvalues_extended = (0:0.025:0.3);
 heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
-a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)).^2);
-v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)));
+a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)).^2);
+v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)));
 plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
-plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','red','LineStyle','-.')
+plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
 
 % % Plot Cp vs. A* and U*
 % % contourf(U_star_sorted,A_star_sorted,powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
@@ -63,8 +63,8 @@ plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','red','LineStyle',
 % contour(U_star_sorted,A_star_sorted,powercoef_mean_sorted,[0,0],'LineWidth',3,'LineColor','k','LineStyle','--')
 % % scatter(U_star_sorted,A_star_sorted,[],'k')
 % grid on
-% xlabel('{\it U}* = {\it U/Df }')
-% ylabel('{\it A}* = {\it A/D}')
+% xlabel('{\it U}* = {\it U/df }')
+% ylabel('{\it A}* = {\it A/d}')
 % xlim([3 20])
 % ylim([0 1.2])
 % Ustarvalues_extended = (0:1:11);

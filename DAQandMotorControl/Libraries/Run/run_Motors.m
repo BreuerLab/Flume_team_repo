@@ -1,5 +1,5 @@
-function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi, foiltype]...
-    = run_Motors(dq,last_out,bias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
+function [flume, out, dat, Prof_out_angle, Prof_out,last_out,freq2,freq3,pitch2, heave2, pitch3, heave3,phase13, num_cyc, phi, foiltype]...
+    = run_Motors(dq,last_out,bias,foiltype,freq2,freq3, pitch2, heave2, pitch3, heave3, phase13, phi,...
     num_cyc, transientcycs, constantamplitude, offset)
 %%
 % Given frequency [Hz], Pitch amplitude [deg] and heave amplitude [chords], this function will run 3 rigs for a set number of cycles
@@ -18,9 +18,10 @@ function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq,pitch2, heave
 % > phi --- phase between heave and pitch [deg]
 
 %% Initial setup
+freq = freq3;
 freq1 = freq; % all foils will oscillate at the same frequency
-freq2 = freq; % freq
-freq3 = freq;
+% freq2 = freq; % freq
+% freq3 = freq;
 
 pitch1 = 0; % these three are 0 because Shawn (frontmost rig) is no more
 heave1 = 0; % changed this temporarily to test out the measurements
