@@ -4,7 +4,7 @@
 % datadir = 'C:\Users\Joel\Documents\Brown Data\';
 % datadir = 'D:\Experiments\2foil\'; 
 datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-% trialdir = 'FoilAndVib_13-Nov-2022_14_11_29\data\';namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
+trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
 % freq = freq2;
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
@@ -12,7 +12,7 @@ filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
 load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 1;
+singletrial_analysis = 0;
 manytrial_analysis = 1;
 varyphase = 0;
 
@@ -26,10 +26,10 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.3;
+fstarvector = 0.1;
 % % fvector = 0.4328;
 % % Avector = 0;
-Astarvector = 0;
+Astarvector = 1.1;
 ftrials = 1; Atrials = 1;
 end
 
@@ -141,7 +141,8 @@ for Atrial = 1:Atrials
 
 % Filter force data
     force_L_corrected = force_L+(foil.mass1+0.6)*heave_accel; %+inertialload_y;
-    [b,a] = butter(6,10*freq*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
+    freq_cutoff = 10*freq;%20; % 
+    [b,a] = butter(6,freq_cutoff*(2*T),'low'); % butterworth filter 6th order with cut-off frequency at 10*freq
     force_L_corrected_filtered = filtfilt(b,a,squeeze(force_L_corrected)); %force_L_corrected; %
     force_D_filtered =  filtfilt(b,a,squeeze(force_D)); %force_D; %
     torque_x0_filtered = filtfilt(b,a,squeeze(torque_x0));

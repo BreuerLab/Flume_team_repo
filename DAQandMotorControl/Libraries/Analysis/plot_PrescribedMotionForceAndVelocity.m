@@ -5,9 +5,9 @@ grid on
 plot(time_star,heave_star_measured,'DisplayName','{\it y/d}','Color','black','LineWidth',4)
 % plot(time_ND,100*heave_velo,'DisplayName','Heave velocity','Color','green');
 plot(time_star,liftcoef,'DisplayName','{\it C}_L','Color','red','LineWidth',4)
-plot(time_star,dragcoef,'DisplayName','{\it C}_D','Color','blue','LineWidth',4)
+% plot(time_star,dragcoef,'DisplayName','{\it C}_D','Color','blue','LineWidth',4)
 % plot(time_star,dragtorquecoef,'DisplayName','{\it C}_{\tau D}','Color','green','LineWidth',4)
-% plot(time_star,powercoef,'DisplayName','C_P','Color','magenta')
+plot(time_star,powercoef,'DisplayName','{\it C}_P','Color','blue','LineWidth',4)
 hold off
 
 legend()
