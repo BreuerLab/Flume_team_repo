@@ -8,8 +8,9 @@ U_star_sorted = 1./f_star_sorted;
 phase12_sorted = phase12(sort_index,:);
 A_star_sorted = A_star_measured(sort_index,:);
 powercoef_mean_sorted = powercoef_mean(sort_index,:);
-movmeanpower_points = 1;
+movmeanpower_points =1;
 powercoef_mean_sorted_smoothed = smooth2a(powercoef_mean_sorted,movmeanpower_points,movmeanpower_points);
+powercoef_mean_sort_smooth_round = round(powercoef_mean_sorted_smoothed,3);
 % power_mean_sorted = power_mean(sort_index,:);
 delay_sorted = delay(sort_index,:);
 % powercoef_conv = powercoef_convtest(1,sort_index,:);
@@ -28,7 +29,7 @@ hold on
 
 % Plot Cp vs. A* and f*
 % contourf(f_star_sorted,A_star_sorted,power_mean_sorted,120,'LineStyle','none')
-contourf(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,120,'LineStyle','none')%,[],'LineStyle','none'
+contourf(independent_var,A_star_sorted,powercoef_mean_sort_smooth_round,100,'LineStyle','none')%,[],'LineStyle','none'
 % contourf(f_star_sorted,A_star_sorted,squeeze(powercoef_conv(1,:,:))./powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
 % quiver(f_star_sorted,A_star_sorted,gradA,gradf)
 
@@ -36,8 +37,8 @@ caxis([-1 0.2])
 % colorbarpwn(-6.0,0.2,'colorN',[0 0.5 1],'log',1.5)
 colormap(bluewhitered)
 
-contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[1e-4 1e-4],'LineWidth',4,'LineColor','k','LineStyle','--')
-scatter(independent_var,A_star_sorted,60,'.','k')
+contour(independent_var,A_star_sorted,powercoef_mean_sort_smooth_round,[-1e-4 -1e-4],'LineWidth',4,'LineColor','k','LineStyle','--')
+scatter(independent_var,A_star_sorted,20,'.','k')
 grid on
 xlabel(xlabelstr)
 ylabel('{\it A} * = {\it A/d}')
@@ -50,9 +51,10 @@ grid off
 heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
 a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)).^2);
+a_limit_curve = (heaveaccelcommandlimit+0.2)./(thcknss*(2*pi*(U*f_star_sorted(:,1)/thcknss)).^2);
 v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)));
-plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
-plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
+plot(independent_var(:,1),a_limit_curve,'LineWidth',3,'Color','blue','LineStyle',':')
+% plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
 
 % % Plot Cp vs. A* and U*
 % % contourf(U_star_sorted,A_star_sorted,powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'

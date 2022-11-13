@@ -4,7 +4,9 @@
 % datadir = 'C:\Users\Joel\Documents\Brown Data\';
 % datadir = 'D:\Experiments\2foil\'; 
 datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
+trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\';namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % freq = freq2;
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
@@ -17,7 +19,7 @@ manytrial_analysis = 1;
 varyphase = 0;
 
 if manytrial_analysis==1
-fstarvector = (0.1:0.01:0.3);%(0.05:0.01:0.14);
+fstarvector = (0.1:0.01:0.4);%(0.05:0.01:0.14);
 Astarvector = (0.0:0.05:1.1);
 ftrials = length(fstarvector); Atrials = length(Astarvector);
     if varyphase==1
@@ -29,7 +31,7 @@ elseif singletrial_analysis==1
 fstarvector = 0.1;
 % % fvector = 0.4328;
 % % Avector = 0;
-Astarvector = 1.1;
+Astarvector = 0;
 ftrials = 1; Atrials = 1;
 end
 
@@ -153,9 +155,9 @@ for Atrial = 1:Atrials
 
 % Calculate power
     power_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^3;
-    power_fluid = force_L_corrected_filtered .*heave_velo;
+    power_fluid = force_L_corrected_filtered.*heave_velo;
     m_star = 2.4; damping_ratio = 0.0045;
-    damping_coef = 0; %4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
+    damping_coef = 4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
     power_damping = -damping_coef*heave_velo.^2;
     power_total = power_fluid + power_damping;
     power_mean(ftrial,Atrial) = mean(power_total);

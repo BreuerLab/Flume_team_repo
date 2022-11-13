@@ -36,7 +36,7 @@ caxis([-1 0.2])
 % colorbarpwn(-6.0,0.2,'colorN',[0 0.5 1],'log',1.5)
 colormap(bluewhitered)
 
-contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[1e-4 1e-4],'LineWidth',4,'LineColor','k','LineStyle','--')
+contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','--')
 scatter(independent_var,A_star_sorted,60,'.','k')
 grid on
 xlabel(xlabelstr)
@@ -49,10 +49,11 @@ grid off
 % fstarvalues_extended = (0:0.025:0.3);
 heaveaccelcommandlimit = 3.5;
 heavevelocommandlimit = 0.5;
-a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)).^2);
-v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,end).*independent_var(:,1)/thcknss)));
-plot(independent_var(:,1),a_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
-plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','red','LineStyle','-.')
+a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)).^2);
+a_limit_curve = heaveaccelcommandlimit./(thcknss*(2*pi*(U*f/thcknss)).^2);
+v_limit_curve = heavevelocommandlimit./(thcknss*(2*pi*(flowspeed_measured_mean(:,1).*independent_var(:,1)/thcknss)));
+plot(independent_var(:,1),a_limit_curve,'LineWidth',2,'Color','black','LineStyle','-.')
+% plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','black','LineStyle','-.')
 
 % % Plot Cp vs. A* and U*
 % % contourf(U_star_sorted,A_star_sorted,powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
