@@ -2,10 +2,10 @@
 % and automatically save the output data
 
 startexp = tic;
-experimentnamestr = 'FoilAndVib';
-foiltype='V1';
-chord=0.0535; % meters
-thcknss = 0.0265;
+experimentnamestr = 'FoilAndEllipticCyl';
+foiltype='EC1';
+chord=0.0594; % meters
+thcknss = 0.0238;
 U = 0.3; % m/s
 num_cyc = 60; % must be even?
 transientcycs = 5;

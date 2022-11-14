@@ -4,17 +4,17 @@
 % datadir = 'C:\Users\Joel\Documents\Brown Data\';
 % datadir = 'D:\Experiments\2foil\'; 
 datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-% trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
+trialdir = 'FoilAndVib_13-Nov-2022_14_11_29\data\';namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
-trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\';namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
-% freq = freq2;
+% trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\';namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
+
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
 filename = [datadir,trialdir,namepart1];
 trialfiles = dir([datadir,trialdir]);
 load([datadir,trialdir,trialfiles(4).name]);
 
-singletrial_analysis = 0;
+singletrial_analysis = 1;
 manytrial_analysis = 1;
 varyphase = 0;
 
@@ -79,10 +79,10 @@ pitch1_mean = nan(ftrials,Atrials);
 % Loop through trials with different flow speed U
 for ftrial = 1:ftrials
         T = 1/samplerate;
-        timesteps_persubtrial = round((num_cyc/freq)/T);
-        timesteps_subtrialcropped = round((num_cyc/freq)/T);
-        transient_timesteps = round((transientcycs/freq)/T); % duration in seconds of transient heaving to crop off at beginning and end
-    
+%         timesteps_persubtrial = round((num_cyc/freq)/T);
+%         timesteps_subtrialcropped = round((num_cyc/freq)/T);
+%         transient_timesteps = round((transientcycs/freq)/T); % duration in seconds of transient heaving to crop off at beginning and end
+%     
     % Loop through subtrials with different heave amplitude A
 for Atrial = 1:Atrials
 
@@ -94,7 +94,7 @@ for Atrial = 1:Atrials
     end
 
     try
-        load(trialname,'transientcycs','out','Prof_out_angle','freq','phase2')
+        load(trialname,'transientcycs','out','Prof_out_angle','freq2','phase2')
     catch
         disp(['Failed to load ',trialname])
         break
@@ -102,8 +102,9 @@ for Atrial = 1:Atrials
 
     % Extract measured quantities
     [time_star,heave_commanded,heave_measured,heave_star_measured,pitch1_measured,pitch2_measured,force_D,force_L,inertialload_y,...
-    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,1/samplerate,Prof_out_angle,out,thcknss);
-
+    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq2,1/samplerate,Prof_out_angle,out,thcknss);
+    freq = freq2; % Added as workaround for cases with 2 different frequencies
+    
 %     % Define timesteps for each subtrial, excluding ramp up/down
 %     timesteps = length(out);
 %     timestep_start = round(transientcycs/(freq*T))+1;

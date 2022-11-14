@@ -6,10 +6,10 @@ samplerate = 1000; % DAQ sample rate in measurements/second
 
 %% Experimental Setup
 % default values:
-chord = 0.0535;
-thcknss = 0.0265;
-span = 0.401;
-foil_shape = 'V1';
+chord = 0.0594;
+thcknss = 0.0238;
+span = 0.405;
+foil_shape = 'EC1';
 Wall_distance_left = 0.4;
 Wall_distance_right = 0.4;
 flume_height = 0.552;
