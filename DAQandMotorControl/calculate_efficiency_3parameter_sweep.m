@@ -1,5 +1,5 @@
 %% Calculate Tandem Foil Experiments Results
-% Eric Handy, Sept 2022
+% Eric Handy, Oct 2022
 
 clear;
 
@@ -8,11 +8,12 @@ clear;
 
 % Folderpath where files are stored
 
-folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221011_TandemTuesday_AlphaSweep_APHPhase_A3E_a16_a33_a68\');
+% folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221011_TandemTuesday_AlphaSweep_APHPhase_A3E_a16_a33_a68\');
+folderpath = ('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221114_TandemMonday_redux_LeadingAlphaSweep\data\');
 
 % Sweeping parameters
 
-p2 = [40    50    70];
+p2 = [40 50 70];
 
 aT4 = [0.155, 0.33, 0.679]; laT4 = length(aT4);
 p3 = [65    70    75]; lp3 = length(p3);

@@ -20,8 +20,8 @@ foiltype = 'A3E';
 [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, 1000, transientcycs, 6*foil.chord, flume_height);
 % [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, srate, transientcycs);
 
-% out = filter_motor_noise_wallace(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
-% out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+out = filter_motor_noise_wallace(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
+out = filter_motor_noise_gromit(out, par.freq, par.srate, 30); % to show nice data, doesn't affect the efficiency calculation
 res = calculate_forces(par, kin, out);
 
 %% Plotting

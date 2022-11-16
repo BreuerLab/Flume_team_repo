@@ -1,7 +1,7 @@
 %% Plotting efficiency aT4 vs p3 vs h3 vs ph
 % 20220815 - errik 'andi
 
-% THIS IS THE BEST ONE TILL NOW 20220929
+% THIS IS THE BEST ONE TILL NOW 20221115
 
 clear;
 
@@ -12,10 +12,11 @@ addpath(genpath("Libraries"));
 
 % load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20220929_TandemThursday_AlphaSweep_APHPhase_A3E_a16_a33_a68\20220929_TandemFoil_APHPhaseSweep_A3E_alpha=0.155_p3=65_h3=1.1c_phase=-180.mat');
 % load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221003_TandemMonday_AlphaSweep_APHPhase_A3E_a16_a33_a68\20221003_TandemFoil_APHPhaseSweep_A3E_alpha=0.155_p3=65_h3=0.7c_phase=-180.mat')
-load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221011_TandemTuesday_AlphaSweep_APHPhase_A3E_a16_a33_a68\20221011_TandemFoil_APHPhaseSweep_A3E_alpha=0.679_p3=75_h3=1.2c_phase=120.mat')
+% load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221011_TandemTuesday_AlphaSweep_APHPhase_A3E_a16_a33_a68\20221011_TandemFoil_APHPhaseSweep_A3E_alpha=0.679_p3=75_h3=1.2c_phase=120.mat')
+load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221114_TandemMonday_redux_LeadingAlphaSweep\data\20221114_TandemMonday_leadingAlphaSweep_PHPh_aT4=0.33rad,p3=65deg,h3=0.7c,ph=0.mat')
 
 % out(:,5) = Prof_out_angle(:,5); % for wallace pitch that came undone
-[kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, fs, 3, 6*chord);
+[kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_angle, out, samplerate, transientcycs, 6*chord);
 
 maintitle = ['$f^* =$ ', num2str(par.fred), ', $c =$ ', num2str(foil.chord),...
     ' m, Re = ', num2str(round(par.Re,-4)/1000), 'k, $U_{\infty} =$ ', num2str(round(par.U,4)), ' m/s'];
@@ -23,8 +24,9 @@ maintitle = ['$f^* =$ ', num2str(par.fred), ', $c =$ ', num2str(foil.chord),...
 %% Main data
 
 % load('20221011_TandemFoil_efficiency_A3E_a155_330_679_PHPh_CpWake_EffWake_SysEffBoth.mat');
-load('20221011_TandemFoil_efficiency_A3E_a155_330_679_PHPh_CpFrstrm_EffFrstrm_SysEffFrstrm_wBaseline.mat');
+% load('20221011_TandemFoil_efficiency_A3E_a155_330_679_PHPh_CpFrstrm_EffFrstrm_SysEffFrstrm_wBaseline.mat');
 % load('20220929_TandemFoil_efficiency_A3E_a155_330_679_PHPh_CpFrstrm_EffFrstrm.mat')
+load('\\lrs.brown.edu\research\ENG_Breuer_Shared\ehandyca\DATA_main_repo\20221114_TandemMonday_redux_LeadingAlphaSweep\data\20221114_TandemFoil_Redux_efficiency_A3E_a155_330_679_PHPh.mat')
 
 aT4 = [0.155, 0.33, 0.679]; laT4 = length(aT4);
 p3 = [65  70  75]; lp3 = length(p3);
@@ -46,7 +48,7 @@ lvlstp = 0.005;
 ylbl = ('$h^*_{tr} = H_{0,tr}/c$');
 xlbl = ('$\psi_{1-2}$ (deg)');
 
-%%
+%% Total power coefficient
 
 figure(1)
 colormap('inferno')
@@ -90,7 +92,8 @@ end
 c = colorbar();
 c.TickLabelInterpreter = 'latex';
 
-%%
+%% Trailing measured efficiency
+
 figure(2)
 colormap('magma')
 
@@ -132,7 +135,8 @@ end
 c = colorbar();
 c.TickLabelInterpreter = 'latex';
 
-%%
+%% Measured system efficiency
+
 figure(3)
 colormap('magma')
 
@@ -174,7 +178,7 @@ end
 c = colorbar();
 c.TickLabelInterpreter = 'latex';
 
-%%
+%% Measured leading efficiency
 figure(4)
 colormap('magma')
 
@@ -216,20 +220,21 @@ end
 c = colorbar();
 c.TickLabelInterpreter = 'latex';
 
-%%
+%% Swept area
+
 figure(5)
 colormap('viridis')
 
-mt = ['$\bar{U}_{wake}$, ', maintitle]; % change this to appropriate
+mt = ['$A_{s}$, ', maintitle]; % change this to appropriate
 sgtitle(mt, 'FontSize', 28, 'Interpreter', 'latex');
 
 for n = 1:size(Yp,1) % every alphaT4
     
-    variable = Uwake; % CHANGE THIS TO THE DESIRED VARIABLE
+    variable = Yp; % CHANGE THIS TO THE DESIRED VARIABLE
     lvlstp = 0.0005; % to account for very small variations in the mean wake flow
     par = squeeze(variable(n,:,:,:));
     m = n;
-    mean(mean(mean(par)))
+    mean(mean(mean(par)));
     for i = 1:size(par,1) % every pitch angle
 
         par_loop = squeeze(par(i,:,:));
