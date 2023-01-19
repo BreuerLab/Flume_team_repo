@@ -8,16 +8,19 @@ U_star_sorted = 1./f_star_sorted;
 phase12_sorted = phase12(sort_index,:);
 A_star_sorted = A_star_measured(sort_index,:);
 powercoef_mean_sorted = powercoef_mean(sort_index,:);
-movmeanpower_points = 1;
+powercoef_mean_sorted(:,1) = zeros(size(f_star_sorted,1),1);
+movmeanpower_points =0;
 powercoef_mean_sorted_smoothed = smooth2a(powercoef_mean_sorted,movmeanpower_points,movmeanpower_points);
+
+% powercoef_mean_sort_smooth_round = round(powercoef_mean_sorted_smoothed,3);
 % power_mean_sorted = power_mean(sort_index,:);
 delay_sorted = delay(sort_index,:);
 % powercoef_conv = powercoef_convtest(1,sort_index,:);
 
 if plot_w_fstar == 1
     independent_var = f_star_sorted;
-    xlimits = [0.09 0.41];
-    xlabelstr = '{\it f} * = {\it f D/U }';
+    xlimits = [0.09 0.31];
+    xlabelstr = '{\it f} * = {\it f d/U }';
 elseif plot_w_Ustar == 1
     independent_var = 1./f_star_sorted;
     xlimits = [0 18];
@@ -28,7 +31,7 @@ hold on
 
 % Plot Cp vs. A* and f*
 % contourf(f_star_sorted,A_star_sorted,power_mean_sorted,120,'LineStyle','none')
-contourf(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,120,'LineStyle','none')%,[],'LineStyle','none'
+contourf(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,200,'LineStyle','none')%,[],'LineStyle','none'
 % contourf(f_star_sorted,A_star_sorted,squeeze(powercoef_conv(1,:,:))./powercoef_mean_sorted,120,'LineStyle','none') %,[],'LineStyle','none'
 % quiver(f_star_sorted,A_star_sorted,gradA,gradf)
 
@@ -36,8 +39,8 @@ caxis([-1 0.2])
 % colorbarpwn(-6.0,0.2,'colorN',[0 0.5 1],'log',1.5)
 colormap(bluewhitered)
 
-contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','--')
-scatter(independent_var,A_star_sorted,60,'.','k')
+contour(independent_var,A_star_sorted,powercoef_mean_sorted_smoothed,[0 0],'LineWidth',4,'LineColor','k','LineStyle','-')
+scatter(independent_var,A_star_sorted,20,'.','k')
 grid on
 xlabel(xlabelstr)
 ylabel('{\it A} * = {\it A/D}')
@@ -77,5 +80,5 @@ c=colorbar();
 c.Label.String = '{\it C}_P';
 % c.Label.Interpreter = 'Latex';
 set(gca,"FontName","Arial"); set(gca,"FontSize",36); set(gca,"LineWidth",2); 
-
+set(gcf, 'Position',  [100, 100, 1400, 800])
 hold off

@@ -11,14 +11,16 @@ num_cyc = 60; % must be even?
 transientcycs = 5;
 constantpitch = 0; % 1 for constant pitch during trial, only last foil
 A2pitch = 0; % Pitch amplitude in degrees
-A1pitch = 0; % pitch amplitude of upstream foil in degrees
-A1star = 0; % heave amplitude of upstream foil in meters
-phase2 = 0;
-phi = 0;
+A1pitch = 30; % pitch amplitude of upstream foil in degrees
+% A1star = 0; % heave amplitude of upstream foil in meters
+A1 = 0.024;
+freq1 = 0.15*U/thcknss; 
+phase2 = -148.45;
+phi = -90;
 offset = 0; % Time (in cycles) from start of run to start PIV
-
-for fstar = 0.1:0.01:0.4 %0.3:0.02:0.3
-        freq = fstar*U/thcknss;
+ 
+for fstar = 0.1:0.01:0.3 %0.1:0.01:0.3
+        freq2 = fstar*U/thcknss;
 
     for A2star = 0:0.05:1.1 %0.0:0.1:1.1
         A2 = A2star*thcknss;

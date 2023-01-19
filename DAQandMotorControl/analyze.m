@@ -5,13 +5,11 @@
 % datadir = 'D:\Experiments\1foil\'; 
 % trialdir = 'Enter descriptive name_03-Nov-2022_17_27_4\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
 datadir = 'R:\ENG_Breuer_Shared\jnewbolt\DAQandMotorControl\Data\';
-trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'FoilAndEllipticCyl_13-Nov-2022_22_31_38\data\';namepart1 = 'FoilAndEllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
+% trialdir = 'EllipticCylHigherFreq_06-Nov-2022_12_49_19\data\';namepart1 = 'EllipticCyl_pitch=0deg,f='; namepart2='Hz,A=';
+trialdir = 'CircCylHighRes_03-Nov-2022_19_35_11\data\';namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
 % trialdir = 'VibHigherFreq_04-Nov-2022_19_16_8\data\';namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
-% trialdir = 'Enter descriptive name_04-Nov-2022_17_2_18\data\'; namepart1 = 'CircCyl_pitch=0deg,f='; namepart2='Hz,A=';
-% trialdir = 'CircCyl_20220919\data\'; namepart1 = 'CylPowerMap_pitch=0deg,f='; namepart2='Hz,A=';
-% trialdir = 'EllipticalCyl_04-Jul-2022_16_7_4\data\'; namepart1 = 'EllipticalCyl_pitch=0deg,f='; namepart2='Hz,A=';
-% trialdir = 'VibManyFreq_27-Oct-2022_18_52_34\data\'; namepart1 = 'Vib_pitch=0deg,f='; namepart2='Hz,A=';
-% filename = 'Data\20220620_foilandvib\vary_phase12\foilandvib_pitch=0deg,f='; name2='Hz,A='; name3='cm,phase12=';
+% trialdir = 'FoilAndVib_13-Nov-2022_14_11_29\data\';namepart1 = 'FoilAndVib_pitch=0deg,f='; namepart2='Hz,A=';
 
 % Combine strings to form filename and load last trial to get some necessary variable values from the trial
 filename = [datadir,trialdir,namepart1];
@@ -23,7 +21,7 @@ manytrial_analysis = 1;
 varyphase = 0;
 
 if manytrial_analysis==1
-fstarvector = (0.1:0.02:0.4);%(0.05:0.01:0.14);
+fstarvector = (0.1:0.01:0.3);%(0.05:0.01:0.14);
 Astarvector = (0.0:0.05:1.1);
 ftrials = length(fstarvector); Atrials = length(Astarvector);
     if varyphase==1
@@ -32,10 +30,8 @@ ftrials = length(fstarvector); Atrials = length(Astarvector);
     ftrials = length(phase12vector); 
     end
 elseif singletrial_analysis==1
-fstarvector = 0.24;
-% % fvector = 0.4328;
-% % Avector = 0;
-Astarvector = 0.4;
+fstarvector = 0.16;
+Astarvector = 1.0;
 ftrials = 1; Atrials = 1;
 end
 
@@ -102,10 +98,10 @@ for Atrial = 1:Atrials
         disp(['Failed to load ',trialname])
         break
     end
-
+    freq2 = freq; % Added as workaround for cases with 2 different frequencies
     % Extract measured quantities
-    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch_measured,force_D,force_L,inertialload_y,...
-    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq,1/samplerate,Prof_out_angle,out,thcknss);
+    [time_star,heave_commanded,heave_measured,heave_star_measured,pitch1_measured,pitch2_measured,force_D,force_L,inertialload_y,...
+    torque_x0,flowspeed_measured,heave_velo,heave_accel] = extract_measurements(transientcycs,freq2,1/samplerate,Prof_out_angle,out,thcknss);
 
 %     % Define timesteps for each subtrial, excluding ramp up/down
 %     timesteps = length(out);
@@ -158,12 +154,13 @@ for Atrial = 1:Atrials
     power_scale(ftrial,Atrial) = 0.5*1000*thcknss*span*flowspeed_measured_mean(ftrial,Atrial)^3;
     power_fluid = force_L_corrected_filtered .*heave_velo;
     m_star = 2.4; damping_ratio = 0.0045;
-    damping_coef = 4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
+    damping_coef = 0; %4*pi*freq*m_star*(pi*(1.5*0.0254/2)^2*10*1.5*0.0254)*damping_ratio; % dimensions of kg/s
     power_damping = -damping_coef*heave_velo.^2;
     power_total = power_fluid + power_damping;
     power_mean(ftrial,Atrial) = mean(power_total);
     powercoef = power_total/power_scale(ftrial,Atrial);
     powercoef_mean(ftrial,Atrial) = power_mean(ftrial,Atrial)/power_scale(ftrial,Atrial);
+%     powercoef_mean(ftrial,Atrial) = CL1*sin(phi_CL1);
 
 % % heave spectrum
     duration = max(time_star/freq)/T;
@@ -186,9 +183,13 @@ for Atrial = 1:Atrials
 %     spacing = (f_force(2)-f_force(1))/f;
 %     findpeaks(10*log10(force_powerspec),1/spacing,'MinPeakHeight',max_power-20)
 
+    % Find phase delay between heave and force
+    [CL1,phi_CL1] = fourierSineAmpAndPhase(time_star,liftcoef,freq,num_cyc);
+
 %     % Find phase delay between heave and force
 %     maxlag = round(1/(2*freq*T));  % Maximum lag to calculate xcorr (in timesteps)
-%     [corrs,lags] = xcorr(heave_measured,force_L_corrected_filtered ,maxlag);
+%     corr_wave = heave_measured/max(heave_measured);
+%     [corrs,lags] = xcorr(force_L_corrected_filtered,corr_wave,maxlag);
 % %     delay = freq*T*360*finddelay(heave_measured,force_y_corrected_filtered,maxlag)
 %     figure
 %     hold on
@@ -200,7 +201,8 @@ for Atrial = 1:Atrials
 %     xlim([-180 180])
 %     hold off
 %     drawnow
-% 
+
+
 % %     % Hilbert transform for instantaneous freq
 % %     window = floor(duration/10);
 % %     noverlap = floor(window/4);
@@ -226,11 +228,17 @@ for Atrial = 1:Atrials
     if singletrial_analysis==1
         close all
 %         time_star = time_star/freq; % Restore seconds to time
-    plot_PrescribedMotionForceAndVelocity(time_star,heave_star_measured,heave_velo,liftcoef,...
-        dragcoef,powercoef,num_cyc,dragtorquecoef);
-    drawnow
-    end
+    
+%     plot_PrescribedMotionForceAndVelocity(time_star,heave_star_measured,heave_velo,liftcoef,...
+%         dragcoef,powercoef,num_cyc,dragtorquecoef);
+%     hold on
+%     plot(time_star,CL1(9)*sin(2*pi*time_star+phi_CL1(9)),'LineWidth',2)
+%     hold off
+%     drawnow
 
+
+    end
+    plot(phi_CL1); ylim([-pi pi]); 
 %     disp(['CD', num2str(mean(dragcoef)),'  CL',num2str(mean(liftcoef))]);
     liftcoef_alltrials(ftrial,Atrial) = mean(liftcoef);
     liftcoef_max(ftrial,Atrial) = max(liftcoef);
@@ -245,6 +253,7 @@ end
 end
    if manytrial_analysis==1
     figure
+    powercoef_mean = mean(CL1*sin(mean(phi_CL1))); 
     plot_PowerCoefContour;
     drawnow
     end
