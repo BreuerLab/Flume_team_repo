@@ -177,7 +177,7 @@ function res = calculate_forces(par, kin, out)
     
 %     [beta2, U_2prime, ~, ~, ~, CD2_norm, CD2_norm_p] = blockage_barn_well(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
 %     [beta2, U_2prime, ~, CD2_norm, CD2_norm_p] = blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
-    [beta2, U_2prime, ~, CD2_norm, CD2_norm_p] = test_blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
+    [beta2, U_2prime, u2_2bypass, ~, CD2_norm, CD2_norm_p] = test_blockage_houlsby(p2_comm, CD2, par.H2, Eff_2, U, par.Fr, foil, par.flume_height);
     
     Eff_2prime = Eff_2*(U/U_2prime)^3; % corrected leading foil efficiency
     Eff_2prime_std = Eff_2_std*(U/U_2prime)^3; % same correction as the actual efficiency
@@ -186,7 +186,7 @@ function res = calculate_forces(par, kin, out)
     
 %     [beta3, U_3prime, Eff_3prime, ~, ~, CD3_norm, CD3_norm_p] = blockage_barn_well(p3_comm, CD3, par.H3, Eff_3, U_wake, par.Fr, foil, par.flume_height);
 %     [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U_wake, par.Fr, foil, par.flume_height);
-    [beta3, U_3prime, Eff_3prime, CD3_norm, CD3_norm_p] = test_blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
+    [beta3, U_3prime, u2_3bypass, Eff_3prime, CD3_norm, CD3_norm_p] = test_blockage_houlsby(p3_comm, CD3, par.H3, Eff_3, U, par.Fr, foil, par.flume_height);
 
 %     Eff_3prime = Eff_3*(U_wake/U_3prime)^3; % corrected trailing foil efficiency
 %     ^^^ temporarily commented 20220921 (doesn't really need to be commented anymore)
@@ -254,9 +254,11 @@ function res = calculate_forces(par, kin, out)
     res.CPP3 = CPP3; % trailing pitch power coeff
     
     res.U_2prime = U_2prime; % corrected flowspeed
+    res.u2_2bypass = u2_2bypass; % estimated bypass flow from actuator disk methods (houlsby)
 %     res.U_2wake = U_2wake; % wake vleocity behind the leading foil
     
     res.U_3prime = U_3prime; % corrected flowspeed in fornt of the trailing foil
+    res.u2_3bypass = u2_3bypass; % estimated bypass flow from actuator disk methods (houlsby)
 %     res.U_3wake = U_3wake; % wake vleocity behind the leading foil
     
     res.CD2_norm = CD2_norm; % leading drag coeff normalized by the heaving amplitude

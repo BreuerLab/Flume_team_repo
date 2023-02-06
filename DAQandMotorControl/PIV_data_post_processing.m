@@ -2,6 +2,9 @@
 % Courtesy of Yuanhang 20220815
 % Edited by yours truly, El Eric
 
+% This is the OG code
+% does NOT implement RPCA and GPOD
+
 clear;
 
 %% General parameters
@@ -114,7 +117,7 @@ data_no_y = 303; % from "text data" in the file structure (J values)
 
 %% Foil coordinates
 % NOTE: ideally instead of using the isValid array to determine the foil's position, a raw image should be
-% used with the calibration determined in the previous section.
+% used along with the calibration determined in the previous section.
 
 % flip measurement frame of reference from the encoders to the PIV
 p2 = -out(:,3); % pitch leading foil [rad] (THESE SHOULD ALL BE NEGATIVE)
@@ -188,9 +191,6 @@ plot(out(:,24)*max(rad2deg(out(:,3))),'g','linewidth',2);
 xline(I0,'r','LineWidth',2); hold off;
 xlim([(I0-2000),(I0+2000)])
 
-% I might not need this part now:
-% frame_displ = foil2_coords(1,4) - h2(I0); % displacement between the encoder frame of reference and the piv data frame of reference
-
 % Leading foil coordinates (based only on the encoder measurement)
 
 f2_xpos = -foil_separation/2;% - 0.15*chord; % adding  SLIGHT displacement correction
@@ -210,10 +210,6 @@ foil3_mc = [f3_xpos,                          h3(I0)]; % trailing foil mid-chord
 foil3_te = [f3_xpos + cos(p3(I0))*chord/2,    h3(I0) + sin(p3(I0))*chord/2]; % trailing foil trailing edge
 
 foil3_coords(1,:) = [foil3_le, foil3_mc, foil3_te];
-
-% YOU CAN DELETE THIS:
-% f2_xpos = foil2_coords(1,3); % fixed x position of both foils
-% f3_xpos = foil3_coords(1,3);
 
 piv_period = 1/piv_freq; % time between each piv frame
 time_steps = piv_period/(1/samplerate); % time steps between piv frames

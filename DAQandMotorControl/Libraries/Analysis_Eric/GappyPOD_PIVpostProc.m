@@ -1,3 +1,6 @@
+%% ENGN 2912T, Gappy Proper Orthogonal Decomposition - GPOD
+% Adapted mainly from Venturi and Karniadakis, 2004
+
 function [interpolated_data, G] = GappyPOD_PIVpostProc(compiled_data)
 
     parfor n = 1:length(compiled_data)
@@ -116,7 +119,7 @@ function [interpolated_data, G] = GappyPOD_PIVpostProc(compiled_data)
         end
 
         % f = NaN(P,size(xi,2)); % alternate way of performing this calculation
-
+        %
         % for k = 1:size(xi,2)
         %     for i = 1:P
         %         f(i,k) = dot(xi(:,k).*gaps(:,k),phi_tild(:,i));

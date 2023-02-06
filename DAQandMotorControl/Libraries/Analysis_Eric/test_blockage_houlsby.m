@@ -4,7 +4,7 @@
 
 % clear;clc;close all
 
-function [beta, U_prime, Eff_prime, CD_norm, CD_norm_p] = test_blockage_houlsby(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
+function [beta, U_prime, u2, Eff_prime, CD_norm, CD_norm_p] = test_blockage_houlsby(pitch_prof, drag_coeff, heave_amp, Eff, U, Fr, foil, depth)
 
 width = 0.8;
 
@@ -14,6 +14,7 @@ width = 0.8;
 
 v0 = U; % Freestream velocity is 0.5m/s
 error = 10;
+% u2 is the estimated bypass velocity
 u2 = U + 0.01; % 0.4m/s / 0.3m/s PIV - Guess (choose a value until you see convergence of Houlsby equations (Read Ross's paper for more info)
 beta = (2*heave_amp*foil.span)/(width*depth); % Blockage: At/Ac = (2*h0*S)/(depth*width) = 2*0.1*0.35/(0.6*0.8) = 0.146 (h0 = 1c for all the kinematics we have)
 
@@ -21,6 +22,12 @@ CD = mean(drag_coeff);
 
 Cd = CD * (foil.chord/(2*heave_amp));   %EXP: f12h1a55 - From experiments (not corrected yet) - Only extra info necessary to update efficiency value (normalization given by Gauthier's paper)
 eta = Eff;                  %EXP: f12h1a55 - From experiments (not corrected yet)
+
+% ONLY for highly loaded cases (corrects convergence)
+if Cd > 1
+    Cd = 1;
+end
+% Cd = 1; % overriding CD for all cases and not only high loading 20230109
 
 g = 9.80665;
 d0 = depth; %Putting same as channel depth (inspired from Ross's paper)
