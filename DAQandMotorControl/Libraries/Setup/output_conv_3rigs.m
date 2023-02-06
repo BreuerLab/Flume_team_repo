@@ -64,6 +64,15 @@ out(:,23) = loadmass*accscale*(dat(:,23) - bias.accmeter);%- mean(dat(:,23),1); 
 out(:,24) = dat(:,24);
 out(:,25) = dat(:,25);
 
+% New traverse 20230206 - courtesy of Xiaowei He
+out(:,26) = dat(:,26); % heave cmd
+out(:,27) = dat(:,27); % pitch cmd
+
+out(:,28) = dat(:,28); % heave encoder (zero for now)
+out(:,29) = encodertheta(dat(:,29), 0); % pitch encoder (assuming you're always starting at 0 respect to the sreawise)
+
+
+
 t = (0:numel(out(:,1))-1)/1000;
 t = t';
 end

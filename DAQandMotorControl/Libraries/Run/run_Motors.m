@@ -93,6 +93,8 @@ disp(['Time taken to run DAQ foreground scan: ',num2str(scantime),' seconds.'])
 
 % Convert raw voltages to useful data
 [out,t]=output_conv_3rigs(dat,bias,foil); % output angle is in radians
+% Convert new traverse
+
 Length = numel(out(:,1))/1000;
 flume = 0;
 

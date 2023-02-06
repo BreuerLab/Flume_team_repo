@@ -2,7 +2,7 @@ function [dq] = setup_DAQ_channels(samplerate)
 
 disp('Inititializing NI DAQs')
 
-% Channels in s are as follows:
+% Channels in s are as follows: THIS NEEDS TO BE UPDATED
 % 
 % Data acquisition session using National Instruments hardware:
 %    No data queued.  Will run at 1000 scans/second.
@@ -37,6 +37,17 @@ disp('Inititializing NI DAQs')
 %       26    ao   Dev1   ao1     Voltage (SingleEnd) -10 to +10 Volts Heave 2
 %       27    ao   Dev2   ao0     Voltage (SingleEnd) -10 to +10 Volts Pitch 3
 %       28    ao   Dev2   ao1     Voltage (SingleEnd) -10 to +10 Volts Heave 3
+
+
+%       ##    ai   Dev1   ai0     Voltage (SingleEnd) 0 to +10 Volts   cmd recording Heave New Traverse
+%       ##    ai   Dev1   ai1     Voltage (SingleEnd) 0 to +10 Volts   cmd recording Pitch New Traverse
+%       ##    ci   Dev1   ctr0    Position            n/a              Heave New Traverse
+%       ##    ci   Dev1   crt1    Position            n/a              Pitch New Traverse
+
+%       ##    ao   Dev1   ao0     Voltage             0 to +10 Volts   command Heave New Traverse
+%       ##    di/o Dev1   P0.0    Digital             0 or +5 Volts    cmd Lock Heave New Traverse
+%       ##    ao   Dev1   ao1     Voltage             0 to +10 Volts   command Pitch New Traverse
+%       ##    di/o Dev1   P0.1    Digital             0 or +5 Volts    cmd Lock Pitch New Traverse
 
 dq = daq("ni");
 % dq=daq.createSession('ni');
@@ -192,6 +203,40 @@ disp('Analog outputs done. Syncing and Zeroing output...')
     addinput(dq,'dev2','Port0/line10','Digital'); % record the trigger signal, Dev2.2, P0.1
     addinput(dq,'dev2','Port0/line9','Digital'); % record the pulse signal from the PTU, Dev2.2, P0.0
 
+% New traverse input channels 20230206 - courtesy of Xiaowei He
+
+ai_y_cmd = addinput(dq, 'Dev1', 0, 'Voltage');
+ai_y_cmd.Name = 'y_cmd_m';
+ai_y_cmd.TerminalConfig = 'SingleEnded';
+
+ai_theta_cmd = addinput(dq, 'Dev1', 1, 'Voltage');
+ai_theta_cmd.Name = 'theta_cmd_m';
+ai_theta_cmd.TerminalConfig = 'SingleEnded';
+
+ctr_y = addinput(dq, 'Dev1', 'ctr0', 'Position');
+ctr_y.Name = 'encoder_y';
+ctr_y.EncoderType = 'X4';
+
+ctr_theta = addinput(dq, 'Dev1', 'ctr1', 'Position');
+ctr_theta.Name = 'encoder_theta';
+ctr_theta.EncoderType = 'X4';
+
+% New traverse output channels 20230206 - courtesy of Xiaowei He
+
+ao_y_cmd = addoutput(dq, 'Dev1', 'ao0', 'Voltage');
+ao_y_cmd.Name = 'y_cmd';
+
+dio_y_lock = addoutput(dq, 'Dev1', 'Port0/Line0', 'Digital');
+dio_y_lock.Name = 'y_lock';
+
+ao_theta_cmd = addoutput(dq, 'Dev1', 'ao1', 'Voltage');
+ao_theta_cmd.Name = 'theta_cmd';
+
+dio_theta_lock = addoutput(dq, 'Dev1', 'Port0/Line1', 'Digital');
+dio_theta_lock.Name = 'theta_lock';
+
+
+% Don't know if this needs to be here
 
 % addTriggerConnection(s,'Dev1/PFI4','Dev4/PFI0','StartTrigger');
 % 
