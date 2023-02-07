@@ -1,6 +1,7 @@
 %% Blockage Correction - Look at Ross' paper for more info on various methods
 
 % copied from bernardo's paper
+% This is the one in the force calculation code
 
 % clear;clc;close all
 
