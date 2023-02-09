@@ -20,7 +20,12 @@ pprof3=linspace(last_out(5),last_out(5),bias_trialduration*dq.Rate)';
 
 trigger=linspace(last_out(7),last_out(7),bias_trialduration*dq.Rate)';
 
-output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger];  % needs additional trigger channel for PIV
+htraverse = linspace(last_out(8),last_out(8),bias_trialduration*dq.Rate)';
+lock_htraverse = linspace(last_out(9),last_out(9),bias_trialduration*dq.Rate)';
+ptraverse = linspace(last_out(10),last_out(10),bias_trialduration*dq.Rate)';
+lock_ptraverse = linspace(last_out(11),last_out(11),bias_trialduration*dq.Rate)';
+
+output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger htraverse lock_htraverse ptraverse lock_ptraverse];  % added channels from the new traverse
 
 % figure(3)
 % plot(output)

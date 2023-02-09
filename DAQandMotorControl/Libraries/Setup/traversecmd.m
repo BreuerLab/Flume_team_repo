@@ -1,6 +1,6 @@
 function varargout = traversecmd(axisName, positionCmd, positionOffset)
-%[voltageCmd] = belt_traverse(axisName, positionCmd, positionOffset)
-%[voltageCmd, cmdLock] = belt_traverse(axisName, positionCmd, positionOffset)
+%[voltageCmd] = traversecmd(axisName, positionCmd, positionOffset)
+%[voltageCmd, cmdLock] = traversecmd(axisName, positionCmd, positionOffset)
 %
 % Belt traverse analog control signal convertor.
 % Converts position input [m] (linear axis) or [deg] (rotational axis) to

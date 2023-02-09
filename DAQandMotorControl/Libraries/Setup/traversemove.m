@@ -1,6 +1,8 @@
 function [positionAbs] = traversemove(daqObj, axisName, positionCurrent, positionTarget)
 %[positionAbs] = traversemove(daqObj, axisName, positionCurrent, positionTarget)
 %
+% positionAbs only updates one channel in last_out
+%
 % Belt traverse manual movement function.
 % Commands a selected axis to move from current position to a target
 % positon and hold.
@@ -24,7 +26,7 @@ function [positionAbs] = traversemove(daqObj, axisName, positionCurrent, positio
 %            - 'y' = y/heave axis
 %            - 'theta' = theta/pitch axis.
 %
-% positionCurrent = current absolut position on the selected axis
+% positionCurrent = current absolute position on the selected axis
 %                    referenced to its home zero.
 %
 % positionTarget = target absolut position of the selected axis referenced
@@ -32,7 +34,7 @@ function [positionAbs] = traversemove(daqObj, axisName, positionCurrent, positio
 % -------------------------------------------------------------------------
 % Output:
 % positionAbs = last absolute postion commanded by the daq, equivalent
-%                to Last_out
+%                to the corresponding channel in last_out
 % -------------------------------------------------------------------------
 % Note:
 % Change NchYcmd, NchYhold, NchTcmd, and NchThold accordingly if the output
@@ -110,10 +112,10 @@ positionAbs = round(positionCmd(end), Ndigit); % record the absolute position of
 
 outScanData = zeros(length(positionCmd), NchTotal); % initiate output matrix
 
-outScanData([NchYlock, NchTlock]) = 1; % set the motors to "command lock", motors hold current positions as defult
+outScanData(:, [NchYlock, NchTlock]) = 1; % set the motors to "command lock", motors hold current positions as defult
                                        % high-level input to motor I/O "Input A"
 
 outScanData(:, columnNum) = [voltageCmd, cmdLock]; % store voltage command and command lock
-                                                    % signals of the target axis to the output matrix
+                                                   % signals of the target axis to the output matrix
 
 readwrite(daqObj, outScanData); % write to daq: voltage is sent to the motor now

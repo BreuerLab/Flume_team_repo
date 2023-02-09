@@ -19,3 +19,11 @@ out(:,5) = (profs(:,5) - pitch_bias(3))/5./10*30000/12800*360/1.00;%5:1 gear *( 
 
 % out(:,3) = -profs(:,3)*1.*10/2000*1000/360*1.00*90/57.42+pitch_offset2;
 out(:,3) = -(profs(:,3) - pitch_bias(2))./5.*(360)/2/65*81/5;
+
+
+% New traverse 20230206 - courtesy of Xiaowei He
+out(:,26) = dat(:,26); % heave cmd
+out(:,27) = dat(:,27); % pitch cmd
+
+out(:,28) = dat(:,28); % heave encoder (zero for now)
+out(:,29) = encodertheta(dat(:,29), 0); % pitch encoder (assuming you're always starting at 0 respect to the sreawise)

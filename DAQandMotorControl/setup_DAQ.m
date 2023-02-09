@@ -87,7 +87,7 @@ mkdir([fname,'\data'])
 %     disp('ensure Vectrino and Vector are collecting data and recording to file')
 % end
 
-last_out = [0 0 0 0 0 0 0];
+last_out = [0 0 0 0 0 0 0 0 0 0 0];
   write(dq,last_out)
 
 
