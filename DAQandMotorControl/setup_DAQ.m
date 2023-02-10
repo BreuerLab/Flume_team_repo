@@ -128,7 +128,7 @@ user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s")
         zero_pitch = 1;
     end
 end
-[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0,0,0,0,0,0],5,bias,foil); % move gromit to original position
+[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0 0 0 0 0 0],5,bias,foil); % move gromit to original position
 
 % disp('Run flume.  Click <a href="matlab: [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil);">find_zero_pitch</a> when at full speed.')
 
