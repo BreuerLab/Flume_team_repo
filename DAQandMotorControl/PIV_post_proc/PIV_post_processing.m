@@ -52,94 +52,77 @@ m = length(range_y);
 fprintf('Processing...\n\n');
 
 N = 100;%length(files);
+
+% initialize variables
+x_raw = nan(n*m,1);
+y_raw = nan(n*m,1);
+u_raw = nan(n*m,N);
+v_raw = x_raw;
+vort_raw = x_raw;
+corr_raw = x_raw;
+isVa_raw = x_raw;
+uncU_raw = x_raw;
+uncV_raw = x_raw;
+
 tic;
 for k = 1:N
     filename = ['B', num2str(k,'%04.0f'), '.dat'];
     [A,~,~] = importdata(filename); % load data from file
     
-    raw_x = A.data(window_index,1);
-    raw_y = A.data(window_index,2);
-    raw_u(:,k) = A.data(window_index,3);
-    raw_v(:,k) = A.data(window_index,4);
-    raw_vort(:,k) = A.data(window_index,9);
-    raw_corr(:,k) = A.data(window_index,12);
-    raw_isVa(:,k) = A.data(window_index,15);
-    raw_uncU(:,k) = A.data(window_index,13)/0.33; % percentage uncertainty
-    raw_uncV(:,k) = A.data(window_index,14)/0.33; % percentage uncertainty
+    x_raw = A.data(window_index,1);
+    y_raw = A.data(window_index,2);
+    u_raw(:,k) = A.data(window_index,3);
+    v_raw(:,k) = A.data(window_index,4);
+    vort_raw(:,k) = A.data(window_index,9);
+    corr_raw(:,k) = A.data(window_index,12);
+    isVa_raw(:,k) = A.data(window_index,15);
+    uncU_raw(:,k) = A.data(window_index,13)/0.33; % percentage uncertainty
+    uncV_raw(:,k) = A.data(window_index,14)/0.33; % percentage uncertainty
     
 end
-
-X = [raw_u; raw_v]; % compile velocity components into spatio-temporal matrix
-
 toc;
+
+X = [u_raw; v_raw]; % compile velocity components into spatio-temporal matrix
+
 %% Gappy Proper Orthogonal Decomposition (GPOD)
 % Interpolates low correlation and missing vectors
 
-gaps = gappy_mask(raw_vort, 'corr', raw_corr, 0.4);
+skip = 0; % change to enable GPOD interpolation
 
-Xgappy_u = raw_u.*gaps;
-Xgappy_v = raw_v.*gaps;
-Xgappy = [Xgappy_u; Xgappy_v]; % stack both velocity components on top of each other
-Wgappy = raw_vort.*gaps;
+if skip == 1
+    gaps = gappy_mask(vort_raw, 'corr', corr_raw, 0.4);
 
-[Xinterp, details_velo] = GPOD(Xgappy);
-[Winterp, details_vort] = GPOD(Wgappy);
+    Xgappy_u = u_raw.*gaps;
+    Xgappy_v = v_raw.*gaps;
+    Xgappy = [Xgappy_u; Xgappy_v]; % stack both velocity components on top of each other
+    Wgappy = vort_raw.*gaps;
+
+    [Xinterp, details_velo] = GPOD(Xgappy);
+    [Winterp, details_vort] = GPOD(Wgappy);
+end
 
 %% Robust Principle Component Analysis (RPCA)
 % De-noises the data
 
-[L,S] = RPCA(Xinterp); % performs RPCA on the velocity components
+skip = 0; % change to enable RPCA filtering
 
-u_L = L(1:end/2,:);
-v_L = L(end/2+1:end,:);
+if skip == 1
+    [L,S] = RPCA(Xinterp); % performs RPCA on the velocity components
 
-[vort_L,vort_S] = RPCA(Winterp); % performs RPCA on the vorticity components
+    u_L = L(1:end/2,:);
+    v_L = L(end/2+1:end,:);
+
+    [vort_L,vort_S] = RPCA(Winterp); % performs RPCA on the vorticity components
+end
 
 %% Phase-averaging
 % Phase averaging for periodic flows
 
-[u_avg, v_avg, vort_avg] = phase_average_piv(u_L, v_L, vort_L, fpc, 92);
-[uL_avg, vL_avg, vortL_avg] = phase_average_piv(u_L, v_L, raw_vort, fpc, 92);
-[u_avg, v_avg, vort_avg] = phase_average_piv(raw_u, raw_v, raw_vort, fpc, 92);
+[u_avg, v_avg, vort_avg] = phase_average_piv(u_raw, v_raw, vort_raw, fpc, 92);
 
-save('RPCA_results.mat','X','L','S','vort_L','vort_S','raw_x','raw_y');
-save('WRONG_Averaged_Flowfield.mat','u_avg','v_avg','vort_avg','raw_x','raw_y');
-save('WRONG_Averaged_Flowfield_RPCA.mat','uL_avg','vL_avg','vortL_avg','raw_x','raw_y');
+out = track_vortex(x_raw, y_raw, u_avg, v_avg, [m,n]);
 
-%% Testing (temporary)
-
-x = reshape(raw_x,[n,m]);
-y = reshape(raw_y,[n,m]);
-
-% u = reshape(u_L,[n,m,N]);
-% v = reshape(v_L,[n,m,N]);
-% vort = reshape(vort_L,[n,m,N]);
-% vort(abs(vort)<1) = 0;
-
-u = reshape(uL_avg,[n,m,fpc]);
-v = reshape(vL_avg,[n,m,fpc]);
-% vort = reshape(vortL_avg,[n,m,fpc]);
-
-% u = reshape(u_avg,[n,m,fpc]);
-% v = reshape(v_avg,[n,m,fpc]);
-% vort = reshape(vort_avg,[n,m,fpc]);
-
-U = sqrt(u.^2 + v.^2);
-% U = U - mean(U,3);
-
-figure(3)
-for frame = 1:fpc
-    contourf(x,y,vort(:,:,frame),'linestyle','none','levelstep',0.005);
-    colormap(brewermap([],'-RdBu'))
-    caxis([-0.1,0.1])
-
-%     quiver(x,y,u(:,:,frame),v(:,:,frame),2,'k');
-    
-%     contourf(x,y,U(:,:,frame),'linestyle','none','levelstep',0.005);
-%     colormap(brewermap([],'-YlGnBu'))
-    
-    pause(0.1)
-end
+save('Averaged_Flowfield.mat','u_avg','v_avg','vort_avg','x_raw','y_raw');
 
 %% End
 cd(main_folder);

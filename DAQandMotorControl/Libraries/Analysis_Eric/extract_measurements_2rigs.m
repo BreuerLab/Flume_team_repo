@@ -73,7 +73,6 @@ function    [kin, par, foil] = extract_measurements_2rigs(foiltype, Prof_out_ang
 %         error('Number of cycles incorrect. Verify cycles profile.');
 %     end
 
-%     total_cyc = num_cyc + 2*transientcycs; % total number of cycles including transients
     T = NaN(num_cyc,1); % period of each cycle
     time = 0:Tsamp:length(heave_profile)/srate-Tsamp; time = time'; % time of the experiment
     
