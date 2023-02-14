@@ -18,7 +18,8 @@
 % Upadated 02/13/2023, E Handy
 %
 % Tracks a vortex formed and shed by a hydrofoil based on the Q-criterion and an initial interrogation window.
-% 
+% NOTE: Next update should be to use a circular interrogation window instead of a square.
+%
 % ----------------------------------------------------------------------------------------------------------------------------
 % % Inputs (required):
 %   x - x coordinates matrix for one snapshot [n,m]
