@@ -57,7 +57,7 @@ T = 1/dq.Rate;
 
 %% Counter channels for encoder inputs
 % global ch1
-ch1=addinput(dq,"Dev3","ctr0","Position");
+ch1=addinput(dq,"Dev2","ctr2","Position");
 % ch1=dq.addCounterInputChannel('dev3','ctr0','Position');
 ch1.EncoderType='X4';
 ch1.ZResetEnable=0;
@@ -68,7 +68,7 @@ ch1.ZResetCondition = 'BothLow';
 % disp(['Channel 1 Terminal Z: ', ch1.TerminalZ])
 ch1.ZResetValue = -65;
 % global ch2
-ch2=addinput(dq,"Dev3","ctr1","Position");
+ch2=addinput(dq,"Dev2","ctr3","Position");
 % ch2=dq.addCounterInputChannel('dev3','ctr1','Position');
 ch2.EncoderType='X4';
 ch2.ZResetEnable=0;
@@ -78,28 +78,40 @@ ch2.Name = 'Heave Shawn';
 % disp(['Channel 2 Terminal A: ', ch2.TerminalA])
 % disp(['Channel 2 Terminal B: ', ch2.TerminalB]) 
 % disp(['Channel 2 Terminal Z: ', ch2.TerminalZ])
-% global ch3
-ch3=addinput(dq,"Dev2","ctr3","Position");
-% ch3=s.addCounterInputChannel('Dev2','ctr3','Position');
-ch3.EncoderType='X4';
-ch3.ZResetEnable=0;
-ch3.ZResetCondition = 'BothLow';
-ch3.Name = 'Pitch Gromit';
-% disp(['Channel 3 Terminal A: ', ch3.TerminalA])
-% disp(['Channel 3 Terminal B: ', ch3.TerminalB])
-% disp(['Channel 3 Terminal Z: ', ch3.TerminalZ])
-ch3.ZResetValue = -795;
-% global ch4
-ch4=addinput(dq,"Dev2","ctr2","Position");
-% ch4=dq.addCounterInputChannel('dev2','ctr2','Position');
-ch4.EncoderType='X4';
-ch4.ZResetEnable=0;
-ch4.ZResetCondition = 'BothLow';
-ch4.ZResetValue = 0;
-ch4.Name = 'Heave Gromit';
-% disp(['Channel 4 Terminal A: ', ch4.TerminalA])
-% disp(['Channel 4 Terminal B: ', ch4.TerminalB])
-% disp(['Channel 4 Terminal Z: ', ch4.TerminalZ])
+
+% REPLACE GROMIT ENCODER INPUTS WITH NEW TRAVERSE
+% % global ch3
+% ch3=addinput(dq,"Dev2","ctr3","Position");
+% % ch3=s.addCounterInputChannel('Dev2','ctr3','Position');
+% ch3.EncoderType='X4';
+% ch3.ZResetEnable=0;
+% ch3.ZResetCondition = 'BothLow';
+% ch3.Name = 'Pitch Gromit';
+% % disp(['Channel 3 Terminal A: ', ch3.TerminalA])
+% % disp(['Channel 3 Terminal B: ', ch3.TerminalB])
+% % disp(['Channel 3 Terminal Z: ', ch3.TerminalZ])
+% ch3.ZResetValue = -795;
+% % global ch4
+% ch4=addinput(dq,"Dev2","ctr2","Position");
+% % ch4=dq.addCounterInputChannel('dev2','ctr2','Position');
+% ch4.EncoderType='X4';
+% ch4.ZResetEnable=0;
+% ch4.ZResetCondition = 'BothLow';
+% ch4.ZResetValue = 0;
+% ch4.Name = 'Heave Gromit';
+% % disp(['Channel 4 Terminal A: ', ch4.TerminalA])
+% % disp(['Channel 4 Terminal B: ', ch4.TerminalB])
+% % disp(['Channel 4 Terminal Z: ', ch4.TerminalZ])
+
+% new traverse:
+ctr_theta = addinput(dq, 'Dev3', 'ctr1', 'Position');
+ctr_theta.Name = 'encoder_theta';
+ctr_theta.EncoderType = 'X4';
+
+ctr_y = addinput(dq, 'Dev3', 'ctr0', 'Position');
+ctr_y.Name = 'encoder_y';
+ctr_y.EncoderType = 'X4';
+
 % global ch5
 ch5=addinput(dq,"Dev2","ctr1","Position");
 % ch5=dq.addCounterInputChannel('Dev2','ctr1','Position');
@@ -205,35 +217,28 @@ disp('Analog outputs done. Syncing and Zeroing output...')
 
 % New traverse input channels 20230206 - courtesy of Xiaowei He
 
-ai_y_cmd = addinput(dq, 'Dev1', 0, 'Voltage');
+ai_y_cmd = addinput(dq, 'Dev2', 20, 'Voltage');
 ai_y_cmd.Name = 'y_cmd_m';
 ai_y_cmd.TerminalConfig = 'SingleEnded';
 
-ai_theta_cmd = addinput(dq, 'Dev1', 1, 'Voltage');
+ai_theta_cmd = addinput(dq, 'Dev2', 21, 'Voltage');
 ai_theta_cmd.Name = 'theta_cmd_m';
 ai_theta_cmd.TerminalConfig = 'SingleEnded';
 
-ctr_y = addinput(dq, 'Dev1', 'ctr0', 'Position');
-ctr_y.Name = 'encoder_y';
-ctr_y.EncoderType = 'X4';
-
-ctr_theta = addinput(dq, 'Dev1', 'ctr1', 'Position');
-ctr_theta.Name = 'encoder_theta';
-ctr_theta.EncoderType = 'X4';
-
 % New traverse output channels 20230206 - courtesy of Xiaowei He
+% This was removed in place of using the original Gromit channels
 
-ao_y_cmd = addoutput(dq, 'Dev1', 'ao0', 'Voltage');
-ao_y_cmd.Name = 'y_cmd';
-
-dio_y_lock = addoutput(dq, 'Dev1', 'Port0/Line0', 'Digital');
-dio_y_lock.Name = 'y_lock';
-
-ao_theta_cmd = addoutput(dq, 'Dev1', 'ao1', 'Voltage');
-ao_theta_cmd.Name = 'theta_cmd';
-
-dio_theta_lock = addoutput(dq, 'Dev1', 'Port0/Line1', 'Digital');
-dio_theta_lock.Name = 'theta_lock';
+% ao_y_cmd = addoutput(dq, 'Dev1', 'ao0', 'Voltage');
+% ao_y_cmd.Name = 'y_cmd';
+% 
+% dio_y_lock = addoutput(dq, 'Dev1', 'Port0/Line0', 'Digital');
+% dio_y_lock.Name = 'y_lock';
+% 
+% ao_theta_cmd = addoutput(dq, 'Dev1', 'ao1', 'Voltage');
+% ao_theta_cmd.Name = 'theta_cmd';
+% 
+% dio_theta_lock = addoutput(dq, 'Dev1', 'Port0/Line1', 'Digital');
+% dio_theta_lock.Name = 'theta_lock';
 
 
 % Don't know if this needs to be here

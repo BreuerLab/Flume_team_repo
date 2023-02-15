@@ -22,8 +22,12 @@ out(:,2)=(dat(:,2)).*heave_conv;
 out(:,5)=(dat(:,5)).*pitch_conv;%-(max(dat(:,3))+min(dat(:,3)))/2).*pitch_conv;
 out(:,6)=(dat(:,6)).*heave_conv;
 %Gromit (Middle)
-out(:,3)=-(dat(:,3)).*pitch_conv/5;%-(max(dat(:,5))+min(dat(:,5)))/2).*pitch_conv;
-out(:,4)=(dat(:,4)).*heave_conv;
+% out(:,3)=-(dat(:,3)).*pitch_conv/5;%-(max(dat(:,5))+min(dat(:,5)))/2).*pitch_conv;
+% out(:,4)=(dat(:,4)).*heave_conv;
+
+out(:,3) = encodertheta(dat(:,3), 0);
+out(:,4) = (dat(:,4)).*heave_conv; % not working be for digital encoder arrives
+
 % out(:,2)=(dat(:,2)).*pitch_conv;
 % out(:,1) = out(:,1)+.0003258*t-.008941;
 % for ii = [7:12]
@@ -68,8 +72,8 @@ out(:,25) = dat(:,25);
 out(:,26) = dat(:,26); % heave cmd
 out(:,27) = dat(:,27); % pitch cmd
 
-out(:,28) = dat(:,28); % heave encoder (zero for now)
-out(:,29) = encodertheta(dat(:,29), 0); % pitch encoder (assuming you're always starting at 0 respect to the sreawise)
+% out(:,28) = dat(:,28); % heave encoder (zero for now)
+% out(:,29) = encodertheta(dat(:,29), 0); % pitch encoder (assuming you're always starting at 0 respect to the sreawise)
 
 
 

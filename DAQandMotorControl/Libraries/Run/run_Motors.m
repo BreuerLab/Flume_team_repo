@@ -1,5 +1,5 @@
-function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq, pitch2, heave2, pitch3, heave3, pitch4, heave4, phase13, num_cyc, phi, foiltype]...
-    = run_Motors(dq,last_out,bias,foiltype, freq, pitch2, heave2, pitch3, heave3, pitch4, heave4, phase13, phi,...
+function [flume, out, dat, Prof_out_angle, Prof_out,last_out, freq, pitch2, heave2, pitch3, heave3, phase13, num_cyc, phi, foiltype]...
+    = run_Motors(dq,last_out,bias,foiltype, freq, pitch2, heave2, pitch3, heave3, phase13, phi,...
     num_cyc, transientcycs, constantamplitude, offset)
 %%
 % Given frequency [Hz], Pitch amplitude [deg] and heave amplitude [chords], this function will run 3 rigs for a set number of cycles
@@ -67,19 +67,19 @@ transientcycs2 = transientcycs*freq2/freq3;
 
 [t1p, Prof1p] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, pitch1, phi,0);          % pitch Shawn
 [t1h, Prof1h] = generate_profile(num_cyc, freq1, dq.Rate, transientcycs, transientcycs, heave1, 0,0);            % heave Shawn
-[t2p, Prof2p] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, pitch2, phase12 + phi,0);% pitch Gromit
-[t2h, Prof2h] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, heave2, phase12,0);      % heave Gromit
+[t2p, Prof2p] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, pitch2, phase12 + phi,0);% pitch Gromit THIS IS UNEEDED
+[t2h, Prof2h] = generate_profile(num_cyc2, freq2, dq.Rate, transientcycs2, transientcycs2, heave2, phase12,0);      % heave Gromit THIS IS UNEEDED
 [t3p, Prof3p] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, pitch3, phase12 + phi,0);% pitch Wallace
 [t3h, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase12,0);      % heave Wallace
 
-[t4p, Prof4p] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, pitch4, phase13 + phi,0);% pitch traverse
-[t4h, Prof4h] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, heave4*chord, phase13,0);      % heave traverse
+[t4p, Prof4p] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, pitch2, phase13 + phi,0);% pitch traverse
+[t4h, Prof4h] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, heave2, phase13,0);      % heave traverse
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];
 Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,bias.pitch); % let's hope this works <-- It does! But something is weird with the signs.
 
-Prof_out_angle = [Prof_out_angle, Prof4h, Prof4p]; % add the traverse conversion
+Prof_out_angle(:,[3,4]) = [Prof4p, Prof4h]; % add the traverse conversion
 
 % For PIV trigger
 
@@ -94,10 +94,11 @@ trig_signal(end-round(1/freq*dq.Rate)*1:end)=0;
 % Traverse heave: (motion profile and lock)
 [voltageCmd_pitch, cmdLock_pitch] = traversecmd('theta', Prof4p, 180); % position rig starting facing the upstream
 
-traverse_signal = [voltageCmd_heave, cmdLock_heave, voltageCmd_pitch, cmdLock_pitch]; % assemble a matrix to append to the output variable
+traverse_signal = [voltageCmd_pitch, voltageCmd_heave]; % assemble a matrix to append to the output variable
 
 % Append trigger and traverse signals to the outputted signal
-Prof_out = [Prof_out_temp trig_signal traverse_signal];
+Prof_out = [Prof_out_temp trig_signal];
+Prof_out(:,[3,4]) = traverse_signal; % Gromit is now replaced with the new traverse
 
 %% Run section
 tic

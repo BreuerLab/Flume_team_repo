@@ -75,7 +75,7 @@ else
            '\n\taxisName must be either ''y'' or ''theta''.'])
 end
 %% signal conversion
-voltageCmd = (positionCmd + positionOffset) * calib; % voltage to motor [V]
+voltageCmd = positionCmd * calib; % voltage to motor [V]
 cmdLock = zeros(length(voltageCmd), 1); % unlock "hold position"
 cmdLock(end) = 1; % lock motor at the last time step in the output
 

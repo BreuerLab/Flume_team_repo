@@ -10,9 +10,9 @@ hprof1=linspace(last_out(2),last_out(2),bias_trialduration*dq.Rate)';
 
 pprof1=linspace(last_out(1),last_out(1),bias_trialduration*dq.Rate)';
 
-hprof2=linspace(last_out(4),last_out(4),bias_trialduration*dq.Rate)';
+hprof2=linspace(last_out(4),last_out(4),bias_trialduration*dq.Rate)'; % this is now the new traverse
 
-pprof2=linspace(last_out(3),last_out(3),bias_trialduration*dq.Rate)';
+pprof2=linspace(last_out(3),last_out(3),bias_trialduration*dq.Rate)'; % this is now the new traverse
 
 hprof3=linspace(last_out(6),last_out(6),bias_trialduration*dq.Rate)';
 
@@ -20,12 +20,12 @@ pprof3=linspace(last_out(5),last_out(5),bias_trialduration*dq.Rate)';
 
 trigger=linspace(last_out(7),last_out(7),bias_trialduration*dq.Rate)';
 
-htraverse = linspace(last_out(8),last_out(8),bias_trialduration*dq.Rate)';
-lock_htraverse = linspace(last_out(9),last_out(9),bias_trialduration*dq.Rate)';
-ptraverse = linspace(last_out(10),last_out(10),bias_trialduration*dq.Rate)';
-lock_ptraverse = linspace(last_out(11),last_out(11),bias_trialduration*dq.Rate)';
+% htraverse = linspace(last_out(8),last_out(8),bias_trialduration*dq.Rate)';
+% lock_htraverse = linspace(last_out(9),last_out(9),bias_trialduration*dq.Rate)';
+% ptraverse = linspace(last_out(10),last_out(10),bias_trialduration*dq.Rate)';
+% lock_ptraverse = linspace(last_out(11),last_out(11),bias_trialduration*dq.Rate)';
 
-output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger htraverse lock_htraverse ptraverse lock_ptraverse];  % added channels from the new traverse
+output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger];  % added channels from the new traverse
 
 % figure(3)
 % plot(output)
