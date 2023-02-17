@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.28
+ * Model version              : 1.29
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Wed Feb 15 14:04:50 2023
+ * C source code generated on : Fri Feb 17 11:53:04 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -851,12 +851,12 @@
 typedef struct {
   real_T PrevY;                        /* '<Root>/Rate Limiter3' */
   real_T PrevY_d;                      /* '<Root>/Rate Limiter6' */
-  void *y_lock_in_p02_PWORK;           /* '<Root>/y_lock_in_p0.2' */
   void *theta_lock_in_p03_PWORK;       /* '<Root>/theta_lock_in_p0.3' */
+  void *y_lock_in_p02_PWORK;           /* '<Root>/y_lock_in_p0.2' */
   void *y_cmd_ai0_PWORK;               /* '<Root>/y_cmd_ai0' */
   void *theta_cmd_ai1_PWORK;           /* '<Root>/theta_cmd_ai1' */
-  void *y_lock_out_signal_p00_PWORK;   /* '<Root>/y_lock_out_signal_p0.0' */
   void *theta_lock_out_signal_p01_PWORK;/* '<Root>/theta_lock_out_signal_p0.1' */
+  void *y_lock_out_signal_p00_PWORK;   /* '<Root>/y_lock_out_signal_p0.0' */
   void *y_cmd_out_signal_ao0_PWORK;    /* '<Root>/y_cmd_out_signal_ao0' */
   void *y_control_signal_ctr0_out_PFI12_PWORK;
                                   /* '<Root>/y_control_signal_ctr0_out_PFI12' */
@@ -881,14 +881,14 @@ struct P_belt_traverse_control_T_ {
                          /* Mask Parameter: theta_control_signal_ctr1_PFI13_Duty
                           * Referenced by: '<Root>/theta_control_signal_ctr1_PFI13'
                           */
-  real_T y_lock_in_p02_MaxMissedTicks;
-                                 /* Mask Parameter: y_lock_in_p02_MaxMissedTicks
-                                  * Referenced by: '<Root>/y_lock_in_p0.2'
-                                  */
   real_T theta_lock_in_p03_MaxMissedTicks;
                              /* Mask Parameter: theta_lock_in_p03_MaxMissedTicks
                               * Referenced by: '<Root>/theta_lock_in_p0.3'
                               */
+  real_T y_lock_in_p02_MaxMissedTicks;
+                                 /* Mask Parameter: y_lock_in_p02_MaxMissedTicks
+                                  * Referenced by: '<Root>/y_lock_in_p0.2'
+                                  */
   real_T y_cmd_ai0_MaxMissedTicks;   /* Mask Parameter: y_cmd_ai0_MaxMissedTicks
                                       * Referenced by: '<Root>/y_cmd_ai0'
                                       */
@@ -896,14 +896,14 @@ struct P_belt_traverse_control_T_ {
                                  /* Mask Parameter: theta_cmd_ai1_MaxMissedTicks
                                   * Referenced by: '<Root>/theta_cmd_ai1'
                                   */
-  real_T y_lock_out_signal_p00_MaxMissedTicks;
-                         /* Mask Parameter: y_lock_out_signal_p00_MaxMissedTicks
-                          * Referenced by: '<Root>/y_lock_out_signal_p0.0'
-                          */
   real_T theta_lock_out_signal_p01_MaxMissedTicks;
                      /* Mask Parameter: theta_lock_out_signal_p01_MaxMissedTicks
                       * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
                       */
+  real_T y_lock_out_signal_p00_MaxMissedTicks;
+                         /* Mask Parameter: y_lock_out_signal_p00_MaxMissedTicks
+                          * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+                          */
   real_T y_cmd_out_signal_ao0_MaxMissedTicks;
                           /* Mask Parameter: y_cmd_out_signal_ao0_MaxMissedTicks
                            * Referenced by: '<Root>/y_cmd_out_signal_ao0'
@@ -920,14 +920,14 @@ struct P_belt_traverse_control_T_ {
                /* Mask Parameter: theta_control_signal_ctr1_PFI13_MaxMissedTicks
                 * Referenced by: '<Root>/theta_control_signal_ctr1_PFI13'
                 */
-  real_T y_lock_in_p02_YieldWhenWaiting;
-                               /* Mask Parameter: y_lock_in_p02_YieldWhenWaiting
-                                * Referenced by: '<Root>/y_lock_in_p0.2'
-                                */
   real_T theta_lock_in_p03_YieldWhenWaiting;
                            /* Mask Parameter: theta_lock_in_p03_YieldWhenWaiting
                             * Referenced by: '<Root>/theta_lock_in_p0.3'
                             */
+  real_T y_lock_in_p02_YieldWhenWaiting;
+                               /* Mask Parameter: y_lock_in_p02_YieldWhenWaiting
+                                * Referenced by: '<Root>/y_lock_in_p0.2'
+                                */
   real_T y_cmd_ai0_YieldWhenWaiting;
                                    /* Mask Parameter: y_cmd_ai0_YieldWhenWaiting
                                     * Referenced by: '<Root>/y_cmd_ai0'
@@ -936,14 +936,14 @@ struct P_belt_traverse_control_T_ {
                                /* Mask Parameter: theta_cmd_ai1_YieldWhenWaiting
                                 * Referenced by: '<Root>/theta_cmd_ai1'
                                 */
-  real_T y_lock_out_signal_p00_YieldWhenWaiting;
-                       /* Mask Parameter: y_lock_out_signal_p00_YieldWhenWaiting
-                        * Referenced by: '<Root>/y_lock_out_signal_p0.0'
-                        */
   real_T theta_lock_out_signal_p01_YieldWhenWaiting;
                    /* Mask Parameter: theta_lock_out_signal_p01_YieldWhenWaiting
                     * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
                     */
+  real_T y_lock_out_signal_p00_YieldWhenWaiting;
+                       /* Mask Parameter: y_lock_out_signal_p00_YieldWhenWaiting
+                        * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+                        */
   real_T y_cmd_out_signal_ao0_YieldWhenWaiting;
                         /* Mask Parameter: y_cmd_out_signal_ao0_YieldWhenWaiting
                          * Referenced by: '<Root>/y_cmd_out_signal_ao0'
@@ -960,41 +960,41 @@ struct P_belt_traverse_control_T_ {
              /* Mask Parameter: theta_control_signal_ctr1_PFI13_YieldWhenWaiting
               * Referenced by: '<Root>/theta_control_signal_ctr1_PFI13'
               */
-  int32_T y_lock_in_p02_BitMode;       /* Mask Parameter: y_lock_in_p02_BitMode
-                                        * Referenced by: '<Root>/y_lock_in_p0.2'
-                                        */
   int32_T theta_lock_in_p03_BitMode;/* Mask Parameter: theta_lock_in_p03_BitMode
                                      * Referenced by: '<Root>/theta_lock_in_p0.3'
                                      */
-  int32_T y_lock_out_signal_p00_BitMode;
-                                /* Mask Parameter: y_lock_out_signal_p00_BitMode
-                                 * Referenced by: '<Root>/y_lock_out_signal_p0.0'
-                                 */
+  int32_T y_lock_in_p02_BitMode;       /* Mask Parameter: y_lock_in_p02_BitMode
+                                        * Referenced by: '<Root>/y_lock_in_p0.2'
+                                        */
   int32_T theta_lock_out_signal_p01_BitMode;
                             /* Mask Parameter: theta_lock_out_signal_p01_BitMode
                              * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
                              */
-  int32_T y_lock_in_p02_Channels;      /* Mask Parameter: y_lock_in_p02_Channels
-                                        * Referenced by: '<Root>/y_lock_in_p0.2'
-                                        */
+  int32_T y_lock_out_signal_p00_BitMode;
+                                /* Mask Parameter: y_lock_out_signal_p00_BitMode
+                                 * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+                                 */
   int32_T theta_lock_in_p03_Channels;
                                    /* Mask Parameter: theta_lock_in_p03_Channels
                                     * Referenced by: '<Root>/theta_lock_in_p0.3'
                                     */
+  int32_T y_lock_in_p02_Channels;      /* Mask Parameter: y_lock_in_p02_Channels
+                                        * Referenced by: '<Root>/y_lock_in_p0.2'
+                                        */
   int32_T y_cmd_ai0_Channels;          /* Mask Parameter: y_cmd_ai0_Channels
                                         * Referenced by: '<Root>/y_cmd_ai0'
                                         */
   int32_T theta_cmd_ai1_Channels;      /* Mask Parameter: theta_cmd_ai1_Channels
                                         * Referenced by: '<Root>/theta_cmd_ai1'
                                         */
-  int32_T y_lock_out_signal_p00_Channels;
-                               /* Mask Parameter: y_lock_out_signal_p00_Channels
-                                * Referenced by: '<Root>/y_lock_out_signal_p0.0'
-                                */
   int32_T theta_lock_out_signal_p01_Channels;
                            /* Mask Parameter: theta_lock_out_signal_p01_Channels
                             * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
                             */
+  int32_T y_lock_out_signal_p00_Channels;
+                               /* Mask Parameter: y_lock_out_signal_p00_Channels
+                                * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+                                */
   int32_T y_cmd_out_signal_ao0_Channels;
                                 /* Mask Parameter: y_cmd_out_signal_ao0_Channels
                                  * Referenced by: '<Root>/y_cmd_out_signal_ao0'
@@ -1105,13 +1105,13 @@ struct P_belt_traverse_control_T_ {
   real_T Saturation2_LowerSat;         /* Expression: 5000
                                         * Referenced by: '<Root>/Saturation2'
                                         */
-  boolean_T y_lock_manual_Value;      /* Computed Parameter: y_lock_manual_Value
-                                       * Referenced by: '<Root>/y_lock_manual'
-                                       */
   boolean_T theta_lock_manual_Value;
                                   /* Computed Parameter: theta_lock_manual_Value
                                    * Referenced by: '<Root>/theta_lock_manual'
                                    */
+  boolean_T y_lock_manual_Value;      /* Computed Parameter: y_lock_manual_Value
+                                       * Referenced by: '<Root>/y_lock_manual'
+                                       */
 };
 
 /* Real-time Model Data Structure */

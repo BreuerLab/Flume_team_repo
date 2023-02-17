@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.28
+ * Model version              : 1.29
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Wed Feb 15 14:04:50 2023
+ * C source code generated on : Fri Feb 17 11:53:04 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -32,13 +32,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   0.5,
 
-  /* Mask Parameter: y_lock_in_p02_MaxMissedTicks
-   * Referenced by: '<Root>/y_lock_in_p0.2'
+  /* Mask Parameter: theta_lock_in_p03_MaxMissedTicks
+   * Referenced by: '<Root>/theta_lock_in_p0.3'
    */
   10.0,
 
-  /* Mask Parameter: theta_lock_in_p03_MaxMissedTicks
-   * Referenced by: '<Root>/theta_lock_in_p0.3'
+  /* Mask Parameter: y_lock_in_p02_MaxMissedTicks
+   * Referenced by: '<Root>/y_lock_in_p0.2'
    */
   10.0,
 
@@ -52,13 +52,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   10.0,
 
-  /* Mask Parameter: y_lock_out_signal_p00_MaxMissedTicks
-   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+  /* Mask Parameter: theta_lock_out_signal_p01_MaxMissedTicks
+   * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
    */
   10.0,
 
-  /* Mask Parameter: theta_lock_out_signal_p01_MaxMissedTicks
-   * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
+  /* Mask Parameter: y_lock_out_signal_p00_MaxMissedTicks
+   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
    */
   10.0,
 
@@ -82,13 +82,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   10.0,
 
-  /* Mask Parameter: y_lock_in_p02_YieldWhenWaiting
-   * Referenced by: '<Root>/y_lock_in_p0.2'
+  /* Mask Parameter: theta_lock_in_p03_YieldWhenWaiting
+   * Referenced by: '<Root>/theta_lock_in_p0.3'
    */
   1.0,
 
-  /* Mask Parameter: theta_lock_in_p03_YieldWhenWaiting
-   * Referenced by: '<Root>/theta_lock_in_p0.3'
+  /* Mask Parameter: y_lock_in_p02_YieldWhenWaiting
+   * Referenced by: '<Root>/y_lock_in_p0.2'
    */
   1.0,
 
@@ -102,13 +102,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   0.0,
 
-  /* Mask Parameter: y_lock_out_signal_p00_YieldWhenWaiting
-   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+  /* Mask Parameter: theta_lock_out_signal_p01_YieldWhenWaiting
+   * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
    */
   0.0,
 
-  /* Mask Parameter: theta_lock_out_signal_p01_YieldWhenWaiting
-   * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
+  /* Mask Parameter: y_lock_out_signal_p00_YieldWhenWaiting
+   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
    */
   0.0,
 
@@ -132,18 +132,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   0.0,
 
-  /* Mask Parameter: y_lock_in_p02_BitMode
-   * Referenced by: '<Root>/y_lock_in_p0.2'
-   */
-  0,
-
   /* Mask Parameter: theta_lock_in_p03_BitMode
    * Referenced by: '<Root>/theta_lock_in_p0.3'
    */
   0,
 
-  /* Mask Parameter: y_lock_out_signal_p00_BitMode
-   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
+  /* Mask Parameter: y_lock_in_p02_BitMode
+   * Referenced by: '<Root>/y_lock_in_p0.2'
    */
   0,
 
@@ -152,15 +147,20 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   0,
 
-  /* Mask Parameter: y_lock_in_p02_Channels
-   * Referenced by: '<Root>/y_lock_in_p0.2'
+  /* Mask Parameter: y_lock_out_signal_p00_BitMode
+   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
    */
-  2,
+  0,
 
   /* Mask Parameter: theta_lock_in_p03_Channels
    * Referenced by: '<Root>/theta_lock_in_p0.3'
    */
   3,
+
+  /* Mask Parameter: y_lock_in_p02_Channels
+   * Referenced by: '<Root>/y_lock_in_p0.2'
+   */
+  2,
 
   /* Mask Parameter: y_cmd_ai0_Channels
    * Referenced by: '<Root>/y_cmd_ai0'
@@ -172,13 +172,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   1,
 
-  /* Mask Parameter: y_lock_out_signal_p00_Channels
-   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
-   */
-  0,
-
   /* Mask Parameter: theta_lock_out_signal_p01_Channels
    * Referenced by: '<Root>/theta_lock_out_signal_p0.1'
+   */
+  1,
+
+  /* Mask Parameter: y_lock_out_signal_p00_Channels
+   * Referenced by: '<Root>/y_lock_out_signal_p0.0'
    */
   0,
 
@@ -352,13 +352,13 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   5000.0,
 
-  /* Computed Parameter: y_lock_manual_Value
-   * Referenced by: '<Root>/y_lock_manual'
+  /* Computed Parameter: theta_lock_manual_Value
+   * Referenced by: '<Root>/theta_lock_manual'
    */
   false,
 
-  /* Computed Parameter: theta_lock_manual_Value
-   * Referenced by: '<Root>/theta_lock_manual'
+  /* Computed Parameter: y_lock_manual_Value
+   * Referenced by: '<Root>/y_lock_manual'
    */
   false
 };

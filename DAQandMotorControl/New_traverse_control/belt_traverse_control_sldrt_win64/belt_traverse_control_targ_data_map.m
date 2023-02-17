@@ -39,11 +39,11 @@
                     section.data(2).logicalSrcIdx = 1;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% belt_traverse_control_P.y_lock_in_p02_MaxMissedTicks
+                    ;% belt_traverse_control_P.theta_lock_in_p03_MaxMissedTicks
                     section.data(3).logicalSrcIdx = 16;
                     section.data(3).dtTransOffset = 2;
 
-                    ;% belt_traverse_control_P.theta_lock_in_p03_MaxMissedTicks
+                    ;% belt_traverse_control_P.y_lock_in_p02_MaxMissedTicks
                     section.data(4).logicalSrcIdx = 17;
                     section.data(4).dtTransOffset = 3;
 
@@ -55,11 +55,11 @@
                     section.data(6).logicalSrcIdx = 19;
                     section.data(6).dtTransOffset = 5;
 
-                    ;% belt_traverse_control_P.y_lock_out_signal_p00_MaxMissedTicks
+                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_MaxMissedTicks
                     section.data(7).logicalSrcIdx = 20;
                     section.data(7).dtTransOffset = 6;
 
-                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_MaxMissedTicks
+                    ;% belt_traverse_control_P.y_lock_out_signal_p00_MaxMissedTicks
                     section.data(8).logicalSrcIdx = 21;
                     section.data(8).dtTransOffset = 7;
 
@@ -79,11 +79,11 @@
                     section.data(12).logicalSrcIdx = 25;
                     section.data(12).dtTransOffset = 11;
 
-                    ;% belt_traverse_control_P.y_lock_in_p02_YieldWhenWaiting
+                    ;% belt_traverse_control_P.theta_lock_in_p03_YieldWhenWaiting
                     section.data(13).logicalSrcIdx = 26;
                     section.data(13).dtTransOffset = 12;
 
-                    ;% belt_traverse_control_P.theta_lock_in_p03_YieldWhenWaiting
+                    ;% belt_traverse_control_P.y_lock_in_p02_YieldWhenWaiting
                     section.data(14).logicalSrcIdx = 27;
                     section.data(14).dtTransOffset = 13;
 
@@ -95,11 +95,11 @@
                     section.data(16).logicalSrcIdx = 29;
                     section.data(16).dtTransOffset = 15;
 
-                    ;% belt_traverse_control_P.y_lock_out_signal_p00_YieldWhenWaiting
+                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_YieldWhenWaiting
                     section.data(17).logicalSrcIdx = 30;
                     section.data(17).dtTransOffset = 16;
 
-                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_YieldWhenWaiting
+                    ;% belt_traverse_control_P.y_lock_out_signal_p00_YieldWhenWaiting
                     section.data(18).logicalSrcIdx = 31;
                     section.data(18).dtTransOffset = 17;
 
@@ -126,27 +126,27 @@
             section.nData     = 22;
             section.data(22)  = dumData; %prealloc
 
-                    ;% belt_traverse_control_P.y_lock_in_p02_BitMode
+                    ;% belt_traverse_control_P.theta_lock_in_p03_BitMode
                     section.data(1).logicalSrcIdx = 36;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% belt_traverse_control_P.theta_lock_in_p03_BitMode
+                    ;% belt_traverse_control_P.y_lock_in_p02_BitMode
                     section.data(2).logicalSrcIdx = 37;
                     section.data(2).dtTransOffset = 1;
 
-                    ;% belt_traverse_control_P.y_lock_out_signal_p00_BitMode
+                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_BitMode
                     section.data(3).logicalSrcIdx = 38;
                     section.data(3).dtTransOffset = 2;
 
-                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_BitMode
+                    ;% belt_traverse_control_P.y_lock_out_signal_p00_BitMode
                     section.data(4).logicalSrcIdx = 39;
                     section.data(4).dtTransOffset = 3;
 
-                    ;% belt_traverse_control_P.y_lock_in_p02_Channels
+                    ;% belt_traverse_control_P.theta_lock_in_p03_Channels
                     section.data(5).logicalSrcIdx = 40;
                     section.data(5).dtTransOffset = 4;
 
-                    ;% belt_traverse_control_P.theta_lock_in_p03_Channels
+                    ;% belt_traverse_control_P.y_lock_in_p02_Channels
                     section.data(6).logicalSrcIdx = 41;
                     section.data(6).dtTransOffset = 5;
 
@@ -158,11 +158,11 @@
                     section.data(8).logicalSrcIdx = 43;
                     section.data(8).dtTransOffset = 7;
 
-                    ;% belt_traverse_control_P.y_lock_out_signal_p00_Channels
+                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_Channels
                     section.data(9).logicalSrcIdx = 44;
                     section.data(9).dtTransOffset = 8;
 
-                    ;% belt_traverse_control_P.theta_lock_out_signal_p01_Channels
+                    ;% belt_traverse_control_P.y_lock_out_signal_p00_Channels
                     section.data(10).logicalSrcIdx = 45;
                     section.data(10).dtTransOffset = 9;
 
@@ -316,11 +316,11 @@
             section.nData     = 2;
             section.data(2)  = dumData; %prealloc
 
-                    ;% belt_traverse_control_P.y_lock_manual_Value
+                    ;% belt_traverse_control_P.theta_lock_manual_Value
                     section.data(1).logicalSrcIdx = 80;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% belt_traverse_control_P.theta_lock_manual_Value
+                    ;% belt_traverse_control_P.y_lock_manual_Value
                     section.data(2).logicalSrcIdx = 81;
                     section.data(2).dtTransOffset = 1;
 
@@ -427,11 +427,11 @@
             section.nData     = 10;
             section.data(10)  = dumData; %prealloc
 
-                    ;% belt_traverse_control_DW.y_lock_in_p02_PWORK
+                    ;% belt_traverse_control_DW.theta_lock_in_p03_PWORK
                     section.data(1).logicalSrcIdx = 2;
                     section.data(1).dtTransOffset = 0;
 
-                    ;% belt_traverse_control_DW.theta_lock_in_p03_PWORK
+                    ;% belt_traverse_control_DW.y_lock_in_p02_PWORK
                     section.data(2).logicalSrcIdx = 3;
                     section.data(2).dtTransOffset = 1;
 
@@ -443,11 +443,11 @@
                     section.data(4).logicalSrcIdx = 5;
                     section.data(4).dtTransOffset = 3;
 
-                    ;% belt_traverse_control_DW.y_lock_out_signal_p00_PWORK
+                    ;% belt_traverse_control_DW.theta_lock_out_signal_p01_PWORK
                     section.data(5).logicalSrcIdx = 6;
                     section.data(5).dtTransOffset = 4;
 
-                    ;% belt_traverse_control_DW.theta_lock_out_signal_p01_PWORK
+                    ;% belt_traverse_control_DW.y_lock_out_signal_p00_PWORK
                     section.data(6).logicalSrcIdx = 7;
                     section.data(6).dtTransOffset = 5;
 
@@ -497,8 +497,8 @@
     ;%
 
 
-    targMap.checksum0 = 2861307693;
-    targMap.checksum1 = 2657055331;
-    targMap.checksum2 = 1646048555;
-    targMap.checksum3 = 3412688750;
+    targMap.checksum0 = 1809890267;
+    targMap.checksum1 = 754553682;
+    targMap.checksum2 = 3486107148;
+    targMap.checksum3 = 3445440987;
 

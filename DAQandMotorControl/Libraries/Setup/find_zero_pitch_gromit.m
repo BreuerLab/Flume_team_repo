@@ -1,6 +1,11 @@
 function [last_out,bias] = find_zero_pitch_gromit(dq,last_out,bias,foil)
 % Finds the minimum lift on gromit hydrofoil while under flow.
 
+% Index of the perpendicular (to the streamwise direction) transducer force channel
+fy_index = 17;
+% index of the pitch axis transducer moment channel
+mz_index = 22;
+
 disp('finding zero.  Gromit will now move +/- 5 degrees')
 [~,~,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 5 0 0 0],5,bias,foil);
 scan_time = 30;
@@ -9,9 +14,9 @@ b1_Vtheta = last_out(3);
  [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 -5 0 0 0],scan_time,bias,foil);
 a1_Vtheta = (last_out(3)-b1_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 % Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
-Torque(:,1) = out(:,22);
+Torque(:,1) = out(:,mz_index);
 
 % f=polyfit(smooth(Lift,100)',1:numel(Lift),1);
 coefL1=polyfit(1:numel(Lift),smooth(Lift,100)',1);
@@ -27,9 +32,9 @@ b2_Vtheta = last_out(3);
  [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 5 0 0 0],scan_time,bias,foil);
 a2_Vtheta = (last_out(3)-b2_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 % Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
-Torque(:,1) = out(:,22);
+Torque(:,1) = out(:,mz_index);
 
 coefL2=polyfit(1:numel(Lift),smooth(Lift,100)',1);
 aL2 = coefL2(1); bL2 = coefL2(2);
@@ -50,7 +55,7 @@ if max(aL1*(1:numel(Lift))+bL1) < 0 || min(aL1*(1:numel(Lift))+bL1) > 0
  [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 -15 0 0 0],scan_time,bias,foil);
  a1_Vtheta = (last_out(3)-b1_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 %     Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
 
 %     f=polyfit(smooth(Lift,100)',1:numel(Lift),1);
@@ -64,7 +69,7 @@ Lift(:,1) = out(:,17);
  [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 15 0 0 0],scan_time,bias,foil);
  a2_Vtheta = (last_out(3)-b2_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 %     Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
 
 %     f1=polyfit(smooth(Lift,100)',1:numel(Lift),1);
@@ -90,7 +95,7 @@ Lift(:,1) = out(:,17);
     [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 -5 0 0 0],scan_time,bias,foil);
      a1_Vtheta = (last_out(3)-b1_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 %     Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
 
 %     f=polyfit(smooth(Lift,100)',1:numel(Lift),1);
@@ -104,7 +109,7 @@ Lift(:,1) = out(:,17);
     [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 5 0 0 0],scan_time,bias,foil);
     a2_Vtheta = (last_out(3)-b2_Vtheta)/(scan_time*dq.Rate);
 
-Lift(:,1) = out(:,17);
+Lift(:,1) = out(:,fy_index);
 %     Lift(:,1) = (out(:,7).*cos(out(:,5))+out(:,8).*sin(out(:,5)));
 
 %     f1=polyfit(smooth(Lift,100)',1:numel(Lift),1);

@@ -67,21 +67,27 @@ end
        
     Prof_out(:,6) = -profs(:,6)./0.03/(p00+p10*x + p01*y); % Heave 3 (Wallace)
 
-%% Pitch 1 and 2 (Shawn and Gromit)
+%% Pitch 1 (Shawn)
 
 Prof_out(:,1) = -profs(:,1).*5./(360)*2*45/56*5 + pitch_bias(1); % Pitch 1 (Shawn)
 % Prof_out(:,3) = -profs(:,3).*5./(360)*2*60/74 + pitch_offset2;%/1.0126
 % below is for Parker Motion motor
 % Prof_out(:,5) = -profs(:,5)*5.*10/30000*12800/360*1.00+pitch_bias(3); % 5:1 gear *( 10 volts /30000 steps) * (12800 steps/ revolution) * calibration gain 4/4/2016
 % Prof_out(:,5) = -profs(:,5)*5.*1/184.613+pitch_bias(3); % 5:1 gear *(1 Volt/ 184.613 deg) for new Teknic servo motor
-Prof_out(:,5) = -profs(:,5)*5.*0.022222+pitch_bias(3); % 20221108 - debugging autocommutation and conversion Teknic
-% ^^^^^ Supposedly this is sent out to Wallace?
 
-%% Pitch 3 (Servo motor)
+%% Wallace (current leading traverse)
+% position command: [0 0 0 0 1 0]
+Prof_out(:,5) = -profs(:,5)*5.*0.022222 + pitch_bias(3);
 
-% Prof_out(:,3) = -profs(:,3)*1.*10/2000*1000/360*1.00*90/57.42+pitch_offset2;
-Prof_out(:,3) = -profs(:,3).*5./(360)*2*65/81*5 + pitch_bias(2);
-% ^^^^^ and this is sent out to Gromit?
+%% New Traverse
+% The signal sent to the former Gromit now goes to the new traverse ([0 0 1 0 0 0])
+Prof_out(:,3) = traversecmd('theta', -profs(:,3), 180);
+Prof_out(:,3) = Prof_out(:,3) + pitch_bias(2); % the bias is what used to correspond to Gromit
+
+% %% Old Gromit
+% % Prof_out(:,3) = -profs(:,3)*1.*10/2000*1000/360*1.00*90/57.42+pitch_offset2;
+% Prof_out(:,3) = -profs(:,3).*5./(360)*2*65/81*5 + pitch_bias(2);
+% % ^^^^^ and this is sent out to Gromit?
 
 if abs(Prof_out)>10*ones(numel(Prof_out(:,1)),6)
     error('Voltage output too high! Check conversion')

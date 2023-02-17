@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.28
+ * Model version              : 1.29
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Wed Feb 15 14:04:50 2023
+ * C source code generated on : Fri Feb 17 11:53:04 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping

@@ -106,7 +106,7 @@ while zero_pitch == 0 % for Gromit
 user_ans = input(['Would you like to run find_zero_pitch for Gromit? Enter "y" or "n" and hit enter.', ...
     'If yes, turn on the flume flow first.',newline],"s");
 if user_ans == 'y'
-    [last_out,bias] = find_zero_pitch_gromit(dq,last_out,bias,foil); % for wallace
+    [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil,1); % for gromit
 end
 user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s");
     if user_ans2 == 'n'
@@ -120,15 +120,15 @@ user_ans = input(['Would you like to run find_zero_pitch for Wallace? Enter "y" 
     'If yes, turn on the flume flow first.',newline],"s");
 if user_ans == 'y'
     out_of_the_way = [0,0,0,0.15,0,0]; % position of gromit to move out of the way
-    [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,out_of_the_way,5,bias,foil);
-    [last_out,bias] = find_zero_pitch_wallace(dq,last_out,bias,foil,out_of_the_way); % for wallace
+    [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,out_of_the_way,5,bias,foil); % moves the leading traverse out of the way
+    [last_out,bias] = find_zero_pitch(dq,last_out,bias,foil,out_of_the_way,2); % for wallace
 end
 user_ans2 = input(['Would you like to repeat find_zero_pitch? y/n',newline],"s");
     if user_ans2 == 'n'
         zero_pitch = 1;
     end
 end
-[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0 0],5,bias,foil); % move gromit to original position
+[out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0],5,bias,foil); % move gromit to original position
 % FIX THIS ^^^^
 
 

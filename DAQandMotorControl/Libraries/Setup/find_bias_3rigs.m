@@ -25,7 +25,7 @@ trigger=linspace(last_out(7),last_out(7),bias_trialduration*dq.Rate)';
 % ptraverse = linspace(last_out(10),last_out(10),bias_trialduration*dq.Rate)';
 % lock_ptraverse = linspace(last_out(11),last_out(11),bias_trialduration*dq.Rate)';
 
-output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger];  % added channels from the new traverse
+output = [pprof1 hprof1 pprof2 hprof2 pprof3 hprof3 trigger];
 
 % figure(3)
 % plot(output)
@@ -49,6 +49,7 @@ bias.accStdev = std(dat(:,23),1);
 % Heave_voltage = mean(dat(:,9),1);
 % -.05158-.05602*sin(2*pi*.2704)
 out = output_conv_3rigs(dat,bias,foil);
+
 figure(1)
 subplot(2,1,2)
 % plot(dat(20:end-20,5:10) - repmat(bias.Wallace,numel(out(20:end-20,3)),1),'.')

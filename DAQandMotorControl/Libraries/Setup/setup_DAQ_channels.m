@@ -2,35 +2,37 @@ function [dq] = setup_DAQ_channels(samplerate)
 
 disp('Inititializing NI DAQs')
 
-% Channels in s are as follows: THIS NEEDS TO BE UPDATED
+% Channels in dq are as follows:
 % 
 % Data acquisition session using National Instruments hardware:
 %    No data queued.  Will run at 1000 scans/second.
 %    Number of channels: 28
 %       index Type Device Channel   MeasurementType        Range         Name   
 %       ----- ---- ------ ------- ------------------- ---------------- ---------
-%       1     ci   Dev1   ctr3    Position            n/a              Pitch 1
-%       2     ci   Dev1   ctr2    Position            n/a              Heave 1
-%       3     ci   Dev1   ctr1    Position            n/a              Pitch 2
-%       4     ci   Dev1   ctr0    Position            n/a              Heave 2
-%       5     ci   Dev2   ctr0    Position            n/a              Pitch 3
-%       6     ci   Dev2   ctr1    Position            n/a              Heave 3
-%       7     ai   Dev1   ai0     Voltage (Diff)      -10 to +10 Volts Wallace 1
-%       8     ai   Dev1   ai1     Voltage (Diff)      -10 to +10 Volts Wallace 2
-%       9     ai   Dev1   ai2     Voltage (Diff)      -10 to +10 Volts Wallace 3
-%       10    ai   Dev1   ai3     Voltage (Diff)      -10 to +10 Volts Wallace 4
-%       11    ai   Dev1   ai4     Voltage (Diff)      -10 to +10 Volts Wallace 5
-%       12    ai   Dev1   ai5     Voltage (Diff)      -10 to +10 Volts Wallace 6
-%       13    ai   Dev1   ai6     Voltage (SingleEnd) -10 to +10 Volts Vel_x
-%       14    ai   Dev1   ai14    Voltage (SingleEnd) -10 to +10 Volts Vel_y
-%       15    ai   Dev1   ai7     Voltage (SingleEnd) -10 to +10 Volts Vel_z1
-%       16    ai   Dev1   ai15    Voltage (SingleEnd) -10 to +10 Volts Vel_z2
-%       17    ai   Dev1   ai16    Voltage (Diff)      -10 to +10 Volts Gromit 1
-%       18    ai   Dev1   ai17    Voltage (Diff)      -10 to +10 Volts Gromit 2
-%       19    ai   Dev1   ai18    Voltage (Diff)      -10 to +10 Volts Gromit 3
-%       20    ai   Dev1   ai19    Voltage (Diff)      -10 to +10 Volts Gromit 4
-%       21    ai   Dev1   ai20    Voltage (Diff)      -10 to +10 Volts Gromit 5
-%       22    ai   Dev1   ai21    Voltage (Diff)      -10 to +10 Volts Gromit 6
+%       1     ci   Dev2   ctr2    Position            n/a              Pitch 1
+%       2     ci   Dev2   ctr3    Position            n/a              Heave 1
+%       3     ci   Dev3   ctr1    Position            n/a              Pitch 2 New Traverse
+%       4     ci   Dev3   ctr0    Position            n/a              Heave 2 New Traverse
+%       5     ci   Dev2   ctr1    Position            n/a              Pitch 3 Wallace
+%       6     ci   Dev2   ctr0    Position            n/a              Heave 3 Wallace
+%       7     ai   Dev2   ai0     Voltage (Diff)      -10 to +10 Volts Wallace 1
+%       8     ai   Dev2   ai1     Voltage (Diff)      -10 to +10 Volts Wallace 2
+%       9     ai   Dev2   ai2     Voltage (Diff)      -10 to +10 Volts Wallace 3
+%       10    ai   Dev2   ai3     Voltage (Diff)      -10 to +10 Volts Wallace 4
+%       11    ai   Dev2   ai4     Voltage (Diff)      -10 to +10 Volts Wallace 5
+%       12    ai   Dev2   ai5     Voltage (Diff)      -10 to +10 Volts Wallace 6
+%       13    ai   Dev3   ai6     Voltage (SingleEnd) -10 to +10 Volts Vel_x
+%       14    ai   Dev3   ai14    Voltage (SingleEnd) -10 to +10 Volts Vel_y
+%       15    ai   Dev3   ai7     Voltage (SingleEnd) -10 to +10 Volts Vel_z1
+%       16    ai   Dev3   ai15    Voltage (SingleEnd) -10 to +10 Volts Vel_z2
+%       17    ai   Dev3   ai16    Voltage (Diff)      -10 to +10 Volts Gromit 1
+%       18    ai   Dev3   ai17    Voltage (Diff)      -10 to +10 Volts Gromit 2
+%       19    ai   Dev3   ai18    Voltage (Diff)      -10 to +10 Volts Gromit 3
+%       20    ai   Dev3   ai19    Voltage (Diff)      -10 to +10 Volts Gromit 4
+%       21    ai   Dev3   ai20    Voltage (Diff)      -10 to +10 Volts Gromit 5
+%       22    ai   Dev3   ai21    Voltage (Diff)      -10 to +10 Volts Gromit 6
+%       ##    ai   Dev2   ai24    Voltage (SingleEnd)                  Accelerometer
+
 %       23    ao   Dev1   ao2     Voltage (SingleEnd) -10 to +10 Volts Pitch 1
 %       24    ao   Dev1   ao0     Voltage (SingleEnd) -10 to +10 Volts Heave 1
 %       25    ao   Dev1   ao3     Voltage (SingleEnd) -10 to +10 Volts Pitch 2

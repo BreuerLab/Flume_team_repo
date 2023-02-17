@@ -1,5 +1,5 @@
 function positionDeg = encodertheta(encoderData, positionOffset)
-%[positionDeg] = encodertheta(encoderData)
+% [positionDeg] = encodertheta(encoderData)
 %
 % Belt traverse theta/pitch axis encoder data convertor.
 % Converts counter channel measurements [counts] to relative rotation [deg].

@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.28
+ * Model version              : 1.29
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Wed Feb 15 14:04:50 2023
+ * C source code generated on : Fri Feb 17 11:53:04 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -63,19 +63,9 @@ void belt_traverse_control_output(void)
   real_T rtb_Saturation3;
   real_T rtb_Saturation4;
   real_T rtb_theta_cmd_ai1;
+  real32_T rtb_theta_lock_in_p03;
   boolean_T rtb_LogicalOperator;
   boolean_T rtb_LogicalOperator1;
-
-  /* S-Function (sldrtdi): '<Root>/y_lock_in_p0.2' */
-  /* S-Function Block: <Root>/y_lock_in_p0.2 */
-  {
-    double inval[1];
-    double* invalp = inval;
-    RTBIO_DriverIO(0, DIGITALINPUT, IOREAD, 1,
-                   &belt_traverse_control_P.y_lock_in_p02_Channels, inval,
-                   &belt_traverse_control_P.y_lock_in_p02_BitMode);
-    rtb_LogicalOperator = (boolean_T) *invalp++;
-  }
 
   /* S-Function (sldrtdi): '<Root>/theta_lock_in_p0.3' */
   /* S-Function Block: <Root>/theta_lock_in_p0.3 */
@@ -85,6 +75,17 @@ void belt_traverse_control_output(void)
     RTBIO_DriverIO(0, DIGITALINPUT, IOREAD, 1,
                    &belt_traverse_control_P.theta_lock_in_p03_Channels, inval,
                    &belt_traverse_control_P.theta_lock_in_p03_BitMode);
+    rtb_theta_lock_in_p03 = (real32_T) *invalp++;
+  }
+
+  /* S-Function (sldrtdi): '<Root>/y_lock_in_p0.2' */
+  /* S-Function Block: <Root>/y_lock_in_p0.2 */
+  {
+    double inval[1];
+    double* invalp = inval;
+    RTBIO_DriverIO(0, DIGITALINPUT, IOREAD, 1,
+                   &belt_traverse_control_P.y_lock_in_p02_Channels, inval,
+                   &belt_traverse_control_P.y_lock_in_p02_BitMode);
     rtb_LogicalOperator1 = (boolean_T) *invalp++;
   }
 
@@ -111,15 +112,15 @@ void belt_traverse_control_output(void)
   }
 
   /* Logic: '<Root>/Logical Operator' incorporates:
-   *  Constant: '<Root>/y_lock_manual'
-   */
-  rtb_LogicalOperator = (belt_traverse_control_P.y_lock_manual_Value ||
-    rtb_LogicalOperator);
-
-  /* Logic: '<Root>/Logical Operator1' incorporates:
    *  Constant: '<Root>/theta_lock_manual'
    */
-  rtb_LogicalOperator1 = (belt_traverse_control_P.theta_lock_manual_Value ||
+  rtb_LogicalOperator = (belt_traverse_control_P.theta_lock_manual_Value ||
+    (rtb_theta_lock_in_p03 != 0.0F));
+
+  /* Logic: '<Root>/Logical Operator1' incorporates:
+   *  Constant: '<Root>/y_lock_manual'
+   */
+  rtb_LogicalOperator1 = (belt_traverse_control_P.y_lock_manual_Value ||
     rtb_LogicalOperator1);
 
   /* Saturate: '<Root>/Saturation3' */
@@ -223,27 +224,27 @@ void belt_traverse_control_output(void)
 
   /* End of Saturate: '<Root>/Saturation2' */
 
-  /* S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
-  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
-  {
-    double doval[1];
-    double* dovalp = doval;
-    *dovalp++ = (double) rtb_LogicalOperator;
-    RTBIO_DriverIO(0, DIGITALOUTPUT, IOWRITE, 1,
-                   &belt_traverse_control_P.y_lock_out_signal_p00_Channels,
-                   doval, &belt_traverse_control_P.y_lock_out_signal_p00_BitMode);
-  }
-
   /* S-Function (sldrtdo): '<Root>/theta_lock_out_signal_p0.1' */
   /* S-Function Block: <Root>/theta_lock_out_signal_p0.1 */
   {
     double doval[1];
     double* dovalp = doval;
-    *dovalp++ = (double) rtb_LogicalOperator1;
+    *dovalp++ = (double) rtb_LogicalOperator;
     RTBIO_DriverIO(0, DIGITALOUTPUT, IOWRITE, 1,
                    &belt_traverse_control_P.theta_lock_out_signal_p01_Channels,
                    doval,
                    &belt_traverse_control_P.theta_lock_out_signal_p01_BitMode);
+  }
+
+  /* S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
+  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
+  {
+    double doval[1];
+    double* dovalp = doval;
+    *dovalp++ = (double) rtb_LogicalOperator1;
+    RTBIO_DriverIO(0, DIGITALOUTPUT, IOWRITE, 1,
+                   &belt_traverse_control_P.y_lock_out_signal_p00_Channels,
+                   doval, &belt_traverse_control_P.y_lock_out_signal_p00_BitMode);
   }
 
   /* S-Function (sldrtao): '<Root>/y_cmd_out_signal_ao0' */
@@ -323,15 +324,15 @@ void belt_traverse_control_update(void)
 /* Model initialize function */
 void belt_traverse_control_initialize(void)
 {
-  /* Start for S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
-
-  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
-
-  /* no initial value should be set */
-
   /* Start for S-Function (sldrtdo): '<Root>/theta_lock_out_signal_p0.1' */
 
   /* S-Function Block: <Root>/theta_lock_out_signal_p0.1 */
+
+  /* no initial value should be set */
+
+  /* Start for S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
+
+  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
 
   /* no initial value should be set */
 
@@ -369,15 +370,15 @@ void belt_traverse_control_initialize(void)
 /* Model terminate function */
 void belt_traverse_control_terminate(void)
 {
-  /* Terminate for S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
-
-  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
-
-  /* no final value should be set */
-
   /* Terminate for S-Function (sldrtdo): '<Root>/theta_lock_out_signal_p0.1' */
 
   /* S-Function Block: <Root>/theta_lock_out_signal_p0.1 */
+
+  /* no final value should be set */
+
+  /* Terminate for S-Function (sldrtdo): '<Root>/y_lock_out_signal_p0.0' */
+
+  /* S-Function Block: <Root>/y_lock_out_signal_p0.0 */
 
   /* no final value should be set */
 
@@ -487,10 +488,10 @@ RT_MODEL_belt_traverse_control_T *belt_traverse_control(void)
   belt_traverse_control_M->Timing.stepSize0 = 0.001;
 
   /* External mode info */
-  belt_traverse_control_M->Sizes.checksums[0] = (2861307693U);
-  belt_traverse_control_M->Sizes.checksums[1] = (2657055331U);
-  belt_traverse_control_M->Sizes.checksums[2] = (1646048555U);
-  belt_traverse_control_M->Sizes.checksums[3] = (3412688750U);
+  belt_traverse_control_M->Sizes.checksums[0] = (1809890267U);
+  belt_traverse_control_M->Sizes.checksums[1] = (754553682U);
+  belt_traverse_control_M->Sizes.checksums[2] = (3486107148U);
+  belt_traverse_control_M->Sizes.checksums[3] = (3445440987U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;

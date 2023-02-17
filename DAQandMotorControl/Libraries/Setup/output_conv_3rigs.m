@@ -18,10 +18,12 @@ dat(dat(:,1:6)>1e6)=dat(dat(:,1:6)>1e6)-2^32; % EXPLAIN!!!!!
 %Shawn (first) <-- we don't care about Shawn no mo'
 out(:,1)=-(dat(:,1)).*pitch_conv/5;%-(max(dat(:,1))+min(dat(:,1)))/2).*pitch_conv;
 out(:,2)=(dat(:,2)).*heave_conv;
-%Wallace (Last)
+
+%% Wallace
 out(:,5)=(dat(:,5)).*pitch_conv;%-(max(dat(:,3))+min(dat(:,3)))/2).*pitch_conv;
 out(:,6)=(dat(:,6)).*heave_conv;
-%Gromit (Middle)
+
+%Gromit
 % out(:,3)=-(dat(:,3)).*pitch_conv/5;%-(max(dat(:,5))+min(dat(:,5)))/2).*pitch_conv;
 % out(:,4)=(dat(:,4)).*heave_conv;
 
@@ -44,9 +46,10 @@ out(:,4) = (dat(:,4)).*heave_conv; % not working be for digital encoder arrives
 %     out(:,7:12) = Wallace_conv(low_pass_filtfilt(dat(:,7:12)));
 %     out(:,17:22) = Gromit_conv(low_pass_filtfilt(dat(:,17:22)));
 % else
-    out(:,7:12) = Wallace_conv(dat(:,7:12),bias.Wallace);
-    out(:,17:22) = Gromit_conv(dat(:,17:22),bias.Gromit);
-% end
+
+%% Force Transducers [Fx, Fy, Fz, Mx, My, Mz]
+out(:,7:12) = Wallace_conv(dat(:,7:12),bias.Wallace);
+out(:,17:22) = Gromit_conv(dat(:,17:22),bias.Gromit);
 
 % phase = abs(asind(dat(1,9)/.05602+.05158/.05602));
 % if dat(4,9)<dat(1,9)
@@ -55,16 +58,18 @@ out(:,4) = (dat(:,4)).*heave_conv; % not working be for digital encoder arrives
 % 
 %     
 % out(:,9) = .03*(dat(:,9));%-(-.05158));%+.05602*sin(.2704*2*pi*(0:.001:(numel(dat(:,9))-1)/1000)'+(phase)*pi/180)));
-% Convert Vectrino velocity
+
+%% Vectrino velocity [Vx, Vy, Vz1, Vz2]
 out(:,13:16)=(dat(:,13:16)-2.5)*2/5;
 
+%% Accelerometer
 accscale = 9.81; % Convert from Volts to m/s^2
 loadmass = 0.6+foil.mass1; % Mass below force sensor in kg
 %  600g is aluminum mounting plate, 386g is cylinder mass as of 20220503,
 %  306g is vibrissae Beem 50x scale as of 20220518
 out(:,23) = loadmass*accscale*(dat(:,23) - bias.accmeter);%- mean(dat(:,23),1); % Accelerometer
 
-% PIV channels
+%% Pass PIV channels
 out(:,24) = dat(:,24);
 out(:,25) = dat(:,25);
 

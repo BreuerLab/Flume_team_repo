@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.28
+ * Model version              : 1.29
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Wed Feb 15 14:04:50 2023
+ * C source code generated on : Fri Feb 17 11:53:04 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -76,7 +76,7 @@ static const char_T * rtDataTypeNames[] = {
 static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&belt_traverse_control_DW.PrevY), 0, 0, 2 },
 
-  { (char_T *)(&belt_traverse_control_DW.y_lock_in_p02_PWORK), 11, 0, 10 }
+  { (char_T *)(&belt_traverse_control_DW.theta_lock_in_p03_PWORK), 11, 0, 10 }
 };
 
 /* data type transition table for block I/O structure */
@@ -90,11 +90,11 @@ static DataTypeTransition rtPTransitions[] = {
   { (char_T *)(&belt_traverse_control_P.y_control_signal_ctr0_out_PFI12_Duty), 0,
     0, 22 },
 
-  { (char_T *)(&belt_traverse_control_P.y_lock_in_p02_BitMode), 6, 0, 22 },
+  { (char_T *)(&belt_traverse_control_P.theta_lock_in_p03_BitMode), 6, 0, 22 },
 
   { (char_T *)(&belt_traverse_control_P.Saturation3_UpperSat), 0, 0, 22 },
 
-  { (char_T *)(&belt_traverse_control_P.y_lock_manual_Value), 8, 0, 2 }
+  { (char_T *)(&belt_traverse_control_P.theta_lock_manual_Value), 8, 0, 2 }
 };
 
 /* data type transition table for Parameters structure */
