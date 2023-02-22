@@ -1,6 +1,6 @@
 function Prof_out = input_conv_3rigs(profs, freq, heave1, heave2, heave3,pitch_bias)
 % Input is [Profiles (Shawn Wallace Gromit),frequency, heave amplitdues ]
-% Input needs to be Nx6 (technically)
+% Input needs to be Nx6 (technically) (only the commanded signals, not the trigger)
 % Each rig must have a pitch column [deg] and a heave column [meters]
 
 % Prof_out = input_conv_3rigs(Prof_out_angle, freq1, heave1, heave2, heave3);
@@ -29,6 +29,7 @@ end
        
     Prof_out(:,2) = -profs(:,2)./0.03./(p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2); % Heave 1 (Shawn)
     
+%% Heave Old Gromit (deprecated)
 %   f(x,y) = p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2
 %   Coefficients (with 95% confidence bounds):
 
@@ -42,7 +43,11 @@ end
        x = freq;
        y = heave2;
        
-    Prof_out(:,4) = -profs(:,4)./0.03/(p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2); % Heave 2 (Gromit)
+%     Prof_out(:,4) = -profs(:,4)./0.03/(p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2); % Heave 2 (old Gromit)
+
+%% Heave New Traverse
+
+    Prof_out(:,4) = traversecmd('y', -profs(:,4), 0.25); % Heave 2 FOR THE NEW TRAVERSE
 
 %% Heave 3 (Wallace)
 
@@ -77,7 +82,8 @@ Prof_out(:,1) = -profs(:,1).*5./(360)*2*45/56*5 + pitch_bias(1); % Pitch 1 (Shaw
 
 %% Wallace (current leading traverse)
 % position command: [0 0 0 0 1 0]
-Prof_out(:,5) = -profs(:,5)*5.*0.022222 + pitch_bias(3);
+% Prof_out(:,5) = -profs(:,5)*5.*0.022222 + pitch_bias(3); % for the old Hudson piece of shit motor that is literally from hell
+Prof_out(:,5) = -profs(:,5).*5./(360)*2*65/81*5 + pitch_bias(3); % stepper that used to be in Gromit before the new traverse came
 
 %% New Traverse
 % The signal sent to the former Gromit now goes to the new traverse ([0 0 1 0 0 0])

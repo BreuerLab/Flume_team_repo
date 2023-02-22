@@ -72,14 +72,14 @@ transientcycs2 = transientcycs*freq2/freq3;
 [t3p, Prof3p] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, pitch3, phase12 + phi,0);% pitch Wallace
 [t3h, Prof3h] = generate_profile(num_cyc, freq3, dq.Rate, transientcycs, transientcycs, heave3, phase12,0);      % heave Wallace
 
-[t4p, Prof4p] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, pitch2, phase13 + phi,0);% pitch traverse
-[t4h, Prof4h] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, heave2, phase13,0);      % heave traverse
+[t4p, Prof2p] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, pitch2, phase13 + phi,0);% pitch traverse NEW TRAVERSE
+[t4h, Prof2h] = generate_profile(num_cyc, freq4, dq.Rate, transientcycs, transientcycs, heave2, phase13,0);      % heave traverse NEW TRAVERSE
 
 
 Prof_out_angle = [Prof1p, Prof1h, Prof2p, Prof2h, Prof3p, Prof3h];
-Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3,bias.pitch); % let's hope this works <-- It does! But something is weird with the signs.
+Prof_out_temp = input_conv_3rigs(Prof_out_angle, freq, heave1, heave2, heave3, bias.pitch); % let's hope this works <-- It does! But something is weird with the signs.
 
-Prof_out_angle(:,[3,4]) = [Prof4p, Prof4h]; % add the traverse conversion
+% Prof_out_angle(:,[3,4]) = [Prof4p, Prof4h]; % add the traverse conversion
 
 % For PIV trigger
 
@@ -90,15 +90,15 @@ trig_signal(end-round(1/freq*dq.Rate)*1:end)=0;
 % For the traverse signal
 
 % Traverse heave: (motion profile and lock)
-[voltageCmd_heave, cmdLock_heave] = traversecmd('y', Prof4h, 0.25); % position rig starting at the center of the flume
+% [voltageCmd_heave, cmdLock_heave] = traversecmd('y', Prof4h, 0.25); % position rig starting at the center of the flume
 % Traverse heave: (motion profile and lock)
-[voltageCmd_pitch, cmdLock_pitch] = traversecmd('theta', Prof4p, 180); % position rig starting facing the upstream
+% [voltageCmd_pitch, cmdLock_pitch] = traversecmd('theta', Prof4p, 180); % position rig starting facing the upstream
 
-traverse_signal = [voltageCmd_pitch, voltageCmd_heave]; % assemble a matrix to append to the output variable
+% traverse_signal = [voltageCmd_pitch, voltageCmd_heave]; % assemble a matrix to append to the output variable
 
 % Append trigger and traverse signals to the outputted signal
 Prof_out = [Prof_out_temp trig_signal];
-Prof_out(:,[3,4]) = traverse_signal; % Gromit is now replaced with the new traverse
+% Prof_out(:,[3,4]) = traverse_signal; % Gromit is now replaced with the new traverse
 
 %% Run section
 tic

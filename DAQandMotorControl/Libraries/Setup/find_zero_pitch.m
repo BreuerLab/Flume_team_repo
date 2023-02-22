@@ -8,22 +8,24 @@ switch traverse
         fy_index = 18; % index of the perpendicular (to the streamwise direction) transducer force channel
         mz_index = 22; % index of the pitch axis transducer moment channel
         position = [0, 0, 0, 0, 5, 0]; % position commanded to the pitch axis of the selected traverse
+        out_of_the_way = [0, 0, 0, 0, 0, 0]; % for trailing alignment (zeros for the leading foil)
         prof_index = 5; % index of the motion profile corresponding to the selected traverse
         p_bias_index = 3; % pitch bias index for the corresponding traverse
-    case 2
+    case 2 % trailing traverse --> wallace sensor --> gromit position
         fy_index = 8;
         mz_index = 12;
         position = [0, 0, 5, 0, 0, 0];
+        out_of_the_way = [0, 0, 0, 0, 0, 0.15]; % to command the leading traverse to move out of the way during trailing alignment
         prof_index = 3;
         p_bias_index = 2;
 end
 
 disp('finding zero.  Traverse will now move +/- 5 degrees')
-[~,~,last_out] = move_new_pos_3rigs(dq,last_out,position,5,bias,foil);
+[~,~,last_out] = move_new_pos_3rigs(dq,last_out,position+out_of_the_way,10,bias,foil);
 scan_time = 30;
 pause(10);
 b1_Vtheta = last_out(prof_index);
- [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,-position,scan_time,bias,foil);
+ [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,-position+out_of_the_way,scan_time,bias,foil);
 a1_Vtheta = (last_out(prof_index)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -41,7 +43,7 @@ aL1 = coefL1(1); bL1 = coefL1(2);
 plot(1:numel(prof(:,1)),prof(:,prof_index),1:numel(out(:,18)),smooth(Lift,100),1:numel(Lift),aL1*(1:numel(Lift))+bL1)
 
 b2_Vtheta = last_out(prof_index);
- [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,position,scan_time,bias,foil);
+ [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,position+out_of_the_way,scan_time,bias,foil);
 a2_Vtheta = (last_out(prof_index)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -62,9 +64,9 @@ legend('Pitch negative','Lift smoothed','Linear fit','Pitch positive','Lift smoo
 
 if max(aL1*(1:numel(Lift))+bL1) < 0 || min(aL1*(1:numel(Lift))+bL1) > 0
     disp('Pitch out of range. Expanding search.')
- [~,~,last_out] =   move_new_pos_3rigs(dq,last_out,3*position,5,bias,foil);
+ [~,~,last_out] =   move_new_pos_3rigs(dq,last_out,3*position+out_of_the_way,5,bias,foil);
  b1_Vtheta = last_out(prof_index);
- [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,-3*position,scan_time,bias,foil);
+ [out,prof,last_out] =  move_new_pos_3rigs(dq,last_out,-3*position+out_of_the_way,scan_time,bias,foil);
  a1_Vtheta = (last_out(prof_index)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -78,7 +80,7 @@ Lift(:,1) = out(:,fy_index);
     hold on
 
     b2_Vtheta = last_out(prof_index);
- [out,prof2,last_out] =  move_new_pos_3rigs(dq, last_out, 3*position, scan_time, bias, foil);
+ [out,prof2,last_out] =  move_new_pos_3rigs(dq, last_out, 3*position+out_of_the_way, scan_time, bias, foil);
  a2_Vtheta = (last_out(prof_index)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -102,9 +104,9 @@ Lift(:,1) = out(:,fy_index);
         disp('Pitch out of range.  Manually align pitch.')
     end
     
-    [~,~,last_out] = move_new_pos_3rigs(dq, last_out, position, 5, bias, foil);
+    [~,~,last_out] = move_new_pos_3rigs(dq, last_out, position+out_of_the_way, 5, bias, foil);
      b1_Vtheta = last_out(prof_index);
-    [out,prof,last_out] =  move_new_pos_3rigs(dq, last_out, -position, scan_time, bias, foil);
+    [out,prof,last_out] =  move_new_pos_3rigs(dq, last_out, -position+out_of_the_way, scan_time, bias, foil);
      a1_Vtheta = (last_out(prof_index)-b1_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -118,7 +120,7 @@ Lift(:,1) = out(:,fy_index);
     % 1:numel(lift) = Lift*a + b
     %Lift = (1:numel(Lift)-b)./a)
     b2_Vtheta = last_out(prof_index);
-    [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,position,scan_time,bias,foil);
+    [out,prof2,last_out] =  move_new_pos_3rigs(dq,last_out,position+out_of_the_way,scan_time,bias,foil);
     a2_Vtheta = (last_out(prof_index)-b2_Vtheta)/(scan_time*dq.Rate);
 
 Lift(:,1) = out(:,fy_index);
@@ -147,7 +149,7 @@ pitch_check = input(['Does this look alright to you? y/n',newline],"s");
 if pitch_check == 'y'
 
     % comment out to keep motor from moving
-    [~,~,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0],5,bias,foil);
+    [~,~,last_out] =  move_new_pos_3rigs(dq,last_out,[0 0 0 0 0 0],5,bias,foil); % also returns leading traverse to zero
     % [last_out] = move_to_zero(dq,last_out,bias);
 end
 

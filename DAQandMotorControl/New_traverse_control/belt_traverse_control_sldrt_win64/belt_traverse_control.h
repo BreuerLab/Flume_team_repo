@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.29
+ * Model version              : 1.30
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Fri Feb 17 11:53:04 2023
+ * C source code generated on : Tue Feb 21 19:17:28 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -1099,7 +1099,7 @@ struct P_belt_traverse_control_T_ {
   real_T theta_calib_biasHz_Bias;      /* Expression: 5000
                                         * Referenced by: '<Root>/theta_calib_bias [Hz]'
                                         */
-  real_T Saturation2_UpperSat;         /* Expression: 10000
+  real_T Saturation2_UpperSat;         /* Expression: 9500
                                         * Referenced by: '<Root>/Saturation2'
                                         */
   real_T Saturation2_LowerSat;         /* Expression: 5000

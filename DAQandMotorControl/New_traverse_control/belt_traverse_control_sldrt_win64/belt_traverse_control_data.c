@@ -7,9 +7,9 @@
  *
  * Code generation for model "belt_traverse_control".
  *
- * Model version              : 1.29
+ * Model version              : 1.30
  * Simulink Coder version : 9.7 (R2022a) 13-Nov-2021
- * C source code generated on : Fri Feb 17 11:53:04 2023
+ * C source code generated on : Tue Feb 21 19:17:28 2023
  *
  * Target selection: sldrt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -342,10 +342,10 @@ P_belt_traverse_control_T belt_traverse_control_P = {
    */
   5000.0,
 
-  /* Expression: 10000
+  /* Expression: 9500
    * Referenced by: '<Root>/Saturation2'
    */
-  10000.0,
+  9500.0,
 
   /* Expression: 5000
    * Referenced by: '<Root>/Saturation2'

@@ -1,5 +1,7 @@
 function [out,output_prof,last_out] = move_new_pos_3rigs(dq,last_out,position,t,bias,foil)
-% n_pos is in volts, transitions position  from current to desired
+% n_pos is in volts, transitions position  from current to desired (POSITION IS ABSOLUTE)
+% position is [Deg] and [Meters]
+% position must only contain what goes out to the traverses, not the trigger channel
 
 % out = input_conv2(n_pos);
 
