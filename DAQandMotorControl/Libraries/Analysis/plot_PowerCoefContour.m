@@ -2,14 +2,19 @@ close all;
 plot_w_fstar = 1;
 plot_w_Ustar = 0;
 
+f_nat = 1;
 % Sort the trials by frequency (needed for countorf function)
 [f_star_sorted,sort_index] = sortrows(f_star_commanded);
 U_star_sorted = 1./f_star_sorted;
 phase12_sorted = phase12(sort_index,:);
 A_star_sorted = A_star_measured(sort_index,:);
-powercoef_mean_sorted = powercoef_mean(sort_index,:);
+% powercoef_mean_sorted = powercoef_mean(sort_index,:);
+% powercoef_mean_sorted = force_inphasewvelo(sort_index,:);
+% coef_added_mass_eff = force_inphasewaccel(sort_index,:)./((1/2)*1000*thcknss*span*flowspeed_measured_mean(sort_index,:)*2*pi^3.*A_star_measured(sort_index,:)).*(1./f_star_sorted).^2;
+% powercoef_mean_sorted = f_nat./(thcknss*flowspeed_measured_mean).*sqrt((m_star+1)./(m_star+coef_added_mass_eff));
+powercoef_mean_sorted = energyin_star(sort_index,:);
 powercoef_mean_sorted(:,1) = zeros(size(f_star_sorted,1),1);
-movmeanpower_points =0;
+movmeanpower_points = 0;
 powercoef_mean_sorted_smoothed = smooth2a(powercoef_mean_sorted,movmeanpower_points,movmeanpower_points);
 
 % powercoef_mean_sort_smooth_round = round(powercoef_mean_sorted_smoothed,3);
@@ -19,11 +24,11 @@ delay_sorted = delay(sort_index,:);
 
 if plot_w_fstar == 1
     independent_var = f_star_sorted;
-    xlimits = [0.09 0.31];
+    xlimits = [0.09 0.41];
     xlabelstr = '{\it f} * = {\it f d/U }';
 elseif plot_w_Ustar == 1
     independent_var = 1./f_star_sorted;
-    xlimits = [0 18];
+    xlimits = [2 16];
     xlabelstr = '{\it U} * = {\it U/Df }';
 end
 
@@ -77,7 +82,7 @@ plot(independent_var(:,1),v_limit_curve,'LineWidth',4,'Color','red','LineStyle',
 % plot(Ustarvalues_extended,v_limit_curve)
 
 c=colorbar();
-c.Label.String = '{\it C}_P';
+c.Label.String = '{\it E*}_{in}';
 % c.Label.Interpreter = 'Latex';
 set(gca,"FontName","Arial"); set(gca,"FontSize",36); set(gca,"LineWidth",2); 
 set(gcf, 'Position',  [100, 100, 1400, 800])

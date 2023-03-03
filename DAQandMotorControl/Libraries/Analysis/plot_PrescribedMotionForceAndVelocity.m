@@ -14,7 +14,7 @@ hold off
 
 legend(h([3 1 2]))
 ylim([-5 5])
-xlim([10 40]) %xlim([10 12]) %
+xlim([0 5]) %xlim([10 12]) %
 xlabel('Time (cycles)')
 % ylabel('Heave (cm), Force (N), Power (W)')
 set(gca,"FontName","Arial"); set(gca,"FontSize",36); set(gca,"LineWidth",2); 
