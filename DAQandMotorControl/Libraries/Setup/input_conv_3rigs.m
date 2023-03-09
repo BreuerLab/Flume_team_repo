@@ -82,8 +82,8 @@ Prof_out(:,1) = -profs(:,1).*5./(360)*2*45/56*5 + pitch_bias(1); % Pitch 1 (Shaw
 
 %% Wallace (current leading traverse)
 % position command: [0 0 0 0 1 0]
-% Prof_out(:,5) = -profs(:,5)*5.*0.022222 + pitch_bias(3); % for the old Hudson piece of shit motor that is literally from hell
-Prof_out(:,5) = -profs(:,5).*5./(360)*2*65/81*5 + pitch_bias(3); % stepper that used to be in Gromit before the new traverse came
+Prof_out(:,5) = -profs(:,5)*5.*0.022222 + pitch_bias(3); % for the old Hudson piece of shit motor that is literally from hell
+% Prof_out(:,5) = -profs(:,5).*5./(360)*2*65/81*5 + pitch_bias(3); % stepper that used to be in Gromit before the new traverse came
 
 %% New Traverse
 % The signal sent to the former Gromit now goes to the new traverse ([0 0 1 0 0 0])

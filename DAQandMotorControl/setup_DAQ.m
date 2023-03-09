@@ -136,5 +136,6 @@ end
 disp(['Take another bias measurement. Press any key to run find_bias_3rigs',newline,'Make sure flume is on at experiment flowspeed!']);
 pause
 [out,bias_loaded,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
+bias_loaded.pitch = bias.pitch;
 
 
