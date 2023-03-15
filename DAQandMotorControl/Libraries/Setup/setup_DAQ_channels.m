@@ -213,9 +213,9 @@ chout6.Name = 'Heave Wallace';
 disp('Analog outputs done. Syncing and Zeroing output...')
 
 %  PIV trigger and pulse train channels
-    addoutput(dq,'dev2','Port0/line14','Digital');% output a trigger signal to the PTU, Dev2.2, P0.5
-    addinput(dq,'dev2','Port0/line10','Digital'); % record the trigger signal, Dev2.2, P0.1
-    addinput(dq,'dev2','Port0/line9','Digital'); % record the pulse signal from the PTU, Dev2.2, P0.0
+    addoutput(dq,'dev2','Port0/line14','Digital');% output a trigger signal to the PTU, Dev2.2, term 16
+    addinput(dq,'dev2','Port0/line10','Digital'); % record the trigger signal, Dev2.2, term 49
+    addinput(dq,'dev2','Port0/line9','Digital'); % record the pulse signal from the PTU, Dev2.2, term 17
 
 % New traverse input channels 20230206 - courtesy of Xiaowei He
 
