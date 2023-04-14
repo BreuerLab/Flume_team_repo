@@ -2,10 +2,6 @@ function [Time, Waveform] = generate_profile(N_cycles, Frequency, Sampling_Frequ
 % Function to generate a waveform of a given amplitude, with a given frequency [Hz], sampling
 % frequency [Hz], number of cycles to ramp up and down, Phase shift [deg]
 
-% Kenny Breuer, Dec 2021
-% Eric Handy, Dec 2021 - edit
-% Eric Handy, Jan 2022 - last edit
-
 %%
 dt = 1/Sampling_Frequency; % time steps for the sine wave
 Npts_total = round((N_cycles + N_cycles_up + N_cycles_down)*(1/Frequency)*Sampling_Frequency); % total number of points

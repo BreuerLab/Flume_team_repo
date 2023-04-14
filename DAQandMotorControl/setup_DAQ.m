@@ -91,14 +91,15 @@ last_out = [0 0 0 0 0 0 0]; % encoder signals: 1p,1h,2p,2h,3p,3h, trig
   write(dq,last_out)
 
 
+
 % Find bias voltages for force and acceleration sensors
 disp(['All set. Press any key to run find_bias_3rigs',newline,'Turn on motors, turn off flume']);
 % fprintf('Checklist:\n  - Zero Flume Velocity\n')
 % fprintf('Press any key to continue\n\n')
 pause
-[out,bias,dat] = find_bias_3rigs(dq,last_out,flume_hertz,fname,foil);
+[out,bias,dat] = find_bias_3rigs(dq, last_out, flume_hertz, fname, foil);
 
-bias.pitch = [0 0 0]; 
+bias.pitch = [0 0 0];
 
 % Find zero bias pitch angle by finding pitch with zero lift
 zero_pitch = 0;

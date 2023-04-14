@@ -101,13 +101,13 @@ Prof_out = [Prof_out_temp trig_signal];
 % Prof_out(:,[3,4]) = traverse_signal; % Gromit is now replaced with the new traverse
 
 %% Run section
+
 tic
 dat = readwrite(dq,Prof_out,"OutputFormat","Matrix");
 last_out = Prof_out(end,:);
 write(dq,last_out);
 scantime = toc;
 disp(['Time taken to run DAQ foreground scan: ',num2str(scantime),' seconds.'])
-
 
 % Convert raw voltages to useful data
 [out,t]=output_conv_3rigs(dat,bias,foil); % output angle is in radians
